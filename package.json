@@ -1,0 +1,17 @@
+{
+  "name": "np-live-map-bot",
+  "version": "1.0.0",
+  "description": "Interactive NP Live Campus Map & Telegram Bot for Ngee Ann Polytechnic",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "nodemailer": "^9.0.3",
+    "resend": "^6.18.1",
+    "telegraf": "^4.16.3"
+  }
+}
