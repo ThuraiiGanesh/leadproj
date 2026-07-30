@@ -13,19 +13,8 @@ const app = express();
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-const { Resend } = require('resend');
-
-// ─── EMAIL DISPATCHER ENGINE (Resend API + Nodemailer Fallback) ──
-let resendClient = null;
+// ─── EMAIL DISPATCHER ENGINE (Gmail SMTP) ───────────────────────────
 let emailTransporter = null;
-
-function getResendClient() {
-  if (process.env.RESEND_API_KEY && !resendClient) {
-    resendClient = new Resend(process.env.RESEND_API_KEY);
-    console.log(`⚡ Resend API Email Sender Initialized!`);
-  }
-  return resendClient;
-}
 
 async function getEmailTransporter() {
   if (emailTransporter) return emailTransporter;
@@ -49,7 +38,7 @@ async function getEmailTransporter() {
   return emailTransporter;
 }
 
-// Function to send real 2FA email via Gmail SMTP or Resend API
+// Function to send real 2FA email via Gmail SMTP
 async function sendReal2FAEmail(toEmail, studentName, otpCode) {
   const htmlContent = `
     <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 560px; margin: 0 auto; padding: 24px; background-color: #0f172a; border-radius: 16px; color: #f8fafc; border: 1px solid rgba(255,255,255,0.1);">
@@ -93,35 +82,6 @@ async function sendReal2FAEmail(toEmail, studentName, otpCode) {
     }
   } catch (err) {
     console.error(`⚠️ Gmail SMTP Error: ${err.message}`);
-  }
-
-  // 2. Secondary: Resend API fallback
-  const resend = getResendClient();
-  if (resend) {
-    try {
-      const response = await resend.emails.send({
-        from: 'NP Portal <onboarding@resend.dev>',
-        to: [toEmail],
-        subject: `🔐 ${otpCode} is your NP Student Portal 2FA Security Code`,
-        html: htmlContent
-      });
-
-      if (!response.error) {
-        console.log(`⚡ Real 2FA Email sent via Resend API to ${toEmail} (ID: ${response.data?.id || 'OK'})`);
-        return true;
-      } else {
-        const fallbackRes = await resend.emails.send({
-          from: 'NP Portal <onboarding@resend.dev>',
-          to: ['ganeshoofs@gmail.com'],
-          subject: `🔐 ${otpCode} is your NP 2FA Code (Target: ${toEmail})`,
-          html: htmlContent
-        });
-        console.log(`⚡ 2FA Email delivered via Resend API for ${toEmail}! (Msg ID: ${fallbackRes.data?.id || 'OK'})`);
-        return true;
-      }
-    } catch (err) {
-      console.error(`⚠️ Resend API Error: ${err.message}`);
-    }
   }
 
   return false;
