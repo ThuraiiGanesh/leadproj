@@ -1,4 +1,5 @@
 
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
@@ -34,7 +35,7 @@ if (createClient && SUPABASE_URL && SUPABASE_ANON_KEY) {
   }
 }
 
-// Nodemailer SMTP Transporter setup (using Gmail SMTP for unlimited real email delivery)
+// Nodemailer SMTP Transporter setup (using Gmail SMTP for reliable email delivery)
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST || 'smtp.gmail.com',
   port: parseInt(process.env.SMTP_PORT || '465', 10),
@@ -44,6 +45,7 @@ const transporter = nodemailer.createTransport({
     pass: process.env.SMTP_PASS
   }
 });
+const SMTP_FROM = process.env.SMTP_FROM || 'ganeshoofs@gmail.com';
 
 // File paths
 const CCAS_FILE = path.join(__dirname, 'data', 'ccas.json');
@@ -181,7 +183,7 @@ app.post('/api/auth/login', async (req, res) => {
   let emailSent = false;
   try {
     await transporter.sendMail({
-      from: process.env.SMTP_USER ? `"NP CCA Match 2FA" <${process.env.SMTP_USER}>` : '"NP CCA Match 2FA" <ganeshoofs@gmail.com>',
+      from: `"NP CCA Match 2FA" <${SMTP_FROM}>`,
       to: email,
       subject: `Your NP CCA Match 2FA Security Code: ${mockOtpCode}`,
       html: `
