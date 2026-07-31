@@ -1,3 +1,4 @@
+
 const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
@@ -242,7 +243,7 @@ app.post('/api/auth/verify-2fa', async (req, res) => {
   const isExco = managedCcas.length > 0;
 
   let userName = student_id.split('@')[0].toUpperCase();
-  if (student_id.toLowerCase().includes('s10234567')) {
+  if (student_id.toLowerCase().includes('s10275803') || student_id.toLowerCase().includes('s10234567')) {
     userName = 'Thurai Ganesh';
   } else if (isExco) {
     ccas.forEach(c => {
