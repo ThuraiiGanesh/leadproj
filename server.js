@@ -3,12 +3,34 @@ const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
 
+// Supabase Integration
+let createClient;
+try {
+  createClient = require('@supabase/supabase-js').createClient;
+} catch (e) {
+  console.log("Supabase module not found, fallback to mock mode.");
+}
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Initialize Supabase Client if env variables exist
+const SUPABASE_URL = process.env.SUPABASE_URL || 'https://cyofolmdypeyvhzqkavr.supabase.co';
+const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || '';
+
+let supabase = null;
+if (createClient && SUPABASE_URL && SUPABASE_ANON_KEY) {
+  try {
+    supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    console.log("✅ Supabase Client Initialized:", SUPABASE_URL);
+  } catch (err) {
+    console.error("Supabase initialization error:", err);
+  }
+}
 
 // File paths
 const CCAS_FILE = path.join(__dirname, 'data', 'ccas.json');
@@ -33,8 +55,12 @@ function loadData() {
 
 function saveData() {
   try {
-    fs.writeFileSync(CCAS_FILE, JSON.stringify(ccas, null, 2));
-    fs.writeFileSync(EVENTS_FILE, JSON.stringify(events, null, 2));
+    if (fs.existsSync(path.dirname(CCAS_FILE))) {
+      fs.writeFileSync(CCAS_FILE, JSON.stringify(ccas, null, 2));
+    }
+    if (fs.existsSync(path.dirname(EVENTS_FILE))) {
+      fs.writeFileSync(EVENTS_FILE, JSON.stringify(events, null, 2));
+    }
   } catch (err) {
     console.error("Error saving JSON datasets:", err);
   }
@@ -99,16 +125,45 @@ function calculateMatchScore(studentAnswers, cca) {
 }
 
 // ----------------------------------------------------
-// AUTH ENDPOINTS (Defence Pillar: Mock 2FA)
+// AUTH ENDPOINTS (Supabase 2FA + Fallback)
 // ----------------------------------------------------
 
-app.post('/api/auth/login', (req, res) => {
+app.post('/api/auth/login', async (req, res) => {
   const { student_id, password } = req.body;
   if (!student_id || !password) {
     return res.status(400).json({ success: false, message: 'NP Student ID and Password are required.' });
   }
 
-  // Generate 6-digit mock OTP code
+  const email = student_id.includes('@') ? student_id.toLowerCase() : `${student_id.toLowerCase()}@connect.np.edu.sg`;
+
+  // If Supabase client is configured, dispatch real Supabase Auth 2FA OTP
+  if (supabase) {
+    try {
+      const { data, error } = await supabase.auth.signInWithOtp({
+        email: email,
+        options: {
+          shouldCreateUser: true
+        }
+      });
+
+      if (error) {
+        console.warn("Supabase OTP warning, falling back to mock mode:", error.message);
+      } else {
+        return res.json({
+          success: true,
+          provider: 'supabase',
+          message: 'Supabase 2FA OTP code dispatched to Outlook email.',
+          student_id,
+          outlook_email: email,
+          mock_otp_code: null
+        });
+      }
+    } catch (err) {
+      console.error("Supabase OTP Exception:", err);
+    }
+  }
+
+  // Fallback: Generate 6-digit mock OTP code for demo purposes
   const mockOtpCode = Math.floor(100000 + Math.random() * 900000).toString();
   active2FASessions.set(student_id, {
     otp: mockOtpCode,
@@ -117,15 +172,51 @@ app.post('/api/auth/login', (req, res) => {
 
   return res.json({
     success: true,
+    provider: 'mock',
     message: '2FA authentication code sent to Outlook email.',
     student_id,
-    outlook_email: `${student_id.toLowerCase()}@connect.np.edu.sg`,
-    mock_otp_code: mockOtpCode // Returned for seamless interactive demo display
+    outlook_email: email,
+    mock_otp_code: mockOtpCode
   });
 });
 
-app.post('/api/auth/verify-2fa', (req, res) => {
+app.post('/api/auth/verify-2fa', async (req, res) => {
   const { student_id, otp_code } = req.body;
+  const email = student_id.includes('@') ? student_id.toLowerCase() : `${student_id.toLowerCase()}@connect.np.edu.sg`;
+
+  // If Supabase client is configured, verify token with Supabase Auth
+  if (supabase) {
+    try {
+      const { data, error } = await supabase.auth.verifyOtp({
+        email: email,
+        token: otp_code.trim(),
+        type: 'email'
+      });
+
+      if (!error && data.session) {
+        const user = {
+          id: student_id,
+          name: student_id.toLowerCase() === 's10234567' ? 'Thurai Ganesh' : `Student (${student_id})`,
+          np_student_id: student_id.toUpperCase(),
+          school: 'School of InfoComm Technology (ICT)',
+          survey_completed: false,
+          survey_answers: null,
+          supabase_user_id: data.user.id
+        };
+
+        return res.json({
+          success: true,
+          provider: 'supabase',
+          message: 'Supabase 2FA Verification Successful.',
+          user
+        });
+      }
+    } catch (err) {
+      console.warn("Supabase 2FA verification fallback:", err);
+    }
+  }
+
+  // Fallback check against in-memory mock sessions
   const session = active2FASessions.get(student_id);
 
   if (!session) {
@@ -143,20 +234,18 @@ app.post('/api/auth/verify-2fa', (req, res) => {
 
   active2FASessions.delete(student_id);
 
-  // Return authenticated student object
   const user = {
     id: student_id,
     name: student_id.toLowerCase() === 's10234567' ? 'Thurai Ganesh' : `Student (${student_id})`,
     np_student_id: student_id.toUpperCase(),
     school: 'School of InfoComm Technology (ICT)',
     survey_completed: false,
-    survey_answers: null,
-    bookmarked_cca_ids: [],
-    signed_up_event_ids: []
+    survey_answers: null
   };
 
   return res.json({
     success: true,
+    provider: 'mock',
     message: '2FA Verification Successful.',
     user
   });
@@ -189,7 +278,6 @@ app.get('/api/ccas', (req, res) => {
       };
     });
 
-    // Sort descending by match score
     result.sort((a, b) => b.match_score - a.match_score);
   } else {
     result = result.map(cca => ({
@@ -199,12 +287,10 @@ app.get('/api/ccas', (req, res) => {
     }));
   }
 
-  // Optional category filter
   if (category && category !== 'All') {
     result = result.filter(cca => cca.category.toLowerCase().includes(category.toLowerCase()));
   }
 
-  // Optional search query
   if (search) {
     const q = search.toLowerCase();
     result = result.filter(cca =>
@@ -235,18 +321,15 @@ function validateSignupRules(event, student_id) {
   const now = new Date();
   const eventTime = new Date(event.datetime);
 
-  // Condition 1: Event not full (signup_count < capacity)
   if (event.signup_count >= event.capacity) {
     return { valid: false, reason: 'Event is fully booked (Capacity reached).' };
   }
 
-  // Condition 2: Student not already signed up
   const alreadySignedUp = event.signups && event.signups.some(s => s.student_id.toLowerCase() === student_id.toLowerCase());
   if (alreadySignedUp) {
     return { valid: false, reason: 'Student is already signed up for this event.' };
   }
 
-  // Condition 3: Signup attempted before event datetime
   if (eventTime <= now) {
     return { valid: false, reason: 'Registration closed. Event date/time has already passed.' };
   }
@@ -271,7 +354,6 @@ app.post('/api/events/:id/signup', (req, res) => {
     return res.status(400).json({ success: false, message: validation.reason });
   }
 
-  // Perform Signup
   event.signup_count += 1;
   if (!event.signups) event.signups = [];
   event.signups.push({
@@ -379,8 +461,6 @@ app.get('/api/admin/events/:id/signups', (req, res) => {
     return res.status(404).json({ success: false, message: 'Event not found.' });
   }
 
-  // CIA Confidentiality Enforced: Return ONLY student Name and NP Student ID
-  // Data Minimization under PDPA - survey answers & credentials strictly hidden
   const sanitizedSignups = (event.signups || []).map(s => ({
     name: s.name,
     student_id: s.student_id,
@@ -402,7 +482,7 @@ app.get('/api/admin/events/:id/signups', (req, res) => {
 // ----------------------------------------------------
 
 app.post('/api/telegram/interact', (req, res) => {
-  const { command, student_id, cca_id, event_id } = req.body;
+  const { command } = req.body;
 
   if (command === '/start') {
     return res.json({
@@ -438,9 +518,13 @@ app.post('/api/telegram/interact', (req, res) => {
   });
 });
 
-// Start Server
-app.listen(PORT, () => {
-  console.log(`=================================================`);
-  console.log(`🚀 NP CCA Match Server running on http://localhost:${PORT}`);
-  console.log(`=================================================`);
-});
+// Start Server (local) and export app (for Vercel serverless)
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`=================================================`);
+    console.log(`🚀 NP CCA Match Server running on http://localhost:${PORT}`);
+    console.log(`=================================================`);
+  });
+}
+
+module.exports = app;
