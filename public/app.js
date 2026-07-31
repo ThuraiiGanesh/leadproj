@@ -72,15 +72,6 @@ async function submitLogin() {
 
     if (data.success) {
       document.getElementById('outlookEmailSpan').textContent = data.outlook_email;
-      
-      const mockBox = document.getElementById('mockOtpBox');
-      if (data.mock_otp_code) {
-        mockBox.style.display = 'flex';
-        document.getElementById('mockOtpDisplay').textContent = data.mock_otp_code;
-      } else {
-        mockBox.style.display = 'none'; // Supabase real email dispatch mode
-      }
-
       document.getElementById('loginStep1').style.display = 'none';
       document.getElementById('loginStep2').style.display = 'block';
       showToast(`🔑 2FA code sent to ${data.outlook_email}`, "success");

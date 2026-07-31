@@ -169,7 +169,12 @@ app.post('/api/auth/login', async (req, res) => {
       });
 
       if (error) {
-        console.warn("Supabase OTP warning, falling back to mock mode:", error.message);
+        console.warn("Supabase OTP warning:", error.message);
+        return res.status(400).json({
+          success: false,
+          provider: 'supabase_error',
+          message: `Supabase Auth Error: ${error.message}. (Please check Supabase Auth -> Providers -> Email OTP settings)`
+        });
       } else {
         return res.json({
           success: true,
@@ -182,6 +187,7 @@ app.post('/api/auth/login', async (req, res) => {
       }
     } catch (err) {
       console.error("Supabase OTP Exception:", err);
+      return res.status(500).json({ success: false, message: `Supabase Exception: ${err.message}` });
     }
   }
 
