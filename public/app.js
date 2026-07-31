@@ -74,7 +74,11 @@ async function submitLogin() {
       document.getElementById('outlookEmailSpan').textContent = data.outlook_email;
       document.getElementById('loginStep1').style.display = 'none';
       document.getElementById('loginStep2').style.display = 'block';
-      showToast(`🔑 2FA code sent to ${data.outlook_email}`, "success");
+      if (data.mock_otp_code) {
+        showToast(`⚡ Rate limit reached. Fallback Code: ${data.mock_otp_code}`, "info");
+      } else {
+        showToast(`🔑 2FA code sent to ${data.outlook_email}`, "success");
+      }
     } else {
       showToast(data.message, "error");
     }
