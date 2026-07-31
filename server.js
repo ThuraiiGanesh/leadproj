@@ -20,7 +20,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Initialize Supabase Client if env variables exist
 const SUPABASE_URL = process.env.SUPABASE_URL || 'https://cyofolmdypeyvhzqkavr.supabase.co';
-const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || '';
+const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || 'sb_publishable_OM6RsPczPdGNUbP6s0hdpQ_UAqr1C31';
 
 let supabase = null;
 if (createClient && SUPABASE_URL && SUPABASE_ANON_KEY) {
