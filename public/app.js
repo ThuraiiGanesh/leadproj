@@ -74,12 +74,10 @@ async function submitLogin() {
       document.getElementById('outlookEmailSpan').textContent = data.outlook_email;
       document.getElementById('loginStep1').style.display = 'none';
       document.getElementById('loginStep2').style.display = 'block';
-      if (data.provider === 'supabase') {
-        showToast(`🔑 2FA code sent to ${data.outlook_email} via Supabase`, "success");
-      } else if (data.provider === 'direct_transport') {
-        showToast(`🔑 2FA security code sent to ${data.outlook_email}`, "success");
+      if (data.provider === 'direct_transport' || data.provider === 'supabase') {
+        showToast(`🔑 2FA security code sent to ${data.outlook_email}. Please check your inbox!`, "success");
       } else {
-        showToast(`🔑 2FA Security Code: ${data.mock_otp_code}`, "success");
+        showToast(`🔑 2FA code generated for ${data.outlook_email}. Check email or server console.`, "info");
       }
     } else {
       showToast(data.message, "error");
