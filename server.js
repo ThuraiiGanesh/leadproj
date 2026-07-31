@@ -71,6 +71,28 @@ loadData();
 // Mock Session & 2FA Store
 const active2FASessions = new Map();
 
+// Helper: Find EXCO Managed CCAs for a user email or student ID
+function getManagedCcas(studentIdOrEmail) {
+  const query = studentIdOrEmail.toLowerCase().trim();
+  const managed = [];
+
+  ccas.forEach(cca => {
+    if (cca.exco && Array.isArray(cca.exco)) {
+      const isExco = cca.exco.some(e => {
+        const excoEmail = (e.email || '').toLowerCase();
+        const excoName = (e.name || '').toLowerCase();
+        return excoEmail.includes(query) || query.includes(excoEmail.split('@')[0]);
+      });
+
+      if (isExco) {
+        managed.push({ id: cca.id, name: cca.name, category: cca.category });
+      }
+    }
+  });
+
+  return managed;
+}
+
 // Helper: Calculate Weighted Score (Section 3 of Build Spec)
 function calculateMatchScore(studentAnswers, cca) {
   if (!studentAnswers || !studentAnswers.interest_tags || studentAnswers.interest_tags.length === 0) {
@@ -125,13 +147,13 @@ function calculateMatchScore(studentAnswers, cca) {
 }
 
 // ----------------------------------------------------
-// AUTH ENDPOINTS (Supabase 2FA + Fallback)
+// AUTH ENDPOINTS (Supabase 2FA + Dynamic EXCO RBAC)
 // ----------------------------------------------------
 
 app.post('/api/auth/login', async (req, res) => {
   const { student_id, password } = req.body;
-  if (!student_id || !password) {
-    return res.status(400).json({ success: false, message: 'NP Student ID and Password are required.' });
+  if (!student_id) {
+    return res.status(400).json({ success: false, message: 'Student ID or Email is required.' });
   }
 
   const email = student_id.includes('@') ? student_id.toLowerCase() : `${student_id.toLowerCase()}@connect.np.edu.sg`;
@@ -152,7 +174,7 @@ app.post('/api/auth/login', async (req, res) => {
         return res.json({
           success: true,
           provider: 'supabase',
-          message: 'Supabase 2FA OTP code dispatched to Outlook email.',
+          message: `Supabase 2FA OTP code dispatched to ${email}`,
           student_id,
           outlook_email: email,
           mock_otp_code: null
@@ -173,7 +195,7 @@ app.post('/api/auth/login', async (req, res) => {
   return res.json({
     success: true,
     provider: 'mock',
-    message: '2FA authentication code sent to Outlook email.',
+    message: `2FA authentication code sent to ${email}`,
     student_id,
     outlook_email: email,
     mock_otp_code: mockOtpCode
@@ -183,6 +205,24 @@ app.post('/api/auth/login', async (req, res) => {
 app.post('/api/auth/verify-2fa', async (req, res) => {
   const { student_id, otp_code } = req.body;
   const email = student_id.includes('@') ? student_id.toLowerCase() : `${student_id.toLowerCase()}@connect.np.edu.sg`;
+
+  const managedCcas = getManagedCcas(student_id);
+  const isExco = managedCcas.length > 0;
+
+  // Derive human-readable name from EXCO dataset or email prefix
+  let userName = student_id.split('@')[0].toUpperCase();
+  if (student_id.toLowerCase().includes('s10234567')) {
+    userName = 'Thurai Ganesh';
+  } else if (isExco) {
+    // Look up name from EXCO match
+    ccas.forEach(c => {
+      (c.exco || []).forEach(e => {
+        if ((e.email || '').toLowerCase().includes(student_id.toLowerCase())) {
+          userName = e.name;
+        }
+      });
+    });
+  }
 
   // If Supabase client is configured, verify token with Supabase Auth
   if (supabase) {
@@ -196,11 +236,14 @@ app.post('/api/auth/verify-2fa', async (req, res) => {
       if (!error && data.session) {
         const user = {
           id: student_id,
-          name: student_id.toLowerCase() === 's10234567' ? 'Thurai Ganesh' : `Student (${student_id})`,
+          name: userName,
           np_student_id: student_id.toUpperCase(),
+          email: email,
           school: 'School of InfoComm Technology (ICT)',
           survey_completed: false,
           survey_answers: null,
+          is_exco: isExco,
+          managed_ccas: managedCcas,
           supabase_user_id: data.user.id
         };
 
@@ -236,11 +279,14 @@ app.post('/api/auth/verify-2fa', async (req, res) => {
 
   const user = {
     id: student_id,
-    name: student_id.toLowerCase() === 's10234567' ? 'Thurai Ganesh' : `Student (${student_id})`,
+    name: userName,
     np_student_id: student_id.toUpperCase(),
+    email: email,
     school: 'School of InfoComm Technology (ICT)',
     survey_completed: false,
-    survey_answers: null
+    survey_answers: null,
+    is_exco: isExco,
+    managed_ccas: managedCcas
   };
 
   return res.json({
@@ -427,14 +473,23 @@ app.get('/api/tdd/run', (req, res) => {
 });
 
 // ----------------------------------------------------
-// ADMIN / CCA LEAD ENDPOINTS (Defence Pillar: Data Isolation)
+// ADMIN / CCA LEAD ENDPOINTS (EXCO Scoped Security)
 // ----------------------------------------------------
 
 app.post('/api/admin/events/create', (req, res) => {
-  const { cca_id, title, datetime, location, capacity, description } = req.body;
+  const { cca_id, title, datetime, location, capacity, description, student_id } = req.body;
 
   if (!cca_id || !title || !datetime || !location || !capacity) {
     return res.status(400).json({ success: false, message: 'All event fields are required.' });
+  }
+
+  // Security Verification: Verify user is EXCO for target cca_id if student_id passed
+  if (student_id) {
+    const managed = getManagedCcas(student_id);
+    const isAuthorized = managed.some(m => m.id === cca_id);
+    if (!isAuthorized) {
+      return res.status(403).json({ success: false, message: 'Forbidden: You are not authorized to post events for this CCA.' });
+    }
   }
 
   const newEvent = {
@@ -452,7 +507,7 @@ app.post('/api/admin/events/create', (req, res) => {
   events.push(newEvent);
   saveData();
 
-  res.json({ success: true, message: 'Event successfully published!', event: newEvent });
+  res.json({ success: true, message: 'Event successfully published by CCA EXCO!', event: newEvent });
 });
 
 app.get('/api/admin/events/:id/signups', (req, res) => {

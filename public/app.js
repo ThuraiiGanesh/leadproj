@@ -1,4 +1,4 @@
-// NP CCA Match — Dark Violet Reference Inspired Frontend Logic
+// NP CCA Match — Mandatory 2FA Gate & EXCO Role-Based Access Control (RBAC) Logic
 
 let currentUser = null;
 let currentRole = 'student'; // 'student' | 'admin'
@@ -7,7 +7,7 @@ let activeCategory = 'All';
 let searchQuery = '';
 let bookmarkedCcaIds = new Set();
 let signedUpEventIds = new Set();
-let remindersSet = new Set();
+let selectedAdminCcaId = null;
 
 const ALL_INTEREST_TAGS = [
   'tech', 'ai', 'coding', 'law', 'sports', 'fitness', 
@@ -18,12 +18,19 @@ const ALL_INTEREST_TAGS = [
 document.addEventListener('DOMContentLoaded', () => {
   fetchCcas();
   renderSurveyTags();
+  // Mandatory 2FA Gate: Open Login Modal on initial load
+  openLoginModal(true);
 });
 
 // ----------------------------------------------------
 // ROLE SWITCHING
 // ----------------------------------------------------
 function switchRole(role) {
+  if (role === 'admin' && (!currentUser || !currentUser.is_exco)) {
+    showToast("Forbidden: Access restricted to CCA EXCO Members only.", "error");
+    return;
+  }
+
   currentRole = role;
   document.getElementById('roleStudentBtn').classList.toggle('active', role === 'student');
   document.getElementById('roleAdminBtn').classList.toggle('active', role === 'admin');
@@ -37,20 +44,21 @@ function switchRole(role) {
 }
 
 // ----------------------------------------------------
-// AUTH & 2FA FLOW (Defence Pillar)
+// AUTH & MANDATORY 2FA GATE FLOW
 // ----------------------------------------------------
-function openLoginModal() {
+function openLoginModal(isMandatory = false) {
   document.getElementById('loginStep1').style.display = 'block';
   document.getElementById('loginStep2').style.display = 'none';
-  document.getElementById('loginModal').classList.add('active');
+  const modal = document.getElementById('loginModal');
+  modal.classList.add('active');
 }
 
 async function submitLogin() {
   const studentId = document.getElementById('loginStudentId').value.trim();
   const password = document.getElementById('loginPassword').value.trim();
 
-  if (!studentId || !password) {
-    showToast("Please enter your NP Student ID and password.", "error");
+  if (!studentId) {
+    showToast("Please enter your Student ID or Email address.", "error");
     return;
   }
 
@@ -64,10 +72,18 @@ async function submitLogin() {
 
     if (data.success) {
       document.getElementById('outlookEmailSpan').textContent = data.outlook_email;
-      document.getElementById('mockOtpDisplay').textContent = data.mock_otp_code;
+      
+      const mockBox = document.getElementById('mockOtpBox');
+      if (data.mock_otp_code) {
+        mockBox.style.display = 'flex';
+        document.getElementById('mockOtpDisplay').textContent = data.mock_otp_code;
+      } else {
+        mockBox.style.display = 'none'; // Supabase real email dispatch mode
+      }
+
       document.getElementById('loginStep1').style.display = 'none';
       document.getElementById('loginStep2').style.display = 'block';
-      showToast("🔑 2FA code sent to your Outlook inbox!", "success");
+      showToast(`🔑 2FA code sent to ${data.outlook_email}`, "success");
     } else {
       showToast(data.message, "error");
     }
@@ -79,6 +95,11 @@ async function submitLogin() {
 async function submit2FA() {
   const studentId = document.getElementById('loginStudentId').value.trim();
   const otpCode = document.getElementById('otpInput').value.trim();
+
+  if (!otpCode) {
+    showToast("Please enter the 6-digit 2FA security code.", "error");
+    return;
+  }
 
   try {
     const res = await fetch('/api/auth/verify-2fa', {
@@ -92,9 +113,14 @@ async function submit2FA() {
       currentUser = data.user;
       closeModal('loginModal');
       updateUserUI();
-      showToast(`Welcome back, ${currentUser.name}!`, "success");
 
-      // Open optional survey for student after login
+      if (currentUser.is_exco) {
+        showToast(`🎉 Welcome EXCO Lead, ${currentUser.name}! Admin Portal unlocked for ${currentUser.managed_ccas.map(c => c.name).join(', ')}.`, "success");
+      } else {
+        showToast(`Welcome back, ${currentUser.name}! Logged in as Student.`, "success");
+      }
+
+      // Open survey modal after mandatory 2FA login
       openSurveyModal();
     } else {
       showToast(data.message, "error");
@@ -106,6 +132,7 @@ async function submit2FA() {
 
 function updateUserUI() {
   if (currentUser) {
+    // User avatar pill
     document.getElementById('userAvatarPill').style.display = 'flex';
     document.getElementById('userStatusText').textContent = currentUser.name;
     const initials = currentUser.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
@@ -113,6 +140,136 @@ function updateUserUI() {
     
     document.getElementById('loginNavBtn').style.display = 'none';
     document.getElementById('myCcasBtn').style.display = 'inline-flex';
+
+    // Role Switcher visibility based on EXCO status (RBAC)
+    const roleSwitcher = document.getElementById('roleSwitcher');
+    if (currentUser.is_exco && currentUser.managed_ccas.length > 0) {
+      roleSwitcher.style.display = 'flex';
+      setupAdminCcaSelector();
+    } else {
+      roleSwitcher.style.display = 'none';
+      switchRole('student');
+    }
+  }
+}
+
+// ----------------------------------------------------
+// EXCO SCOPED ADMIN DASHBOARD
+// ----------------------------------------------------
+function setupAdminCcaSelector() {
+  if (!currentUser || !currentUser.managed_ccas) return;
+  const select = document.getElementById('adminCcaSelect');
+
+  select.innerHTML = currentUser.managed_ccas.map(c => `
+    <option value="${c.id}">${c.name} (${c.category})</option>
+  `).join('');
+
+  if (currentUser.managed_ccas.length > 0) {
+    selectedAdminCcaId = currentUser.managed_ccas[0].id;
+  }
+}
+
+function handleAdminCcaChange() {
+  selectedAdminCcaId = document.getElementById('adminCcaSelect').value;
+  renderAdminDashboard();
+}
+
+async function renderAdminDashboard() {
+  if (!currentUser || !currentUser.is_exco || !selectedAdminCcaId) return;
+
+  try {
+    const eventsRes = await fetch(`/api/ccas/${selectedAdminCcaId}`);
+    const eventsData = await eventsRes.json();
+    const eventsList = eventsData.events || [];
+
+    const container = document.getElementById('adminEventsList');
+    if (eventsList.length === 0) {
+      container.innerHTML = `<p style="font-size:0.875rem; color:var(--text-muted);">No events posted for this CCA yet.</p>`;
+      return;
+    }
+
+    container.innerHTML = eventsList.map(evt => `
+      <div style="background:var(--bg-surface-elevated); border:1px solid var(--border-subtle); padding:1.1rem; border-radius:var(--radius-sm); display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <h4 style="font-size:0.925rem; font-weight:700; color:#fff;">${evt.title}</h4>
+          <p style="font-size:0.78rem; color:var(--text-muted);">📅 ${new Date(evt.datetime).toLocaleString()}</p>
+        </div>
+        <button class="btn btn-outline btn-sm" onclick="viewAdminRoster('${evt.id}')">View Roster (${evt.signup_count})</button>
+      </div>
+    `).join('');
+  } catch (err) {
+    console.error("Admin dashboard load error:", err);
+  }
+}
+
+async function viewAdminRoster(eventId) {
+  try {
+    const res = await fetch(`/api/admin/events/${eventId}/signups`);
+    const data = await res.json();
+
+    if (!data.success) return;
+
+    const container = document.getElementById('adminRosterContainer');
+    container.innerHTML = `
+      <h4 style="font-size:1rem; font-weight:700; color:#fff; margin-bottom:0.6rem;">${data.event_title} (${data.signup_count}/${data.capacity})</h4>
+      ${data.signups.length === 0 ? `<p style="font-size:0.875rem; color:var(--text-muted);">No student signups yet.</p>` : `
+        <table style="width:100%; font-size:0.825rem; border-collapse:collapse;">
+          <thead>
+            <tr style="border-bottom:1px solid var(--border-subtle); text-align:left; color:var(--text-muted);">
+              <th style="padding:8px;">Student Name</th>
+              <th style="padding:8px;">NP Student ID</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${data.signups.map(s => `
+              <tr style="border-bottom:1px solid var(--border-subtle);">
+                <td style="padding:8px; font-weight:600; color:#fff;">${s.name}</td>
+                <td style="padding:8px; color:#c4b5fd;">${s.student_id}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      `}
+    `;
+  } catch (err) {
+    showToast("Failed to fetch student roster.", "error");
+  }
+}
+
+async function openCreateEventModal() {
+  if (!currentUser || !currentUser.is_exco || !selectedAdminCcaId) {
+    showToast("Only EXCO members can create events.", "error");
+    return;
+  }
+
+  const title = prompt("Enter Event Title:", "EXCO Workshop 2026");
+  if (!title) return;
+
+  try {
+    const res = await fetch('/api/admin/events/create', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        cca_id: selectedAdminCcaId,
+        student_id: currentUser.id,
+        title: title,
+        datetime: '2026-08-25T16:00:00',
+        location: 'Blk 31 (ICT) Room 402',
+        capacity: 25,
+        description: 'Published by authorized EXCO member.'
+      })
+    });
+    const data = await res.json();
+
+    if (data.success) {
+      showToast("🎉 Event published by CCA EXCO!", "success");
+      renderAdminDashboard();
+      fetchCcas();
+    } else {
+      showToast(`Publish Error: ${data.message}`, "error");
+    }
+  } catch (err) {
+    showToast("Failed to create event.", "error");
   }
 }
 
@@ -360,8 +517,8 @@ async function openCcaDetail(ccaId) {
 
 async function signUpForEvent(eventId) {
   if (!currentUser) {
-    showToast("Please log in with 2FA first to sign up for events.", "error");
-    openLoginModal();
+    showToast("Please complete 2FA authentication first.", "error");
+    openLoginModal(true);
     return;
   }
 
@@ -378,11 +535,8 @@ async function signUpForEvent(eventId) {
 
     if (data.success) {
       signedUpEventIds.add(eventId);
-      remindersSet.add(eventId);
       closeModal('ccaDetailModal');
       showToast(`🎉 ${data.message}`, "success");
-
-      // Push event confirmation into Telegram Bot Simulator
       appendTgMessage('bot', `✅ **Event Registration Success!**\n\nRegistered for **${data.event.title}**.\n🔔 Automated Outlook + Telegram reminder activated!`);
     } else {
       showToast(`Signup Failed (TDD Rule): ${data.message}`, "error");
@@ -393,97 +547,7 @@ async function signUpForEvent(eventId) {
 }
 
 // ----------------------------------------------------
-// ADMIN DASHBOARD
-// ----------------------------------------------------
-async function renderAdminDashboard() {
-  try {
-    const res = await fetch('/api/ccas');
-    const data = await res.json();
-
-    const eventsRes = await fetch('/api/ccas/legaltech_sig');
-    const eventsData = await eventsRes.json();
-    const eventsList = eventsData.events || [];
-
-    const container = document.getElementById('adminEventsList');
-    container.innerHTML = eventsList.map(evt => `
-      <div style="background:var(--bg-surface-elevated); border:1px solid var(--border-subtle); padding:1.1rem; border-radius:var(--radius-sm); display:flex; justify-content:space-between; align-items:center;">
-        <div>
-          <h4 style="font-size:0.925rem; font-weight:700; color:#fff;">${evt.title}</h4>
-          <p style="font-size:0.78rem; color:var(--text-muted);">📅 ${new Date(evt.datetime).toLocaleString()}</p>
-        </div>
-        <button class="btn btn-outline btn-sm" onclick="viewAdminRoster('${evt.id}')">View Roster (${evt.signup_count})</button>
-      </div>
-    `).join('');
-  } catch (err) {
-    console.error("Admin dashboard load error:", err);
-  }
-}
-
-async function viewAdminRoster(eventId) {
-  try {
-    const res = await fetch(`/api/admin/events/${eventId}/signups`);
-    const data = await res.json();
-
-    if (!data.success) return;
-
-    const container = document.getElementById('adminRosterContainer');
-    container.innerHTML = `
-      <h4 style="font-size:1rem; font-weight:700; color:#fff; margin-bottom:0.6rem;">${data.event_title} (${data.signup_count}/${data.capacity})</h4>
-      ${data.signups.length === 0 ? `<p style="font-size:0.875rem; color:var(--text-muted);">No student signups yet.</p>` : `
-        <table style="width:100%; font-size:0.825rem; border-collapse:collapse;">
-          <thead>
-            <tr style="border-bottom:1px solid var(--border-subtle); text-align:left; color:var(--text-muted);">
-              <th style="padding:8px;">Student Name</th>
-              <th style="padding:8px;">NP Student ID</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${data.signups.map(s => `
-              <tr style="border-bottom:1px solid var(--border-subtle);">
-                <td style="padding:8px; font-weight:600; color:#fff;">${s.name}</td>
-                <td style="padding:8px; color:#c4b5fd;">${s.student_id}</td>
-              </tr>
-            `).join('')}
-          </tbody>
-        </table>
-      `}
-    `;
-  } catch (err) {
-    showToast("Failed to fetch student roster.", "error");
-  }
-}
-
-async function openCreateEventModal() {
-  const title = prompt("Enter Event Title:", "LegalTech Masterclass 2026");
-  if (!title) return;
-
-  try {
-    const res = await fetch('/api/admin/events/create', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        cca_id: 'legaltech_sig',
-        title: title,
-        datetime: '2026-08-25T16:00:00',
-        location: 'Blk 31 (ICT) Room 402',
-        capacity: 25,
-        description: 'New masterclass created by CCA Lead.'
-      })
-    });
-    const data = await res.json();
-
-    if (data.success) {
-      showToast("🎉 Event published by CCA Lead!", "success");
-      renderAdminDashboard();
-      fetchCcas();
-    }
-  } catch (err) {
-    showToast("Failed to create event.", "error");
-  }
-}
-
-// ----------------------------------------------------
-// TDD AUTOMATED SUITE (Software Engineering Pillar)
+// TDD AUTOMATED SUITE
 // ----------------------------------------------------
 async function runTDDSuite() {
   document.getElementById('tddModal').classList.add('active');
@@ -534,8 +598,9 @@ function openDefenceModal() {
   document.getElementById('infoModalBody').innerHTML = `
     <p style="margin-bottom:0.85rem; color:#fff;"><strong>Security Controls Implemented:</strong></p>
     <ol style="padding-left:1.2rem; display:flex; flex-direction:column; gap:10px;">
-      <li><strong>Multi-Factor Authentication (2FA):</strong> All student logins require Outlook OTP verification to prevent unauthorized account access.</li>
-      <li><strong>Data Isolation (CIA Confidentiality):</strong> CCA Leads / Admins can ONLY view student Name and NP Student ID. Survey answers and passwords are kept strictly confidential.</li>
+      <li><strong>Multi-Factor Authentication (2FA):</strong> Mandatory 2FA OTP verification required on initial launch.</li>
+      <li><strong>Role-Based Access Control (RBAC):</strong> Admin dashboard is restricted to verified EXCO members only. Non-EXCO students see only the student portal.</li>
+      <li><strong>CIA Confidentiality Data Isolation:</strong> EXCO members can ONLY access signups for their assigned CCA and see student Name/ID only.</li>
     </ol>
   `;
   document.getElementById('infoModal').classList.add('active');
