@@ -33,13 +33,13 @@ if (createClient && SUPABASE_URL && SUPABASE_ANON_KEY) {
   }
 }
 
-// Nodemailer SMTP Transporter setup (using Resend SMTP for unlimited real email delivery)
+// Nodemailer SMTP Transporter setup (using Gmail SMTP for unlimited real email delivery)
 const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST || 'smtp.resend.com',
+  host: process.env.SMTP_HOST || 'smtp.gmail.com',
   port: parseInt(process.env.SMTP_PORT || '465', 10),
   secure: process.env.SMTP_SECURE !== 'false',
   auth: {
-    user: process.env.SMTP_USER || 'resend',
+    user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASS
   }
 });
@@ -206,7 +206,7 @@ app.post('/api/auth/login', async (req, res) => {
   // Direct Nodemailer Email Dispatch Attempt
   try {
     await transporter.sendMail({
-      from: '"NP CCA Match 2FA" <onboarding@resend.dev>',
+      from: process.env.SMTP_USER ? `"NP CCA Match 2FA" <${process.env.SMTP_USER}>` : '"NP CCA Match 2FA" <no-reply@np.edu.sg>',
       to: email,
       subject: `Your NP CCA Match 2FA Security Code: ${mockOtpCode}`,
       html: `
