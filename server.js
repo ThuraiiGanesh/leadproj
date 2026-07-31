@@ -177,37 +177,11 @@ app.post('/api/auth/login', async (req, res) => {
     expiresAt: Date.now() + 5 * 60 * 1000 // 5 minutes
   });
 
-  // Try Supabase OTP first if configured
-  if (supabase) {
-    try {
-      const { data, error } = await supabase.auth.signInWithOtp({
-        email: email,
-        options: {
-          shouldCreateUser: true
-        }
-      });
-
-      if (!error) {
-        return res.json({
-          success: true,
-          provider: 'supabase',
-          message: `Supabase 2FA OTP code dispatched to ${email}`,
-          student_id,
-          outlook_email: email,
-          mock_otp_code: null
-        });
-      } else {
-        console.warn("Supabase OTP warning, switching to direct email transport:", error.message);
-      }
-    } catch (err) {
-      console.error("Supabase OTP Exception:", err);
-    }
-  }
-
-  // Direct Nodemailer Email Dispatch Attempt
+  // Direct Nodemailer Email Dispatch (Instant delivery without 60s cooldowns)
+  let emailSent = false;
   try {
     await transporter.sendMail({
-      from: process.env.SMTP_USER ? `"NP CCA Match 2FA" <${process.env.SMTP_USER}>` : '"NP CCA Match 2FA" <no-reply@np.edu.sg>',
+      from: process.env.SMTP_USER ? `"NP CCA Match 2FA" <${process.env.SMTP_USER}>` : '"NP CCA Match 2FA" <ganeshoofs@gmail.com>',
       to: email,
       subject: `Your NP CCA Match 2FA Security Code: ${mockOtpCode}`,
       html: `
@@ -221,14 +195,28 @@ app.post('/api/auth/login', async (req, res) => {
         </div>
       `
     });
+    emailSent = true;
+    console.log(`✅ Instant 2FA Email sent to ${email} with code ${mockOtpCode}`);
   } catch (emailErr) {
-    console.log("Direct SMTP email dispatch notice:", emailErr.message);
+    console.error("Direct SMTP email dispatch error:", emailErr.message);
+  }
+
+  // Also sync with Supabase Auth if active
+  if (supabase) {
+    try {
+      await supabase.auth.signInWithOtp({
+        email: email,
+        options: { shouldCreateUser: true }
+      });
+    } catch (err) {
+      console.warn("Supabase OTP sync notice:", err.message);
+    }
   }
 
   return res.json({
     success: true,
-    provider: 'direct_transport',
-    message: `2FA security code dispatched to ${email}`,
+    provider: emailSent ? 'direct_transport' : 'session',
+    message: emailSent ? `2FA security code dispatched to ${email}` : `2FA Security Code Generated`,
     student_id,
     outlook_email: email,
     mock_otp_code: mockOtpCode
