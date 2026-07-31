@@ -33,14 +33,14 @@ if (createClient && SUPABASE_URL && SUPABASE_ANON_KEY) {
   }
 }
 
-// Nodemailer SMTP Transporter setup (for direct email dispatch without Supabase rate limits)
+// Nodemailer SMTP Transporter setup (using Resend SMTP for unlimited real email delivery)
 const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST || 'smtp.ethereal.email',
-  port: parseInt(process.env.SMTP_PORT || '587', 10),
-  secure: process.env.SMTP_SECURE === 'true',
+  host: process.env.SMTP_HOST || 'smtp.resend.com',
+  port: parseInt(process.env.SMTP_PORT || '465', 10),
+  secure: process.env.SMTP_SECURE !== 'false',
   auth: {
-    user: process.env.SMTP_USER || 'demo@connect.np.edu.sg',
-    pass: process.env.SMTP_PASS || 'demopassword'
+    user: process.env.SMTP_USER || 'resend',
+    pass: process.env.SMTP_PASS
   }
 });
 
@@ -206,7 +206,7 @@ app.post('/api/auth/login', async (req, res) => {
   // Direct Nodemailer Email Dispatch Attempt
   try {
     await transporter.sendMail({
-      from: '"NP CCA Match 2FA" <no-reply@np.edu.sg>',
+      from: '"NP CCA Match 2FA" <onboarding@resend.dev>',
       to: email,
       subject: `Your NP CCA Match 2FA Security Code: ${mockOtpCode}`,
       html: `
