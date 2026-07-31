@@ -1,0 +1,162 @@
+[
+  {
+    "id": "legaltech_sig",
+    "name": "NP LegalTech SIG",
+    "category": "Special Interest",
+    "school": "ICT / Business",
+    "description": "Empowering NP students at the intersection of AI, Software Engineering, and Legal Discourse. Build law-tech bots, automate legal workflows, and join national hackathons.",
+    "location": "Block 31 (ICT) Level 4, Room 402",
+    "commitment_level": "medium",
+    "style": "team",
+    "tags": ["tech", "ai", "coding", "law", "innovation", "hackathon"],
+    "exco": [
+      { "name": "Thurai Ganesh", "role": "President", "email": "s10234567@connect.np.edu.sg" },
+      { "name": "Rachel Tan", "role": "Vice President", "email": "s10234890@connect.np.edu.sg" }
+    ],
+    "contact": {
+      "telegram": "t.me/NPLegalTechSIG",
+      "instagram": "@np_legaltech",
+      "email": "legaltech@connect.np.edu.sg"
+    }
+  },
+  {
+    "id": "np_developers",
+    "name": "NP Developers Club",
+    "category": "Academic & Tech",
+    "school": "ICT",
+    "description": "Full-stack development, mobile app creation, open-source projects, and technical workshops. Build real software products for campus life.",
+    "location": "Block 31 Level 3, Makerspace",
+    "commitment_level": "high",
+    "style": "team",
+    "tags": ["tech", "coding", "software", "web", "mobile", "ai"],
+    "exco": [
+      { "name": "Marcus Lim", "role": "President", "email": "s10241122@connect.np.edu.sg" },
+      { "name": "Chloe Wong", "role": "Tech Lead", "email": "s10249911@connect.np.edu.sg" }
+    ],
+    "contact": {
+      "telegram": "t.me/NPDevelopers",
+      "instagram": "@np_devs",
+      "email": "developers@connect.np.edu.sg"
+    }
+  },
+  {
+    "id": "np_robotics",
+    "name": "NP Robotics & Automation Club",
+    "category": "Special Interest",
+    "school": "Engineering",
+    "description": "Design autonomous robots, drone navigation, embedded systems, and microcontroller programming for national competitions.",
+    "location": "Block 22 (MAE) Robotics Lab",
+    "commitment_level": "high",
+    "style": "team",
+    "tags": ["tech", "robotics", "hardware", "engineering", "coding"],
+    "exco": [
+      { "name": "Ahmad Farhan", "role": "President", "email": "s10239081@connect.np.edu.sg" },
+      { "name": "David Chen", "role": "Vice President", "email": "s10237722@connect.np.edu.sg" }
+    ],
+    "contact": {
+      "telegram": "t.me/NPRobotics",
+      "instagram": "@np_robotics",
+      "email": "robotics@connect.np.edu.sg"
+    }
+  },
+  {
+    "id": "np_badminton",
+    "name": "NP Badminton Club",
+    "category": "Sports",
+    "school": "All Schools",
+    "description": "Competitive and recreational badminton training sessions. Build agility, court strategy, and sportsmanship in IVP tournaments.",
+    "location": "Sports Complex Court 1-4",
+    "commitment_level": "medium",
+    "style": "team",
+    "tags": ["sports", "fitness", "badminton", "racket", "competition"],
+    "exco": [
+      { "name": "Kevin Teo", "role": "Captain", "email": "s10231122@connect.np.edu.sg" },
+      { "name": "Sarah Lee", "role": "Vice Captain", "email": "s10233344@connect.np.edu.sg" }
+    ],
+    "contact": {
+      "telegram": "t.me/NPBadminton",
+      "instagram": "@np_badminton",
+      "email": "badminton@connect.np.edu.sg"
+    }
+  },
+  {
+    "id": "np_photography",
+    "name": "NP Visual Arts & Photography",
+    "category": "Arts & Culture",
+    "school": "All Schools",
+    "description": "Master camera composition, street photography, studio lighting, photo editing, and visual storytelling across campus events.",
+    "location": "Block 52 Visual Arts Studio",
+    "commitment_level": "low",
+    "style": "solo",
+    "tags": ["arts", "photography", "design", "creative", "media"],
+    "exco": [
+      { "name": "Jessica Koh", "role": "President", "email": "s10236611@connect.np.edu.sg" },
+      { "name": "Bryan Goh", "role": "Head of Events", "email": "s10237788@connect.np.edu.sg" }
+    ],
+    "contact": {
+      "telegram": "t.me/NPPhoto",
+      "instagram": "@np_photography",
+      "email": "photo@connect.np.edu.sg"
+    }
+  },
+  {
+    "id": "np_dance",
+    "name": "NP Dance Works (Hip-Hop)",
+    "category": "Arts & Culture",
+    "school": "All Schools",
+    "description": "High-energy street dance, choreography jams, stage showcases, and annual dance competitions.",
+    "location": "Convention Centre Dance Studio 2",
+    "commitment_level": "high",
+    "style": "team",
+    "tags": ["arts", "dance", "performance", "hiphop", "music"],
+    "exco": [
+      { "name": "Daniel Kim", "role": "President", "email": "s10238811@connect.np.edu.sg" },
+      { "name": "Mei Ting", "role": "Choreographer", "email": "s10239900@connect.np.edu.sg" }
+    ],
+    "contact": {
+      "telegram": "t.me/NPDanceWorks",
+      "instagram": "@np_danceworks",
+      "email": "dance@connect.np.edu.sg"
+    }
+  },
+  {
+    "id": "np_volunteers",
+    "name": "NP Community Volunteers",
+    "category": "Community Service",
+    "school": "All Schools",
+    "description": "Engage in meaningful community outreach, elderly befriending, food drives, and environmental sustainability initiatives.",
+    "location": "Student Life Office Block 22",
+    "commitment_level": "low",
+    "style": "mixed",
+    "tags": ["community", "volunteering", "social", "outreach", "sustainability"],
+    "exco": [
+      { "name": "Hannah Tan", "role": "President", "email": "s10232211@connect.np.edu.sg" },
+      { "name": "Darren Ong", "role": "Outreach Lead", "email": "s10234455@connect.np.edu.sg" }
+    ],
+    "contact": {
+      "telegram": "t.me/NPVolunteers",
+      "instagram": "@np_volunteers",
+      "email": "volunteers@connect.np.edu.sg"
+    }
+  },
+  {
+    "id": "np_entrepreneurs",
+    "name": "NP Youth Entrepreneurs Society",
+    "category": "Special Interest",
+    "school": "School of Business & Services",
+    "description": "Pitch startup ideas, network with industry mentors, learn financial modeling, and compete in venture capital competitions.",
+    "location": "Block 72 Innovation Hub",
+    "commitment_level": "medium",
+    "style": "mixed",
+    "tags": ["business", "startup", "innovation", "networking", "pitching"],
+    "exco": [
+      { "name": "Ryan Seow", "role": "President", "email": "s10235566@connect.np.edu.sg" },
+      { "name": "Amanda Tan", "role": "Head of Partnerships", "email": "s10238877@connect.np.edu.sg" }
+    ],
+    "contact": {
+      "telegram": "t.me/NPEntrepreneurs",
+      "instagram": "@np_entrepreneurs",
+      "email": "entrepreneurs@connect.np.edu.sg"
+    }
+  }
+]

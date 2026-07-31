@@ -1,0 +1,71 @@
+[
+  {
+    "id": "evt_lt_1",
+    "cca_id": "legaltech_sig",
+    "title": "Build Your First Legal Tech AI Bot Workshop",
+    "datetime": "2026-08-10T17:00:00",
+    "location": "Blk 31 (ICT) Lvl 4 Room 402",
+    "capacity": 30,
+    "signup_count": 12,
+    "signups": [
+      { "student_id": "s10234567", "name": "Thurai Ganesh" },
+      { "student_id": "s10234890", "name": "Rachel Tan" }
+    ],
+    "description": "Hands-on session building custom AI assistants for legal document automation and campus navigation."
+  },
+  {
+    "id": "evt_lt_2",
+    "cca_id": "legaltech_sig",
+    "title": "LegalTech Hackathon 2026 Info Session",
+    "datetime": "2026-08-18T16:00:00",
+    "location": "Convention Centre LT 68A",
+    "capacity": 50,
+    "signup_count": 48,
+    "signups": [],
+    "description": "Learn about problem statements, team formation, and prize categories for the upcoming campus hackathon."
+  },
+  {
+    "id": "evt_dev_1",
+    "cca_id": "np_developers",
+    "title": "Web Architecture & API Integration Bootcamp",
+    "datetime": "2026-08-12T15:30:00",
+    "location": "Blk 31 Lvl 3 Makerspace",
+    "capacity": 25,
+    "signup_count": 25,
+    "signups": [],
+    "description": "Deep dive into REST API design, Node.js express endpoints, and responsive frontend state management."
+  },
+  {
+    "id": "evt_bad_1",
+    "cca_id": "np_badminton",
+    "title": "Freshmen Trials & Selection Match",
+    "datetime": "2026-08-14T18:00:00",
+    "location": "Sports Complex Court 1",
+    "capacity": 20,
+    "signup_count": 8,
+    "signups": [],
+    "description": "Open trials for singles and doubles positions in the upcoming Poly-ITE (POL-ITE) games."
+  },
+  {
+    "id": "evt_photo_1",
+    "cca_id": "np_photography",
+    "title": "Sunset & Night Cityscape Photowalk",
+    "datetime": "2026-08-15T17:30:00",
+    "location": "Marina Bay Sands Waterfront Promenade",
+    "capacity": 15,
+    "signup_count": 6,
+    "signups": [],
+    "description": "Outdoor hands-on photo session covering long exposure, manual aperture settings, and tripod framing."
+  },
+  {
+    "id": "evt_past_1",
+    "cca_id": "legaltech_sig",
+    "title": "LegalTech Orientation & Icebreaker",
+    "datetime": "2026-06-01T14:00:00",
+    "location": "Blk 31 Room 402",
+    "capacity": 40,
+    "signup_count": 35,
+    "signups": [],
+    "description": "Past orientation event for TDD validation of past event timestamps."
+  }
+]

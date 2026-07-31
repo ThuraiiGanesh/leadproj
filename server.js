@@ -1,537 +1,446 @@
-require('dotenv').config();
 const express = require('express');
-const { Telegraf, Markup } = require('telegraf');
+const cors = require('cors');
+const fs = require('fs');
 const path = require('path');
-const nodemailer = require('nodemailer');
-const { NP_CCAS } = require('./data/cca_data');
-
-const PORT = process.env.PORT || 3000;
-const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
-const WEBAPP_URL = process.env.WEBAPP_URL || `http://localhost:${PORT}`;
 
 const app = express();
+const PORT = process.env.PORT || 3000;
+
+app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// ─── EMAIL DISPATCHER ENGINE (Gmail SMTP) ───────────────────────────
-let emailTransporter = null;
+// File paths
+const CCAS_FILE = path.join(__dirname, 'data', 'ccas.json');
+const EVENTS_FILE = path.join(__dirname, 'data', 'events.json');
 
-async function getEmailTransporter() {
-  if (emailTransporter) return emailTransporter;
+// In-Memory Data Stores
+let ccas = [];
+let events = [];
 
-  const host = process.env.SMTP_HOST || 'smtp.gmail.com';
-  const port = parseInt(process.env.SMTP_PORT || '465', 10);
-  const user = process.env.SMTP_USER || 'ganeshoofs@gmail.com';
-  const pass = process.env.SMTP_PASS;
-
-  if (user && pass) {
-    emailTransporter = nodemailer.createTransport({
-      service: 'gmail',
-      host: 'smtp.gmail.com',
-      port: 465,
-      secure: true,
-      family: 4,
-      auth: { user, pass }
-    });
-    console.log(`📧 Gmail SMTP Configured for ${user}`);
-  }
-  return emailTransporter;
-}
-
-// Function to send real 2FA email via Gmail SMTP
-async function sendReal2FAEmail(toEmail, studentName, otpCode) {
-  const htmlContent = `
-    <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 560px; margin: 0 auto; padding: 24px; background-color: #0f172a; border-radius: 16px; color: #f8fafc; border: 1px solid rgba(255,255,255,0.1);">
-      <div style="text-align: center; margin-bottom: 24px;">
-        <div style="display: inline-block; width: 48px; height: 48px; background: linear-gradient(135deg, #3b82f6, #a855f7); color: white; border-radius: 50%; line-height: 48px; font-weight: bold; font-size: 18px;">NP</div>
-        <h2 style="color: #ffffff; font-size: 22px; margin-top: 12px; margin-bottom: 4px;">Ngee Ann Polytechnic</h2>
-        <p style="color: #94a3b8; font-size: 14px; margin: 0;">Student Portal Security Verification</p>
-      </div>
-
-      <div style="background-color: #1e293b; border-radius: 12px; padding: 24px; border: 1px solid rgba(59,130,246,0.3); margin-bottom: 24px; text-align: center;">
-        <p style="color: #cbd5e1; font-size: 15px; margin-top: 0;">Hello <strong>${studentName}</strong>,</p>
-        <p style="color: #cbd5e1; font-size: 14px; margin-bottom: 20px;">Use the following 6-digit security code to complete your NP Student Portal 2FA login:</p>
-        
-        <div style="display: inline-block; padding: 14px 32px; background: rgba(59, 130, 246, 0.2); border: 2px dashed #3b82f6; border-radius: 12px; font-size: 32px; font-weight: 800; letter-spacing: 6px; color: #60a5fa; margin-bottom: 12px;">
-          ${otpCode}
-        </div>
-        
-        <p style="color: #94a3b8; font-size: 12px; margin: 0;">Target Recipient: <strong>${toEmail}</strong></p>
-        <p style="color: #94a3b8; font-size: 12px; margin-top: 4px;">This code will expire in 10 minutes. Do not share this code with anyone.</p>
-      </div>
-
-      <div style="text-align: center; color: #64748b; font-size: 12px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 16px;">
-        <p style="margin: 0;">This is an automated notification from the NP Student Portal.</p>
-      </div>
-    </div>
-  `;
-
-  // 1. Try Gmail SMTP (Sends directly to whatever email the user inputs!)
+function loadData() {
   try {
-    const transporter = await getEmailTransporter();
-    if (transporter) {
-      const senderEmail = process.env.SMTP_USER || 'ganeshoofs@gmail.com';
-      const info = await transporter.sendMail({
-        from: `"NP Student Portal Security" <${senderEmail}>`,
-        to: toEmail,
-        subject: `🔐 ${otpCode} is your NP Student Portal 2FA Security Code`,
-        html: htmlContent
-      });
-      console.log(`🚀 REAL 2FA EMAIL DELIVERED VIA GMAIL SMTP DIRECTLY TO ${toEmail}! (MsgID: ${info.messageId})`);
-      return true;
+    if (fs.existsSync(CCAS_FILE)) {
+      ccas = JSON.parse(fs.readFileSync(CCAS_FILE, 'utf8'));
+    }
+    if (fs.existsSync(EVENTS_FILE)) {
+      events = JSON.parse(fs.readFileSync(EVENTS_FILE, 'utf8'));
     }
   } catch (err) {
-    console.error(`⚠️ Gmail SMTP Error: ${err.message}`);
+    console.error("Error loading JSON datasets:", err);
   }
-
-  return false;
 }
 
-// In-Memory Data Storage for Event Registrations, Profiles & Auth
-const userProfiles = {}; // key: studentId or userId, value: profile object
-const eventRegistrations = {}; // key: studentId or userId, value: array of event objects
-const pending2FACodes = {}; // key: studentId, value: { code, email, expiresAt, name, school }
-const activeSessions = {}; // key: token, value: { studentId, email, name, school }
+function saveData() {
+  try {
+    fs.writeFileSync(CCAS_FILE, JSON.stringify(ccas, null, 2));
+    fs.writeFileSync(EVENTS_FILE, JSON.stringify(events, null, 2));
+  } catch (err) {
+    console.error("Error saving JSON datasets:", err);
+  }
+}
 
-// Health check endpoint
-app.get('/health', (req, res) => {
-  res.json({ status: 'ok', app: 'NP CCA Match / NP CCA GO', total_ccas: NP_CCAS.length });
-});
+loadData();
 
-// ─── AUTHENTICATION & 2FA ENDPOINTS ─────────────────────────────
+// Mock Session & 2FA Store
+const active2FASessions = new Map();
 
-// Helper to normalize and validate Student Email or ID
-function parseNPEmailOrId(input) {
-  if (!input) return null;
-  const str = input.trim().toLowerCase();
+// Helper: Calculate Weighted Score (Section 3 of Build Spec)
+function calculateMatchScore(studentAnswers, cca) {
+  if (!studentAnswers || !studentAnswers.interest_tags || studentAnswers.interest_tags.length === 0) {
+    return 0;
+  }
+
+  // 1. Interest Tag Overlap (weight 0.5)
+  const studentTags = studentAnswers.interest_tags.map(t => t.toLowerCase());
+  const ccaTags = cca.tags.map(t => t.toLowerCase());
   
-  let studentId = str;
-  let email = str;
-
-  if (str.includes('@')) {
-    const parts = str.split('@');
-    studentId = parts[0];
-    email = str; // Exact email typed in by the user
-  } else {
-    // If only Student ID is entered, append default NP domain
-    if (!studentId.startsWith('s') && !studentId.startsWith('p')) {
-      studentId = 's' + studentId;
+  let matchCount = 0;
+  studentTags.forEach(tag => {
+    if (ccaTags.includes(tag)) {
+      matchCount++;
     }
-    email = `${studentId}@connect.np.edu.sg`;
+  });
+
+  const interestOverlap = matchCount / studentTags.length;
+
+  // 2. Commitment Fit (weight 0.3)
+  const studentCommitment = (studentAnswers.commitment_level || '').toLowerCase();
+  const ccaCommitment = (cca.commitment_level || '').toLowerCase();
+  
+  let commitmentFit = 0.0;
+  if (studentCommitment === ccaCommitment) {
+    commitmentFit = 1.0;
+  } else if (
+    (studentCommitment === 'medium' && (ccaCommitment === 'low' || ccaCommitment === 'high')) ||
+    (ccaCommitment === 'medium' && (studentCommitment === 'low' || studentCommitment === 'high'))
+  ) {
+    commitmentFit = 0.5;
+  } else {
+    commitmentFit = 0.0; // low vs high
   }
 
-  if (studentId.length < 3) {
-    return { valid: false, error: 'Please enter a valid Student ID or Email address.' };
+  // 3. Style Fit (weight 0.2)
+  const studentStyle = (studentAnswers.style || '').toLowerCase();
+  const ccaStyle = (cca.style || '').toLowerCase();
+
+  let styleFit = 0.0;
+  if (studentStyle === ccaStyle) {
+    styleFit = 1.0;
+  } else if (studentStyle === 'mixed' || ccaStyle === 'mixed') {
+    styleFit = 0.5;
+  } else {
+    styleFit = 0.0;
   }
 
-  // Derive school based on ID or default to ICT
-  const charCode = studentId.charCodeAt(studentId.length - 1) % 4;
-  const schoolList = ['ICT', 'BA', 'HMS', 'SOE'];
-  const school = schoolList[charCode] || 'ICT';
-
-  return {
-    valid: true,
-    studentId: studentId.toUpperCase(),
-    email: email, // Target email typed by user
-    school
-  };
+  // Weighted Score
+  const rawScore = (0.5 * interestOverlap) + (0.3 * commitmentFit) + (0.2 * styleFit);
+  return Math.round(rawScore * 100);
 }
 
-// 1. Student Login (NP Email + Password check) -> Triggers 2FA Code
-app.post('/api/auth/login', async (req, res) => {
-  const { emailOrId, password } = req.body || {};
+// ----------------------------------------------------
+// AUTH ENDPOINTS (Defence Pillar: Mock 2FA)
+// ----------------------------------------------------
 
-  if (!emailOrId || !password) {
-    return res.status(400).json({ success: false, error: 'Please enter your NP Student ID / Email and password.' });
+app.post('/api/auth/login', (req, res) => {
+  const { student_id, password } = req.body;
+  if (!student_id || !password) {
+    return res.status(400).json({ success: false, message: 'NP Student ID and Password are required.' });
   }
 
-  if (password.length < 4) {
-    return res.status(400).json({ success: false, error: 'Password must be at least 4 characters long.' });
-  }
-
-  const parsed = parseNPEmailOrId(emailOrId);
-  if (!parsed || !parsed.valid) {
-    return res.status(400).json({ success: false, error: parsed ? parsed.error : 'Invalid NP Student credentials.' });
-  }
-
-  // Generate 6-digit OTP 2FA Code
-  const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
-  const expiresAt = Date.now() + 10 * 60 * 1000; // 10 mins
-
-  // Default student name based on ID
-  const idNum = parsed.studentId.replace(/\D/g, '') || '10234567';
-  const sampleNames = ['Alex Tan', 'Jordan Lim', 'Chloe Wong', 'Ryan Teo', 'Hannah Koh'];
-  const nameIndex = parseInt(idNum, 10) % sampleNames.length;
-  const studentName = sampleNames[nameIndex];
-
-  pending2FACodes[parsed.studentId] = {
-    code: otpCode,
-    email: parsed.email,
-    name: studentName,
-    school: parsed.school,
-    expiresAt
-  };
-
-  console.log(`\n==============================================`);
-  console.log(`🔐 2FA SECURITY CODE GENERATED FOR ${parsed.email}`);
-  console.log(`👉 CODE: [ ${otpCode} ]`);
-  console.log(`==============================================\n`);
-
-  // Mask email for privacy UI (e.g. s102****7@connect.np.edu.sg)
-  const emailPrefix = parsed.email.split('@')[0];
-  const maskedPrefix = emailPrefix.substring(0, 3) + '****' + emailPrefix.substring(emailPrefix.length - 1);
-  const maskedEmail = `${maskedPrefix}@${parsed.email.split('@')[1]}`;
-
-  // Attempt real email dispatch via Brevo / SMTP / Resend
-  await sendReal2FAEmail(parsed.email, studentName, otpCode).catch(err => {
-    console.warn('Real email dispatch warning:', err.message);
+  // Generate 6-digit mock OTP code
+  const mockOtpCode = Math.floor(100000 + Math.random() * 900000).toString();
+  active2FASessions.set(student_id, {
+    otp: mockOtpCode,
+    expiresAt: Date.now() + 5 * 60 * 1000 // 5 minutes
   });
 
-  res.json({
+  return res.json({
     success: true,
-    require2FA: true,
-    studentId: parsed.studentId,
-    email: parsed.email,
-    maskedEmail: maskedEmail,
-    devCode: otpCode, // Testing code for instant 1-click login
-    message: `A 2FA verification code has been sent to ${maskedEmail}`
+    message: '2FA authentication code sent to Outlook email.',
+    student_id,
+    outlook_email: `${student_id.toLowerCase()}@connect.np.edu.sg`,
+    mock_otp_code: mockOtpCode // Returned for seamless interactive demo display
   });
 });
 
-// 2. Verify 2FA OTP Code
 app.post('/api/auth/verify-2fa', (req, res) => {
-  const { studentId, code } = req.body || {};
+  const { student_id, otp_code } = req.body;
+  const session = active2FASessions.get(student_id);
 
-  if (!studentId || !code) {
-    return res.status(400).json({ success: false, error: 'Student ID and 2FA Code are required.' });
+  if (!session) {
+    return res.status(400).json({ success: false, message: 'No active 2FA session found. Please log in again.' });
   }
 
-  const pending = pending2FACodes[studentId];
-  if (!pending) {
-    return res.status(400).json({ success: false, error: '2FA session expired. Please log in again.' });
+  if (Date.now() > session.expiresAt) {
+    active2FASessions.delete(student_id);
+    return res.status(400).json({ success: false, message: '2FA code has expired.' });
   }
 
-  if (Date.now() > pending.expiresAt) {
-    delete pending2FACodes[studentId];
-    return res.status(400).json({ success: false, error: '2FA Code has expired. Please request a new code.' });
+  if (session.otp !== otp_code.trim()) {
+    return res.status(400).json({ success: false, message: 'Invalid 2FA code. Please check your Outlook email.' });
   }
 
-  if (pending.code !== code.trim()) {
-    return res.status(400).json({ success: false, error: 'Incorrect 2FA code. Please check your Outlook email and try again.' });
-  }
+  active2FASessions.delete(student_id);
 
-  // Successful Auth! Create Session
-  const sessionToken = `np_sess_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
-  const userProfile = {
-    studentId: studentId,
-    email: pending.email,
-    name: pending.name,
-    school: pending.school,
-    verifiedAt: new Date().toISOString()
+  // Return authenticated student object
+  const user = {
+    id: student_id,
+    name: student_id.toLowerCase() === 's10234567' ? 'Thurai Ganesh' : `Student (${student_id})`,
+    np_student_id: student_id.toUpperCase(),
+    school: 'School of InfoComm Technology (ICT)',
+    survey_completed: false,
+    survey_answers: null,
+    bookmarked_cca_ids: [],
+    signed_up_event_ids: []
   };
 
-  activeSessions[sessionToken] = userProfile;
-  userProfiles[studentId] = userProfile;
-
-  // Clear pending code
-  delete pending2FACodes[studentId];
-
-  res.json({
+  return res.json({
     success: true,
-    token: sessionToken,
-    profile: userProfile,
-    message: '2FA Verification Successful! Welcome to NP Student Portal.'
+    message: '2FA Verification Successful.',
+    user
   });
 });
 
-// 3. Resend 2FA Code
-app.post('/api/auth/resend-2fa', (req, res) => {
-  const { studentId } = req.body || {};
-  if (!studentId || !pending2FACodes[studentId]) {
-    return res.status(400).json({ success: false, error: 'No active 2FA request found. Please login again.' });
-  }
+// ----------------------------------------------------
+// CCA & MATCHING ENDPOINTS (Analytics Pillar)
+// ----------------------------------------------------
 
-  const pending = pending2FACodes[studentId];
-  const newCode = Math.floor(100000 + Math.random() * 900000).toString();
-  pending.code = newCode;
-  pending.expiresAt = Date.now() + 10 * 60 * 1000;
-
-  sendReal2FAEmail(pending.email, pending.name, newCode).catch(err => {
-    console.warn('Resend email error:', err.message);
-  });
-
-  res.json({
-    success: true,
-    message: 'New 2FA code sent to your NP Outlook email.'
-  });
-});
-
-// ─── REST API ENDPOINTS ──────────────────────────────────────────
-
-// 1. Get all CCAs with optional filters
 app.get('/api/ccas', (req, res) => {
-  const { category, school, query } = req.query;
-  let result = [...NP_CCAS];
+  const { interest_tags, commitment_level, style, survey_completed, category, search } = req.query;
 
+  let result = ccas.map(cca => ({ ...cca }));
+
+  const isSurveyDone = survey_completed === 'true';
+
+  if (isSurveyDone && interest_tags) {
+    const studentAnswers = {
+      interest_tags: Array.isArray(interest_tags) ? interest_tags : interest_tags.split(','),
+      commitment_level: commitment_level || 'medium',
+      style: style || 'team'
+    };
+
+    result = result.map(cca => {
+      const score = calculateMatchScore(studentAnswers, cca);
+      return {
+        ...cca,
+        match_score: score,
+        is_recommended: score > 70
+      };
+    });
+
+    // Sort descending by match score
+    result.sort((a, b) => b.match_score - a.match_score);
+  } else {
+    result = result.map(cca => ({
+      ...cca,
+      match_score: null,
+      is_recommended: false
+    }));
+  }
+
+  // Optional category filter
   if (category && category !== 'All') {
-    result = result.filter(c => c.category === category);
+    result = result.filter(cca => cca.category.toLowerCase().includes(category.toLowerCase()));
   }
-  if (school && school !== 'All') {
-    result = result.filter(c => c.school === school);
-  }
-  if (query) {
-    const q = query.toLowerCase();
-    result = result.filter(c => 
-      c.name.toLowerCase().includes(q) ||
-      c.description.toLowerCase().includes(q) ||
-      c.tags.some(t => t.toLowerCase().includes(q))
+
+  // Optional search query
+  if (search) {
+    const q = search.toLowerCase();
+    result = result.filter(cca =>
+      cca.name.toLowerCase().includes(q) ||
+      cca.description.toLowerCase().includes(q) ||
+      cca.tags.some(t => t.toLowerCase().includes(q))
     );
   }
-  res.json(result);
+
+  res.json({ success: true, ccas: result });
 });
 
-// 2. CCA Matcher Algorithm
-app.post('/api/match', (req, res) => {
-  const { interests = [], commitment = "Medium", school = "ICT" } = req.body || {};
+app.get('/api/ccas/:id', (req, res) => {
+  const cca = ccas.find(c => c.id === req.params.id);
+  if (!cca) {
+    return res.status(404).json({ success: false, message: 'CCA not found.' });
+  }
 
-  const scoredCCAs = NP_CCAS.map(cca => {
-    let score = 50; // base score
+  const ccaEvents = events.filter(e => e.cca_id === cca.id);
+  res.json({ success: true, cca, events: ccaEvents });
+});
 
-    // School match bonus (+15)
-    if (cca.school === school) score += 15;
+// ----------------------------------------------------
+// EVENT SIGNUP ENDPOINT (Software Engineering TDD RED Pillar)
+// ----------------------------------------------------
 
-    // Commitment level match (+15)
-    if (cca.commitment.toLowerCase() === commitment.toLowerCase()) {
-      score += 15;
-    } else if (cca.commitment === "Medium") {
-      score += 8;
+function validateSignupRules(event, student_id) {
+  const now = new Date();
+  const eventTime = new Date(event.datetime);
+
+  // Condition 1: Event not full (signup_count < capacity)
+  if (event.signup_count >= event.capacity) {
+    return { valid: false, reason: 'Event is fully booked (Capacity reached).' };
+  }
+
+  // Condition 2: Student not already signed up
+  const alreadySignedUp = event.signups && event.signups.some(s => s.student_id.toLowerCase() === student_id.toLowerCase());
+  if (alreadySignedUp) {
+    return { valid: false, reason: 'Student is already signed up for this event.' };
+  }
+
+  // Condition 3: Signup attempted before event datetime
+  if (eventTime <= now) {
+    return { valid: false, reason: 'Registration closed. Event date/time has already passed.' };
+  }
+
+  return { valid: true };
+}
+
+app.post('/api/events/:id/signup', (req, res) => {
+  const { student_id, student_name } = req.body;
+  const event = events.find(e => e.id === req.params.id);
+
+  if (!event) {
+    return res.status(404).json({ success: false, message: 'Event not found.' });
+  }
+
+  if (!student_id) {
+    return res.status(400).json({ success: false, message: 'Student ID is required.' });
+  }
+
+  const validation = validateSignupRules(event, student_id);
+  if (!validation.valid) {
+    return res.status(400).json({ success: false, message: validation.reason });
+  }
+
+  // Perform Signup
+  event.signup_count += 1;
+  if (!event.signups) event.signups = [];
+  event.signups.push({
+    student_id: student_id.toUpperCase(),
+    name: student_name || 'Student (' + student_id + ')',
+    signed_at: new Date().toISOString()
+  });
+
+  saveData();
+
+  res.json({
+    success: true,
+    message: `Successfully registered for ${event.title}! Reminder set.`,
+    event
+  });
+});
+
+// TDD Automated Test Runner API
+app.get('/api/tdd/run', (req, res) => {
+  const now = new Date();
+  const futureTime = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000).toISOString();
+  const pastTime = new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000).toISOString();
+
+  const testCases = [
+    {
+      name: "Valid Signup (Capacity available, future date, new student)",
+      event: { capacity: 10, signup_count: 5, datetime: futureTime, signups: [{ student_id: "S10000001" }] },
+      student_id: "S10234567",
+      expected: true
+    },
+    {
+      name: "Event Full Error (signup_count == capacity)",
+      event: { capacity: 10, signup_count: 10, datetime: futureTime, signups: [] },
+      student_id: "S10234567",
+      expected: false
+    },
+    {
+      name: "Duplicate Signup Error (student already in signups list)",
+      event: { capacity: 10, signup_count: 5, datetime: futureTime, signups: [{ student_id: "S10234567" }] },
+      student_id: "S10234567",
+      expected: false
+    },
+    {
+      name: "Boundary Case (signup_count == capacity - 1)",
+      event: { capacity: 10, signup_count: 9, datetime: futureTime, signups: [] },
+      student_id: "S10234567",
+      expected: true
+    },
+    {
+      name: "Event Passed Error (datetime <= now)",
+      event: { capacity: 10, signup_count: 2, datetime: pastTime, signups: [] },
+      student_id: "S10234567",
+      expected: false
     }
+  ];
 
-    // Tag / Interest overlap (+10 per tag, max 30)
-    let interestBonus = 0;
-    interests.forEach(interest => {
-      const lower = interest.toLowerCase();
-      if (cca.tags.some(tag => tag.includes(lower) || lower.includes(tag)) ||
-          cca.category.toLowerCase().includes(lower)) {
-        interestBonus += 10;
-      }
-    });
-    score += Math.min(interestBonus, 30);
-
-    // Normalize between 65% and 98%
-    const matchPercentage = Math.min(Math.max(score, 65), 98);
-
+  const results = testCases.map(tc => {
+    const val = validateSignupRules(tc.event, tc.student_id);
+    const passed = val.valid === tc.expected;
     return {
-      ...cca,
-      matchPercentage
+      test_name: tc.name,
+      expected: tc.expected ? "PASS" : "FAIL",
+      actual: val.valid ? "PASS" : "FAIL",
+      passed: passed,
+      reason: val.reason || "Validation Passed"
     };
   });
 
-  // Sort descending by match percentage
-  scoredCCAs.sort((a, b) => b.matchPercentage - a.matchPercentage);
-  res.json(scoredCCAs);
+  const allPassed = results.every(r => r.passed);
+  res.json({ success: true, allPassed, total: results.length, suite: results });
 });
 
-// 3. Get all upcoming CCA events
-app.get('/api/events', (req, res) => {
-  const allEvents = [];
-  NP_CCAS.forEach(cca => {
-    (cca.upcoming_events || []).forEach(evt => {
-      allEvents.push({
-        ...evt,
-        cca_id: cca.id,
-        cca_name: cca.name,
-        cca_category: cca.category
-      });
-    });
-  });
-  res.json(allEvents);
-});
+// ----------------------------------------------------
+// ADMIN / CCA LEAD ENDPOINTS (Defence Pillar: Data Isolation)
+// ----------------------------------------------------
 
-// 4. One-Click Event Registration Endpoint
-app.post('/api/events/signup', (req, res) => {
-  const { studentId = 'GUEST', studentName = 'Student', eventId } = req.body || {};
+app.post('/api/admin/events/create', (req, res) => {
+  const { cca_id, title, datetime, location, capacity, description } = req.body;
 
-  if (!eventId) {
-    return res.status(400).json({ success: false, error: 'Event ID is required' });
+  if (!cca_id || !title || !datetime || !location || !capacity) {
+    return res.status(400).json({ success: false, message: 'All event fields are required.' });
   }
 
-  // Find target event
-  let targetEvent = null;
-  let targetCCA = null;
-  NP_CCAS.forEach(cca => {
-    const evt = (cca.upcoming_events || []).find(e => e.id === eventId);
-    if (evt) {
-      targetEvent = evt;
-      targetCCA = cca;
-    }
-  });
-
-  if (!targetEvent) {
-    return res.status(404).json({ success: false, error: 'Event not found' });
-  }
-
-  if (!eventRegistrations[studentId]) {
-    eventRegistrations[studentId] = [];
-  }
-
-  // Check if already registered
-  const exists = eventRegistrations[studentId].some(e => e.id === eventId);
-  if (exists) {
-    return res.json({ success: true, message: 'Already signed up for this event!', event: targetEvent });
-  }
-
-  // Add registration
-  targetEvent.registeredCount = (targetEvent.registeredCount || 0) + 1;
-  const regEntry = {
-    ...targetEvent,
-    cca_name: targetCCA.name,
-    registeredAt: new Date().toISOString()
+  const newEvent = {
+    id: 'evt_' + Date.now(),
+    cca_id,
+    title,
+    datetime,
+    location,
+    capacity: parseInt(capacity, 10),
+    signup_count: 0,
+    signups: [],
+    description: description || ''
   };
 
-  eventRegistrations[studentId].push(regEntry);
-  res.json({ success: true, message: `Successfully registered for ${targetEvent.title}!`, event: regEntry });
+  events.push(newEvent);
+  saveData();
+
+  res.json({ success: true, message: 'Event successfully published!', event: newEvent });
 });
 
-// 5. Get user's registered events
-app.get('/api/user/events', (req, res) => {
-  const studentId = req.query.studentId || 'GUEST';
-  res.json(eventRegistrations[studentId] || []);
-});
-
-// 6. Save or update Student Profile
-app.post('/api/user/profile', (req, res) => {
-  const { name, studentId, school } = req.body || {};
-  if (!studentId) {
-    return res.status(400).json({ success: false, error: 'Student ID is required' });
+app.get('/api/admin/events/:id/signups', (req, res) => {
+  const event = events.find(e => e.id === req.params.id);
+  if (!event) {
+    return res.status(404).json({ success: false, message: 'Event not found.' });
   }
-  userProfiles[studentId] = { name, studentId, school, updatedAt: new Date().toISOString() };
-  res.json({ success: true, profile: userProfiles[studentId] });
+
+  // CIA Confidentiality Enforced: Return ONLY student Name and NP Student ID
+  // Data Minimization under PDPA - survey answers & credentials strictly hidden
+  const sanitizedSignups = (event.signups || []).map(s => ({
+    name: s.name,
+    student_id: s.student_id,
+    signed_at: s.signed_at || 'Registered'
+  }));
+
+  res.json({
+    success: true,
+    event_title: event.title,
+    capacity: event.capacity,
+    signup_count: event.signup_count,
+    signups: sanitizedSignups,
+    security_note: "PDPA & CIA Confidentiality Control Enforced: Survey answers & sensitive user data are excluded from Admin View."
+  });
 });
 
+// ----------------------------------------------------
+// TELEGRAM BOT SIMULATION ENDPOINTS
+// ----------------------------------------------------
 
-// ─── TELEGRAM BOT INTEGRATION (Telegraf) ───────────────────────────
-let bot = null;
-if (BOT_TOKEN && BOT_TOKEN !== 'your_bot_token_here') {
-  bot = new Telegraf(BOT_TOKEN);
+app.post('/api/telegram/interact', (req, res) => {
+  const { command, student_id, cca_id, event_id } = req.body;
 
-  // Welcome /start command
-  bot.command('start', (ctx) => {
-    const welcomeMsg = 
-      `🎯 *Welcome to NP CCA Match & NP CCA GO!* 🗺️\n\n` +
-      `Easily discover NP CCAs & SIGs, get matched via an AI Survey, sign up for events in 1-click, and navigate directly to campus meeting rooms!\n\n` +
-      `👇 Tap below to open the *NP CCA Matcher App*:`;
+  if (command === '/start') {
+    return res.json({
+      bot_response: "👋 Welcome to **NP CCA Match Bot**!\n\nUse `/browse` to view top matched CCAs based on your interest survey, or use `/myccas` to check your registered events and automated reminders.",
+      buttons: [
+        { text: "🔍 /browse Matched CCAs", action: "browse" },
+        { text: "📅 /myccas & Reminders", action: "myccas" }
+      ]
+    });
+  }
 
-    return ctx.replyWithMarkdown(welcomeMsg, 
-      Markup.inlineKeyboard([
-        [Markup.button.webApp('🚀 Launch NP CCA Match App', WEBAPP_URL)],
-        [Markup.button.callback('🎯 Match Me to a CCA', 'cmd_match'), Markup.button.callback('📅 Upcoming Events', 'cmd_events')],
-        [Markup.button.callback('📜 CCA Directory', 'cmd_ccas'), Markup.button.callback('🗺️ Campus Map', 'cmd_map')]
-      ])
-    );
+  if (command === 'browse') {
+    const topCCAs = ccas.slice(0, 3).map(c => `• **${c.name}** (${c.category})\n📍 ${c.location}`).join('\n\n');
+    return res.json({
+      bot_response: `🌟 **Top Recommended CCAs for You:**\n\n${topCCAs}\n\nSelect a CCA below to sign up for upcoming events:`,
+      buttons: [
+        { text: "⚡ Sign Up LegalTech Workshop", action: "signup_legaltech" },
+        { text: "⭐ Bookmark NP Developers", action: "bookmark_devs" }
+      ]
+    });
+  }
+
+  if (command === 'signup_legaltech') {
+    return res.json({
+      bot_response: "✅ **Event Signup Confirmed via Telegram!**\n\n📌 **Build Your First Legal Tech AI Bot**\n📅 10 Aug 2026 @ 5:00 PM\n📍 Blk 31 (ICT) Room 402\n\n🔔 *Automated reminder set for 1 hour before event.*",
+      buttons: [{ text: "🏠 Main Menu", action: "/start" }]
+    });
+  }
+
+  return res.json({
+    bot_response: "🤖 Bot Command processed successfully.",
+    buttons: [{ text: "Main Menu", action: "/start" }]
   });
-
-  // /match command
-  bot.command('match', (ctx) => {
-    return ctx.reply(
-      '🎯 Take the 1-minute survey to discover your top NP CCA matches:',
-      Markup.inlineKeyboard([
-        [Markup.button.webApp('🎯 Start CCA Matcher Survey', `${WEBAPP_URL}#match`)]
-      ])
-    );
-  });
-
-  // /ccas command
-  bot.command('ccas', (ctx) => {
-    return ctx.reply(
-      '🏛️ Browse updated info, EXCO contacts, and meeting locations for all NP CCAs & SIGs:',
-      Markup.inlineKeyboard([
-        [Markup.button.webApp('🏛️ View CCA & SIG Directory', `${WEBAPP_URL}#ccas`)]
-      ])
-    );
-  });
-
-  // /events command
-  bot.command('events', (ctx) => {
-    return ctx.reply(
-      '📅 Upcoming NP CCA Workshops, Tryouts & Orientation Sessions (1-Click Sign Up):',
-      Markup.inlineKeyboard([
-        [Markup.button.webApp('📅 View & Sign Up for Events', `${WEBAPP_URL}#events`)]
-      ])
-    );
-  });
-
-  // /myevents command
-  bot.command('myevents', (ctx) => {
-    return ctx.reply(
-      '👤 View your registered events and campus navigation shortcuts:',
-      Markup.inlineKeyboard([
-        [Markup.button.webApp('👤 View My Event Registrations', `${WEBAPP_URL}#profile`)]
-      ])
-    );
-  });
-
-  // /map command
-  bot.command('map', (ctx) => {
-    return ctx.reply(
-      '🗺️ Tap below to launch the NP Campus Navigator:',
-      Markup.inlineKeyboard([
-        [Markup.button.webApp('🗺️ Launch Campus Navigator', `${WEBAPP_URL}#map`)]
-      ])
-    );
-  });
-
-  // Callback Actions
-  bot.action('cmd_match', (ctx) => {
-    ctx.answerCbQuery();
-    ctx.reply('🎯 Tap below to start your CCA match survey:', Markup.inlineKeyboard([[Markup.button.webApp('🎯 Start Matcher Survey', `${WEBAPP_URL}#match`)]]));
-  });
-
-  bot.action('cmd_events', (ctx) => {
-    ctx.answerCbQuery();
-    ctx.reply('📅 Tap below to view events and sign up in 1-click:', Markup.inlineKeyboard([[Markup.button.webApp('📅 View Events', `${WEBAPP_URL}#events`)]]));
-  });
-
-  bot.action('cmd_ccas', (ctx) => {
-    ctx.answerCbQuery();
-    ctx.reply('🏛️ Tap below to browse all NP CCAs:', Markup.inlineKeyboard([[Markup.button.webApp('🏛️ Open Directory', `${WEBAPP_URL}#ccas`)]]));
-  });
-
-  bot.action('cmd_map', (ctx) => {
-    ctx.answerCbQuery();
-    ctx.reply('🗺️ Tap below to open campus map navigation:', Markup.inlineKeyboard([[Markup.button.webApp('🗺️ Open Map', `${WEBAPP_URL}#map`)]]));
-  });
-
-  // Launch Bot
-  bot.launch()
-    .then(() => {
-      console.log('🤖 Telegraf Bot successfully started for NP CCA Match!');
-      if (WEBAPP_URL) {
-        bot.telegram.callApi('setChatMenuButton', {
-          menu_button: {
-            type: 'web_app',
-            text: '🎯 NP CCA Match',
-            web_app: { url: WEBAPP_URL }
-          }
-        }).catch(err => console.error('⚠️ Menu Button error:', err.message));
-      }
-    })
-    .catch(err => console.error('⚠️ Bot Error:', err.message));
-
-  process.once('SIGINT', () => bot.stop('SIGINT'));
-  process.once('SIGTERM', () => bot.stop('SIGTERM'));
-} else {
-  console.log('⚠️ TELEGRAM_BOT_TOKEN missing in .env file (Running Web App Mode).');
-}
+});
 
 // Start Server
-if (require.main === module) {
-  app.listen(PORT, () => {
-    console.log(`===================================================`);
-    console.log(`🚀 NP CCA Match / NP CCA GO Web App Server Running`);
-    console.log(`🌐 Local Web App URL: http://localhost:${PORT}`);
-    console.log(`===================================================`);
-  });
-}
-
-module.exports = app;
+app.listen(PORT, () => {
+  console.log(`=================================================`);
+  console.log(`🚀 NP CCA Match Server running on http://localhost:${PORT}`);
+  console.log(`=================================================`);
+});

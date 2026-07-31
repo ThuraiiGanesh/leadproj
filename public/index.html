@@ -2,586 +2,298 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>NP Student Portal & 3D Campus Navigator — Ngee Ann Polytechnic</title>
-
-  <!-- Telegram Web App SDK -->
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-
-  <!-- Three.js & OrbitControls for 3D WebGL Campus Engine -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-
-  <!-- Google Fonts: Fraunces (Serif) & Inter (Sans) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NP CCA Match — LEAD LaunchPad</title>
+  <meta name="description" content="Ngee Ann Polytechnic Campus Life CCA Matching Platform — Dark Violet Pro Aesthetic">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- Tactile Noise Grain Overlay -->
-  <div class="grain"></div>
-
-  <!-- Atmospheric Drifting Orbits & Ambient Glo-Orbs -->
-  <div class="hero-orbits">
-    <div class="orbit o1"></div>
-    <div class="orbit o2"></div>
-    <div class="orbit o3"></div>
-    <div class="glow g1"></div>
-    <div class="glow g2"></div>
-  </div>
-
-  <!-- ─── AUTHENTICATION GATE & 2FA OVERLAY ───────────────────────── -->
-  <div id="auth-overlay" class="auth-overlay-backdrop">
-    <!-- Login Card (Step 1) -->
-    <div id="auth-login-card" class="bento-glass auth-card">
-      <div class="auth-brand-badge">
-        <div class="brand-avatar">NP</div>
-        <span class="badge-text">Ngee Ann Polytechnic</span>
+  <!-- Top Navigation Bar -->
+  <header class="navbar">
+    <div class="brand">
+      <div class="brand-icon">✨</div>
+      <div class="brand-text">
+        <h1>NP CCA Match</h1>
+        <span class="brand-badge">PRO ACCESS</span>
       </div>
-
-      <h2 class="serif auth-title">NP Student SSO Portal</h2>
-      <p class="auth-subtext">Log in with your official NP Student ID or Outlook email to access campus events, 3D navigation, and CCA hubs.</p>
-
-      <form id="auth-login-form" class="auth-form-stack">
-        <div class="form-field">
-          <label>NP Student ID or Email</label>
-          <div class="input-icon-wrap">
-            <span class="field-icon">👤</span>
-            <input type="text" id="login-email" required placeholder="s10234567@connect.np.edu.sg" class="input-ctrl">
-          </div>
-          <span class="input-hint">Enter your email address (e.g. ganeshoofs@gmail.com or s10234567@connect.np.edu.sg)</span>
-        </div>
-
-        <div class="form-field">
-          <label>Password</label>
-          <div class="input-icon-wrap">
-            <span class="field-icon">🔒</span>
-            <input type="password" id="login-password" required placeholder="••••••••" class="input-ctrl">
-          </div>
-        </div>
-
-        <div id="auth-login-error" class="auth-error-box" style="display:none;"></div>
-
-        <button type="submit" id="btn-submit-login" class="btn btn-sage btn-block btn-lg">
-          <span>Sign In & Send 2FA Code</span> <span class="arr">➔</span>
-        </button>
-      </form>
     </div>
 
-    <!-- 2FA Verification Card (Step 2) -->
-    <div id="auth-2fa-card" class="bento-glass auth-card" style="display:none;">
-      <div class="auth-brand-badge">
-        <span class="badge-icon">🔐</span>
-        <span class="badge-text">Two-Factor Authentication</span>
+    <div class="nav-controls">
+      <!-- Role Switcher -->
+      <div class="role-switcher">
+        <button id="roleStudentBtn" class="role-btn active" onclick="switchRole('student')">🎓 Student View</button>
+        <button id="roleAdminBtn" class="role-btn" onclick="switchRole('admin')">🔑 CCA Lead / Admin</button>
       </div>
 
-      <h2 class="serif auth-title">Enter 2FA Security Code</h2>
-      <p class="auth-subtext" id="2fa-subtext-msg">A 6-digit security code has been dispatched to your NP Outlook mail.</p>
+      <div id="userStatus" class="user-status">
+        <div id="userAvatarPill" class="user-avatar-pill" style="display:none;">
+          <div class="avatar-img" id="avatarInitials">TG</div>
+          <span id="userStatusText" style="font-size:0.85rem; font-weight:600;">Thurai Ganesh</span>
+        </div>
+        <button id="loginNavBtn" class="btn btn-primary btn-sm" onclick="openLoginModal()">Log In / 2FA</button>
+        <button id="myCcasBtn" class="btn btn-outline btn-sm" style="display:none;" onclick="openMyCcasModal()">⭐ My CCAs</button>
+      </div>
+    </div>
+  </header>
 
-      <form id="auth-2fa-form" class="auth-form-stack">
-        <div class="form-field">
-          <label>6-Digit Security Code</label>
-          <input type="text" id="input-2fa-code" maxlength="6" pattern="[0-9]*" required placeholder="4 8 2 9 1 0" class="input-ctrl otp-input-code">
+  <!-- Main Container -->
+  <main class="container">
+
+    <!-- Gradient Hero Banner (Reference Inspired) -->
+    <section class="hero-banner">
+      <div class="hero-content">
+        <h2>Unlock Your Campus Life Potential 🚀</h2>
+        <p>Discover personalized CCA recommendations powered by weighted AI matching algorithms, automated event reminders, and 2FA secure logins.</p>
+        <div style="display:flex; gap:1rem;">
+          <button class="btn btn-primary" onclick="openSurveyModal()">Take Match Survey ✨</button>
+          <button class="btn btn-outline" onclick="runTDDSuite()">Run TDD Test Suite 🧪</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- LEAD 4 Pillars Bar (Bento Grid Style) -->
+    <section class="pillars-bar">
+      <div class="pillar-card analytics" onclick="openAnalyticsModal()">
+        <div>
+          <div class="pillar-header">
+            <div class="pillar-icon-circle">📊</div>
+            <div class="arrow-circle">↗</div>
+          </div>
+          <div class="pillar-title">Analytics Pillar</div>
+          <div class="pillar-desc">Weighted Score: (0.5×Tags) + (0.3×Commitment) + (0.2×Style)</div>
+        </div>
+      </div>
+
+      <div class="pillar-card defence" onclick="openDefenceModal()">
+        <div>
+          <div class="pillar-header">
+            <div class="pillar-icon-circle">🛡️</div>
+            <div class="arrow-circle">↗</div>
+          </div>
+          <div class="pillar-title">Defence Pillar</div>
+          <div class="pillar-desc">Outlook 2FA Access Control + Admin Data Isolation Rules</div>
+        </div>
+      </div>
+
+      <div class="pillar-card tdd" onclick="runTDDSuite()">
+        <div>
+          <div class="pillar-header">
+            <div class="pillar-icon-circle">🧪</div>
+            <div class="arrow-circle">↗</div>
+          </div>
+          <div class="pillar-title">Software Engineering</div>
+          <div class="pillar-desc">TDD RED Event Signup Boundary Unit Tests Suite</div>
+        </div>
+      </div>
+
+      <div class="pillar-card legaltech" onclick="openLegalTechModal()">
+        <div>
+          <div class="pillar-header">
+            <div class="pillar-icon-circle">⚖️</div>
+            <div class="arrow-circle">↗</div>
+          </div>
+          <div class="pillar-title">LegalTech Pillar</div>
+          <div class="pillar-desc">PDPA Data Protection Notice & GenAI Declaration</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STUDENT VIEW -->
+    <div id="studentView">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Explore CCAs & Events</h2>
+          <p id="surveyBanner" class="meta-info" style="margin-top: 4px; color:#c4b5fd;">
+            Showing all CCAs. Take the <a href="#" onclick="openSurveyModal()" style="color:var(--text-primary); font-weight:700; text-decoration:underline;">Matching Survey</a> to get weighted match scores.
+          </p>
         </div>
 
-        <div id="auth-2fa-error" class="auth-error-box" style="display:none;"></div>
-
-        <button type="submit" id="btn-submit-2fa" class="btn btn-sage btn-block btn-lg">
-          <span>Verify 2FA & Enter Portal</span> <span class="arr">➔</span>
-        </button>
-
-        <div class="auth-footer-row">
-          <button type="button" id="btn-resend-2fa" class="btn btn-ghost btn-sm">
-            <span>Resend Code</span> ↺
-          </button>
-          <button type="button" id="btn-back-login" class="btn btn-ghost btn-sm">
-            <span>← Back to Login</span>
-          </button>
+        <div class="filter-group">
+          <input type="text" id="searchInput" class="search-input" placeholder="🔍 Search CCAs or tags..." oninput="handleFilterChange()">
+          <button class="category-chip active" onclick="setCategoryFilter('All', this)">All</button>
+          <button class="category-chip" onclick="setCategoryFilter('Special Interest', this)">Special Interest</button>
+          <button class="category-chip" onclick="setCategoryFilter('Academic', this)">Academic & Tech</button>
+          <button class="category-chip" onclick="setCategoryFilter('Sports', this)">Sports</button>
+          <button class="category-chip" onclick="setCategoryFilter('Arts', this)">Arts & Culture</button>
+          <button class="category-chip" onclick="setCategoryFilter('Community', this)">Community</button>
         </div>
-      </form>
+      </div>
+
+      <!-- CCA Card Feed -->
+      <div id="ccaFeed" class="cca-grid">
+        <!-- Rendered dynamically by app.js -->
+      </div>
+    </div>
+
+    <!-- ADMIN VIEW -->
+    <div id="adminView" style="display:none;">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">🔑 CCA Lead / Admin Dashboard</h2>
+          <p class="meta-info" style="color:#c4b5fd;">Post new events and manage student rosters for your CCA.</p>
+        </div>
+        <button class="btn btn-primary" onclick="openCreateEventModal()">+ Create New Event</button>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.6rem;">
+        <!-- Published Events Card -->
+        <div style="background:var(--bg-surface); border:1px solid var(--border-subtle); border-radius:var(--radius-lg); padding:1.6rem;">
+          <h3 style="font-family:var(--font-heading); font-size:1.3rem; margin-bottom:1.1rem; color:#fff;">📢 Published CCA Events</h3>
+          <div id="adminEventsList" style="display:flex; flex-direction:column; gap:0.85rem;">
+            <!-- Rendered by app.js -->
+          </div>
+        </div>
+
+        <!-- Student Roster Inspector -->
+        <div style="background:var(--bg-surface); border:1px solid var(--border-subtle); border-radius:var(--radius-lg); padding:1.6rem;">
+          <h3 style="font-family:var(--font-heading); font-size:1.3rem; margin-bottom:0.6rem; color:#fff;">📋 Student Signup Roster</h3>
+          <div style="background:rgba(245, 158, 11, 0.12); border:1px solid rgba(245, 158, 11, 0.35); padding:10px 14px; border-radius:12px; font-size:0.78rem; color:#fde68a; margin-bottom:1.1rem;">
+            🛡️ <strong>CIA Confidentiality Control Enforced:</strong> Admin view displays ONLY Name and Student ID. Passwords and Survey Answers are strictly isolated under PDPA rules.
+          </div>
+          <div id="adminRosterContainer">
+            <p style="color:var(--text-muted); font-size:0.875rem;">Select an event on the left to view signed-up student roster.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- MODALS -->
+
+  <!-- Auth & 2FA Modal -->
+  <div id="loginModal" class="modal-overlay">
+    <div class="modal-card">
+      <div id="loginStep1">
+        <h3 class="modal-title">NP Student Login</h3>
+        <p style="color:#c4b5fd; font-size:0.875rem; margin-bottom:1.6rem;">Enter your NP Student ID to receive a mock 2FA Outlook code.</p>
+        <div class="form-group">
+          <label class="form-label">NP Student ID</label>
+          <input type="text" id="loginStudentId" class="form-control" placeholder="e.g. S10234567" value="S10234567">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input type="password" id="loginPassword" class="form-control" value="••••••••">
+        </div>
+        <button class="btn btn-primary" style="width:100%; margin-top:0.5rem;" onclick="submitLogin()">Send 2FA Code to Outlook</button>
+      </div>
+
+      <div id="loginStep2" style="display:none;">
+        <h3 class="modal-title">Check Your Outlook Email</h3>
+        <p style="color:#c4b5fd; font-size:0.875rem; margin-bottom:1.2rem;">A 6-digit 2FA code was sent to <strong id="outlookEmailSpan" style="color:#fff;">s10234567@connect.np.edu.sg</strong>.</p>
+        
+        <div style="background:rgba(139, 92, 246, 0.2); border:1px solid var(--accent-violet); padding:12px 16px; border-radius:var(--radius-sm); font-size:0.9rem; margin-bottom:1.35rem; display:flex; justify-content:space-between; align-items:center;">
+          <span style="color:#c4b5fd;">📩 Mock Outlook OTP Code:</span>
+          <strong id="mockOtpDisplay" style="font-size:1.3rem; letter-spacing:3px; color:#fff;">123456</strong>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Enter 6-Digit Code</label>
+          <input type="text" id="otpInput" class="form-control" placeholder="123456" maxlength="6" style="text-align:center; font-size:1.3rem; letter-spacing:5px;">
+        </div>
+        <button class="btn btn-primary" style="width:100%;" onclick="submit2FA()">Verify 2FA Code & Continue</button>
+      </div>
     </div>
   </div>
 
-  <!-- ─── MAIN APPLICATION LAYOUT (LOCKED UNTIL 2FA AUTH) ───────────── -->
-  <div id="app" class="app-layout" style="display:none;">
-
-    <!-- Floating Ultra-Glass Top Navigation Bar -->
-    <div class="nav-wrap">
-      <header class="nav-bar">
-        <div class="nav-brand" id="brand-home-trigger">
-          <div class="brand-avatar">NP</div>
-          <span class="brand-word">NP <i>Portal</i></span>
-        </div>
-
-        <nav class="nav-links">
-          <button class="nav-link active" data-tab="dashboard">Dashboard</button>
-          <button class="nav-link" data-tab="map">3D Campus Map</button>
-          <button class="nav-link" data-tab="ccas">Directory</button>
-          <button class="nav-link" data-tab="events">Events</button>
-          <button class="nav-link" data-tab="match">AI Matcher</button>
-        </nav>
-
-        <div class="header-right-group">
-          <button id="btn-quick-profile" class="btn btn-ghost user-profile-btn" title="Student Profile">
-            <span class="avatar-circle" id="header-avatar-initial">S</span>
-            <span class="user-label" id="header-user-name">Alex Tan</span>
-          </button>
-          <button id="btn-logout" class="btn btn-ghost btn-sm logout-btn" title="Sign Out">
-            <span>Logout</span> 🚪
-          </button>
-        </div>
-      </header>
-    </div>
-
-    <!-- Main Content Area -->
-    <main class="app-main">
-      <div class="content-container">
-
-        <!-- VIEW 1: STUDENT DASHBOARD (PRIMARY LANDING PAGE) -->
-        <section id="view-dashboard" class="view-section active">
-          <!-- Hero Banner -->
-          <div class="dashboard-hero-card bento-glass">
-            <div class="dash-hero-content">
-              <span class="hero-pill-tag">🎓 Verified NP Student Portal</span>
-              <h1 class="serif dash-headline">Welcome back, <em id="dash-student-name">Alex Tan</em></h1>
-              <p class="dash-subtext"><span id="dash-school-lbl">School of InfoComm Technology</span> • Ngee Ann Polytechnic</p>
-            </div>
-            <div class="dash-hero-actions">
-              <button class="btn btn-sage btn-nav-map-3d">
-                <span>🥽 Open 3D Map Navigator</span> <span class="arr">↗</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- Quick Stats & Feature Cards Grid -->
-          <div class="dash-grid-4">
-            <div class="bento-glass dash-stat-card">
-              <div class="stat-ico">🥽</div>
-              <div class="stat-val">3D Navigator</div>
-              <div class="stat-lbl">WebGL Campus & Indoor Guides</div>
-              <button class="btn btn-ghost btn-sm btn-nav-map-3d" style="margin-top:0.75rem;">
-                Explore Map ➔
-              </button>
-            </div>
-
-            <div class="bento-glass dash-stat-card">
-              <div class="stat-ico">🏛️</div>
-              <div class="stat-val">11 CCAs</div>
-              <div class="stat-lbl">Clubs & Special Interest Groups</div>
-              <button class="btn btn-ghost btn-sm btn-nav-tab" data-target="ccas" style="margin-top:0.75rem;">
-                Browse Directory ➔
-              </button>
-            </div>
-
-            <div class="bento-glass dash-stat-card">
-              <div class="stat-ico">📅</div>
-              <div class="stat-val">4 Events</div>
-              <div class="stat-lbl">1-Click Workshop & Tryout Signups</div>
-              <button class="btn btn-ghost btn-sm btn-nav-tab" data-target="events" style="margin-top:0.75rem;">
-                View Calendar ➔
-              </button>
-            </div>
-
-            <div class="bento-glass dash-stat-card highlight-card">
-              <div class="stat-ico">🎯</div>
-              <div class="stat-val">Optional</div>
-              <div class="stat-lbl">AI CCA Matcher Survey</div>
-              <button class="btn btn-sage btn-sm btn-nav-tab" data-target="match" style="margin-top:0.75rem;">
-                Take Matcher Survey ➔
-              </button>
-            </div>
-          </div>
-
-          <!-- Featured Events & Quick Indoor Navigation Stream -->
-          <div class="dash-split-row">
-            <div class="bento-glass dash-section-card">
-              <div class="card-title-row">
-                <h3 class="serif">📅 Upcoming Campus Sessions</h3>
-                <button class="btn btn-ghost btn-sm btn-nav-tab" data-target="events">View All ➔</button>
-              </div>
-              <div id="dash-events-preview" class="events-preview-stack"></div>
-            </div>
-
-            <div class="bento-glass dash-section-card">
-              <div class="card-title-row">
-                <h3 class="serif">📍 Block Locations & Indoor Routes</h3>
-                <button class="btn btn-ghost btn-sm btn-nav-map-3d">Open 3D View ➔</button>
-              </div>
-              <div class="quick-location-list">
-                <div class="quick-loc-item" data-block="blk31">
-                  <div>
-                    <div class="loc-name">Block 31 (ICT)</div>
-                    <div class="loc-sub">Level 4 Room 402 • LegalTech Studio</div>
-                  </div>
-                  <button class="btn btn-sage btn-sm btn-focus-3d" data-block="blk31">Guide ➔</button>
-                </div>
-                <div class="quick-loc-item" data-block="blk72">
-                  <div>
-                    <div class="loc-name">Block 72 (BA)</div>
-                    <div class="loc-sub">Level 3 Room 310 • Business Incubator</div>
-                  </div>
-                  <button class="btn btn-sage btn-sm btn-focus-3d" data-block="blk72">Guide ➔</button>
-                </div>
-                <div class="quick-loc-item" data-block="sports_complex">
-                  <div>
-                    <div class="loc-name">Block 50 (Sports Complex)</div>
-                    <div class="loc-sub">Level 2 Gym • Badminton Court 3</div>
-                  </div>
-                  <button class="btn btn-sage btn-sm btn-focus-3d" data-block="sports_complex">Guide ➔</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- VIEW 2: 3D INTERACTIVE WEBGL CAMPUS NAVIGATOR -->
-        <section id="view-map" class="view-section">
-          <div class="section-title-bar">
-            <div>
-              <span class="hero-pill-tag">🥽 WebGL 3D Wayfinding Engine</span>
-              <h1 class="serif section-headline">NP Interactive 3D Campus Map</h1>
-              <p class="section-subtext">Click blocks or pins to inspect rooms, levels, and step-by-step indoor route guides.</p>
-            </div>
-          </div>
-
-          <div class="map-3d-layout">
-            <!-- 3D Canvas Container -->
-            <div class="bento-glass webgl-canvas-box">
-              <!-- 3D Camera Controls Toolbar -->
-              <div class="canvas-toolbar">
-                <span class="tb-label">Camera Angle:</span>
-                <button class="tb-btn active" id="btn-cam-iso">3D Isometric</button>
-                <button class="tb-btn" id="btn-cam-top">Top Down</button>
-                <button class="tb-btn" id="btn-cam-blk31">Blk 31 (ICT)</button>
-                <button class="tb-btn" id="btn-cam-blk72">Blk 72 (BA)</button>
-                <button class="tb-btn" id="btn-cam-sports">Blk 50 Sports</button>
-                <button class="tb-btn" id="btn-cam-reset">Reset View ↺</button>
-              </div>
-
-              <!-- Canvas element -->
-              <div id="three-canvas-holder" class="three-viewport"></div>
-
-              <!-- Floating Canvas Hint Overlay -->
-              <div class="canvas-hint-overlay">
-                <span>🖱️ Left-Click + Drag to rotate 3D view • Scroll to zoom • Click pins for Indoor Guide</span>
-              </div>
-            </div>
-
-            <!-- Block Details & Indoor Route Inspector -->
-            <div id="webgl-block-inspector" class="bento-glass block-inspector-card">
-              <div id="inspector-default-msg" class="inspector-empty-state">
-                <div class="empty-icon">📍</div>
-                <h3 class="serif">Select a Block or Pin</h3>
-                <p>Click on any 3D glowing pin or building block on the map to view floor breakdown and indoor route instructions.</p>
-              </div>
-
-              <div id="inspector-content" style="display:none;">
-                <div class="inspector-header">
-                  <span class="insp-icon" id="insp-icon">💻</span>
-                  <div>
-                    <h3 class="serif insp-title" id="insp-name">Block 31 (InfoComm Technology)</h3>
-                    <div class="insp-sub" id="insp-school">School of ICT • Block 31</div>
-                  </div>
-                </div>
-
-                <div class="inspector-section">
-                  <h4 class="serif-sub">🏢 Levels & Facilities</h4>
-                  <ul id="insp-levels-list" class="insp-list"></ul>
-                </div>
-
-                <div class="inspector-section">
-                  <h4 class="serif-sub">🚶 Step-by-Step Indoor Route Guide</h4>
-                  <div id="insp-route-steps" class="route-steps-timeline"></div>
-                </div>
-
-                <div class="inspector-section">
-                  <h4 class="serif-sub">👥 Clubs Based Here</h4>
-                  <div id="insp-ccas-tags" class="tag-row"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- VIEW 3: OPTIONAL CCA MATCHER SURVEY -->
-        <section id="view-match" class="view-section">
-          <div class="editorial-hero">
-            <span class="hero-pill-tag">✨ Optional Discovery Survey</span>
-            <h1 class="serif hero-headline">Discover your ideal CCAs at <em>Ngee Ann Poly.</em></h1>
-            <p class="hero-subtext">This survey is completely optional. Answer a few questions about your interests and schedule to get personalized club compatibility matches.</p>
-          </div>
-
-          <!-- Glassmorphic Bento Wizard -->
-          <div id="survey-card" class="bento-glass wizard-glass">
-            <!-- Step Progress Pills -->
-            <div class="step-progress-row">
-              <div class="step-pill active" id="step-pill-1">
-                <span class="step-num">01</span>
-                <span class="step-name">Faculty School</span>
-              </div>
-              <div class="step-track"></div>
-              <div class="step-pill" id="step-pill-2">
-                <span class="step-num">02</span>
-                <span class="step-name">Interest Areas</span>
-              </div>
-              <div class="step-track"></div>
-              <div class="step-pill" id="step-pill-3">
-                <span class="step-num">03</span>
-                <span class="step-name">Commitment</span>
-              </div>
-            </div>
-
-            <!-- Question 1: School -->
-            <div id="survey-q1" class="survey-step-content">
-              <div class="question-header">
-                <h3 class="serif">Select your NP Faculty School</h3>
-                <p>We will prioritize CCAs located near your faculty block:</p>
-              </div>
-
-              <div class="school-card-grid">
-                <button class="school-glass-card" data-q="school" data-val="ICT">
-                  <div class="card-badge">ICT</div>
-                  <div class="card-title">School of InfoComm Technology</div>
-                  <div class="card-sub">Block 31</div>
-                </button>
-                <button class="school-glass-card" data-q="school" data-val="BA">
-                  <div class="card-badge">BA</div>
-                  <div class="card-title">School of Business & Accountancy</div>
-                  <div class="card-sub">Block 72</div>
-                </button>
-                <button class="school-glass-card" data-q="school" data-val="HMS">
-                  <div class="card-badge">HMS</div>
-                  <div class="card-title">School of Humanities & Social Sci</div>
-                  <div class="card-sub">Block 58</div>
-                </button>
-                <button class="school-glass-card" data-q="school" data-val="DE">
-                  <div class="card-badge">DE</div>
-                  <div class="card-title">School of Design & Environment</div>
-                  <div class="card-sub">Block 34</div>
-                </button>
-                <button class="school-glass-card" data-q="school" data-val="FMS">
-                  <div class="card-badge">FMS</div>
-                  <div class="card-title">School of Film & Media Studies</div>
-                  <div class="card-sub">Block 52</div>
-                </button>
-                <button class="school-glass-card" data-q="school" data-val="SOE">
-                  <div class="card-badge">SOE</div>
-                  <div class="card-title">School of Engineering</div>
-                  <div class="card-sub">Block 37</div>
-                </button>
-              </div>
-            </div>
-
-            <!-- Question 2: Interests -->
-            <div id="survey-q2" class="survey-step-content" style="display:none;">
-              <div class="question-header">
-                <h3 class="serif">What activities interest you?</h3>
-                <p>Select one or more interest areas to explore:</p>
-              </div>
-
-              <div class="interest-tag-grid">
-                <button class="interest-glass-tag multi-opt" data-q="interest" data-val="coding">
-                  <span>Software Engineering & AI</span>
-                </button>
-                <button class="interest-glass-tag multi-opt" data-q="interest" data-val="law">
-                  <span>Legal Technology & Law</span>
-                </button>
-                <button class="interest-glass-tag multi-opt" data-q="interest" data-val="business">
-                  <span>Entrepreneurship & Startups</span>
-                </button>
-                <button class="interest-glass-tag multi-opt" data-q="interest" data-val="media">
-                  <span>Media, Dance & Performing Arts</span>
-                </button>
-                <button class="interest-glass-tag multi-opt" data-q="interest" data-val="community">
-                  <span>Volunteering Outreach & YEP</span>
-                </button>
-                <button class="interest-glass-tag multi-opt" data-q="interest" data-val="sports">
-                  <span>Outdoor Sports & Fitness</span>
-                </button>
-              </div>
-
-              <div class="step-footer">
-                <button id="btn-next-q2" class="btn btn-sage">
-                  <span>Continue to Schedule</span> <span class="arr">↗</span>
-                </button>
-              </div>
-            </div>
-
-            <!-- Question 3: Commitment -->
-            <div id="survey-q3" class="survey-step-content" style="display:none;">
-              <div class="question-header">
-                <h3 class="serif">Weekly Schedule Commitment</h3>
-                <p>Pick a pace that fits your academic workload:</p>
-              </div>
-
-              <div class="commitment-card-stack">
-                <button class="commitment-glass-card" data-q="commitment" data-val="Low">
-                  <div class="card-row">
-                    <span class="title">Light Commitment</span>
-                    <span class="tag">1 - 2 hrs/week</span>
-                  </div>
-                  <p class="desc">Flexible attendance, open events, and casual social workshops.</p>
-                </button>
-
-                <button class="commitment-glass-card" data-q="commitment" data-val="Medium">
-                  <div class="card-row">
-                    <span class="title">Moderate Commitment</span>
-                    <span class="tag">3 - 5 hrs/week</span>
-                  </div>
-                  <p class="desc">Bi-weekly practice, regular team projects, and skill building.</p>
-                </button>
-
-                <button class="commitment-glass-card" data-q="commitment" data-val="High">
-                  <div class="card-row">
-                    <span class="title">Intensive Commitment</span>
-                    <span class="tag">6+ hrs/week</span>
-                  </div>
-                  <p class="desc">Executive leadership roles, competitions, and major galas.</p>
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Match Results Section -->
-          <div id="match-results-section" style="display:none; margin-top: 2.5rem;">
-            <div class="results-toolbar">
-              <div>
-                <span class="hero-pill-tag">Algorithm Matches</span>
-                <h2 class="serif section-headline">Recommended NP Clubs for You</h2>
-              </div>
-              <button id="btn-retake-survey" class="btn btn-ghost">
-                <span>Retake Survey</span> ↺
-              </button>
-            </div>
-
-            <div id="match-cards-container" class="bento-grid"></div>
-          </div>
-        </section>
-
-        <!-- VIEW 4: CCA DIRECTORY HUB -->
-        <section id="view-ccas" class="view-section">
-          <div class="section-title-bar">
-            <div>
-              <span class="hero-pill-tag">Official NP Portal</span>
-              <h1 class="serif section-headline">Clubs & Societies</h1>
-              <p class="section-subtext">Browse official student organizations across Ngee Ann Polytechnic.</p>
-            </div>
-            <div class="count-pill" id="cca-count">11 CCAs</div>
-          </div>
-
-          <!-- Directory Search & Segment Filters -->
-          <div class="bento-glass directory-search-bar">
-            <div class="search-input-box">
-              <span class="search-ico">🔍</span>
-              <input type="text" id="cca-search-input" placeholder="Search clubs by name, school or topic..." class="search-input">
-            </div>
-
-            <div class="segmented-pill-bar">
-              <button class="segment-pill active" data-filter-cat="All">All Categories</button>
-              <button class="segment-pill" data-filter-cat="Special Interest">Special Interest</button>
-              <button class="segment-pill" data-filter-cat="Arts & Cultural">Arts & Cultural</button>
-              <button class="segment-pill" data-filter-cat="Sports & Fitness">Sports & Fitness</button>
-              <button class="segment-pill" data-filter-cat="Community Service">Community Service</button>
-            </div>
-          </div>
-
-          <div id="directory-cards-container" class="bento-grid"></div>
-        </section>
-
-        <!-- VIEW 5: EVENTS & ONE-CLICK SIGNUP -->
-        <section id="view-events" class="view-section">
-          <div class="section-title-bar">
-            <div>
-              <span class="hero-pill-tag">Campus Calendar</span>
-              <h1 class="serif section-headline">Upcoming Events</h1>
-              <p class="section-subtext">Register for workshops, trials, and hackathons in one click.</p>
-            </div>
-          </div>
-
-          <div id="events-list-container" class="events-glass-stack"></div>
-        </section>
-
-        <!-- VIEW 6: STUDENT PROFILE -->
-        <section id="view-profile" class="view-section">
-          <div class="profile-bento-grid">
-            <div class="bento-glass profile-card">
-              <div class="profile-header-row">
-                <div class="profile-avatar" id="profile-avatar-large">S</div>
-                <div>
-                  <h2 id="profile-display-name" class="serif profile-title">Alex Tan</h2>
-                  <span id="profile-school-tag" class="profile-tag">School of ICT • Ngee Ann Poly</span>
-                </div>
-              </div>
-
-              <form id="profile-form" class="profile-form-stack">
-                <div class="form-field">
-                  <label>Full Name</label>
-                  <input type="text" id="prof-input-name" required placeholder="e.g. Alex Tan" class="input-ctrl">
-                </div>
-                <div class="form-field">
-                  <label>Student ID</label>
-                  <input type="text" id="prof-input-id" required readonly placeholder="e.g. S10234567" class="input-ctrl">
-                </div>
-                <div class="form-field">
-                  <label>NP Faculty School</label>
-                  <select id="prof-input-school" class="input-ctrl select-ctrl">
-                    <option value="ICT">School of InfoComm Technology (ICT)</option>
-                    <option value="BA">School of Business & Accountancy (BA)</option>
-                    <option value="HMS">School of Humanities & Social Sciences (HMS)</option>
-                    <option value="DE">School of Design & Environment (DE)</option>
-                    <option value="FMS">School of Film & Media Studies (FMS)</option>
-                    <option value="SOE">School of Engineering (SOE)</option>
-                  </select>
-                </div>
-                <button type="submit" class="btn btn-sage btn-block">
-                  <span>Save Student Profile</span> <span class="arr">↗</span>
-                </button>
-              </form>
-            </div>
-
-            <div class="bento-glass agenda-card">
-              <div class="agenda-header-row">
-                <h3 class="serif">My Event Registrations</h3>
-                <span class="count-pill" id="my-events-count">0 Events</span>
-              </div>
-              <div id="my-events-container" class="agenda-stack"></div>
-            </div>
-          </div>
-        </section>
-
+  <!-- Survey Modal -->
+  <div id="surveyModal" class="modal-overlay">
+    <div class="modal-card">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+        <h3 class="modal-title">CCA Matching Survey</h3>
+        <button class="btn btn-outline btn-sm" onclick="skipSurvey()">Skip Survey</button>
       </div>
-    </main>
+      <p style="color:#c4b5fd; font-size:0.875rem; margin-bottom:1.6rem;">Answer 3 quick questions to calculate your weighted match score across all NP CCAs.</p>
 
-    <!-- Mobile Bottom Floating Navigation -->
-    <nav class="mobile-bottom-nav">
-      <button class="mobile-tab active" data-tab="dashboard">
-        <span class="icon">🏠</span>
-        <span class="lbl">Home</span>
-      </button>
-      <button class="mobile-tab" data-tab="map">
-        <span class="icon">🥽</span>
-        <span class="lbl">3D Map</span>
-      </button>
-      <button class="mobile-tab" data-tab="ccas">
-        <span class="icon">🏛️</span>
-        <span class="lbl">Clubs</span>
-      </button>
-      <button class="mobile-tab" data-tab="events">
-        <span class="icon">📅</span>
-        <span class="lbl">Events</span>
-      </button>
-      <button class="mobile-tab" data-tab="profile">
-        <span class="icon">👤</span>
-        <span class="lbl">Profile</span>
-      </button>
-    </nav>
+      <div class="form-group">
+        <label class="form-label">1. Select Your Interest Tags (Multi-select)</label>
+        <div id="surveyTagsContainer" style="display:flex; flex-wrap:wrap; gap:8px; margin-top:8px;">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
 
+      <div class="form-group">
+        <label class="form-label">2. Time Commitment Availability</label>
+        <select id="surveyCommitment" class="form-control">
+          <option value="low">Low (1-2 hours / week)</option>
+          <option value="medium" selected>Medium (3-5 hours / week)</option>
+          <option value="high">High (6+ hours / week)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">3. Team vs Solo Preference</label>
+        <select id="surveyStyle" class="form-control">
+          <option value="team" selected>Team (Group projects, team sports, collaborative)</option>
+          <option value="solo">Solo (Independent projects, individual practice)</option>
+          <option value="mixed">Mixed (Flexible team and solo balance)</option>
+        </select>
+      </div>
+
+      <button class="btn btn-primary" style="width:100%; margin-top:1.2rem;" onclick="submitSurvey()">Calculate My Match Scores ✨</button>
+    </div>
   </div>
 
-  <script src="campus_data.js"></script>
+  <!-- CCA Detail Modal -->
+  <div id="ccaDetailModal" class="modal-overlay">
+    <div class="modal-card" style="max-width:660px;">
+      <div id="ccaDetailContent">
+        <!-- Rendered by app.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- TDD Suite Console Drawer Modal -->
+  <div id="tddModal" class="modal-overlay">
+    <div class="modal-card" style="max-width:620px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+        <h3 class="modal-title">🧪 TDD RED Test Runner</h3>
+        <button class="btn btn-outline btn-sm" onclick="closeModal('tddModal')">Close</button>
+      </div>
+      <p style="color:#c4b5fd; font-size:0.875rem; margin-bottom:1.1rem;">
+        Verifying Event Signup Boundary Conditions (Software Engineering Pillar).
+      </p>
+      <div id="tddConsole" style="background:#0b0914; border:1px solid rgba(167,139,250,0.25); border-radius:14px; padding:14px; font-family:monospace; font-size:0.825rem; height:260px; overflow-y:auto;">
+        <!-- Test logs rendered here -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Pillars Info Modals -->
+  <div id="infoModal" class="modal-overlay">
+    <div class="modal-card">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+        <h3 id="infoModalTitle" class="modal-title">Pillar Information</h3>
+        <button class="btn btn-outline btn-sm" onclick="closeModal('infoModal')">Close</button>
+      </div>
+      <div id="infoModalBody" style="color:#c4b5fd; font-size:0.925rem; line-height:1.65;">
+        <!-- Filled dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Interactive Telegram Bot Simulator Drawer -->
+  <div id="telegramDrawer" class="telegram-drawer collapsed">
+    <div class="telegram-header" onclick="toggleTelegramDrawer()">
+      <div class="telegram-title">
+        <span>✈️</span> NP CCA Match Telegram Bot
+      </div>
+      <span id="tgToggleIcon">▲</span>
+    </div>
+    <div id="telegramBody" class="telegram-body">
+      <div class="chat-bubble bot">
+        👋 Welcome to <strong>NP CCA Match Bot</strong>!<br><br>Click <strong>/start</strong> to begin.
+      </div>
+      <div class="inline-buttons">
+        <button class="bot-btn" onclick="sendTgCommand('/start')">/start</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toastContainer" class="toast-container"></div>
+
   <script src="app.js"></script>
 </body>
 </html>
