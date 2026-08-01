@@ -81,20 +81,33 @@ async function loginWithMicrosoft() {
       return;
     }
 
-    // Operating in Simulated Microsoft SSO Mode
-    const studentIdInput = document.getElementById('loginStudentId');
-    const studentId = (studentIdInput && studentIdInput.value.trim()) ? studentIdInput.value.trim() : 's10275803@connect.np.edu.sg';
+    // Opens Interactive Microsoft 365 Identity Dialog asking user for their account
+    closeModal('loginModal');
+    const msModal = document.getElementById('microsoftModal');
+    if (msModal) msModal.classList.add('active');
+  } catch (err) {
+    showToast("Microsoft SSO connection error.", "error");
+  }
+}
 
+async function submitMicrosoftSso() {
+  const emailInput = document.getElementById('msEmailInput').value.trim();
+  if (!emailInput) {
+    showToast("Please enter your NP Student Email or ID.", "error");
+    return;
+  }
+
+  try {
     const simRes = await fetch('/api/auth/microsoft/simulated', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ student_id: studentId })
+      body: JSON.stringify({ student_id: emailInput })
     });
     const simData = await simRes.json();
 
     if (simData.success) {
       currentUser = simData.user;
-      closeModal('loginModal');
+      closeModal('microsoftModal');
       updateUserUI();
 
       if (currentUser.is_exco) {
