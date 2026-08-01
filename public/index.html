@@ -179,23 +179,25 @@
           <h3 class="modal-title">Authentication Required</h3>
           <span style="font-size:0.75rem; color:var(--accent-violet); background:rgba(139,92,246,0.2); padding:2px 8px; border-radius:12px; font-weight:700;">2FA GATE</span>
         </div>
-        <p style="color:#c4b5fd; font-size:0.875rem; margin-bottom:1.2rem;">Choose your preferred login method to access NP CCA Match LaunchPad.</p>
+        <p style="color:#c4b5fd; font-size:0.875rem; margin-bottom:1.6rem;">Log in with your email or NP Student ID to receive your 2FA security code.</p>
         
-        <!-- Microsoft 365 / Azure AD SSO Button -->
-        <button class="btn btn-microsoft" style="margin-bottom:1rem;" onclick="loginWithMicrosoft()">
-          <svg width="18" height="18" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right:10px;">
-            <path d="M10 0H0V10H10V0Z" fill="#F25022"/>
-            <path d="M21 0H11V10H21V0Z" fill="#7FBA00"/>
-            <path d="M10 11H0V21H10V11Z" fill="#00A4EF"/>
-            <path d="M21 11H11V21H21V11Z" fill="#FFB900"/>
-          </svg>
-          Sign in with Microsoft 365 (NP Connect)
-        </button>
+        <!-- Microsoft 365 / Azure AD SSO Button (Hidden from UI, code preserved) -->
+        <div id="msSsoSection" style="display:none;">
+          <button class="btn btn-microsoft" style="margin-bottom:1rem;" onclick="loginWithMicrosoft()">
+            <svg width="18" height="18" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right:10px;">
+              <path d="M10 0H0V10H10V0Z" fill="#F25022"/>
+              <path d="M21 0H11V10H21V0Z" fill="#7FBA00"/>
+              <path d="M10 11H0V21H10V11Z" fill="#00A4EF"/>
+              <path d="M21 11H11V21H21V11Z" fill="#FFB900"/>
+            </svg>
+            Sign in with Microsoft 365 (NP Connect)
+          </button>
 
-        <div style="display:flex; align-items:center; margin-bottom:1.2rem; text-align:center;">
-          <div style="flex:1; height:1px; background:var(--border-subtle);"></div>
-          <span style="padding:0 10px; font-size:0.725rem; color:var(--text-muted); font-weight:700; letter-spacing:1px;">OR TRADITIONAL EMAIL / 2FA</span>
-          <div style="flex:1; height:1px; background:var(--border-subtle);"></div>
+          <div style="display:flex; align-items:center; margin-bottom:1.2rem; text-align:center;">
+            <div style="flex:1; height:1px; background:var(--border-subtle);"></div>
+            <span style="padding:0 10px; font-size:0.725rem; color:var(--text-muted); font-weight:700; letter-spacing:1px;">OR TRADITIONAL EMAIL / 2FA</span>
+            <div style="flex:1; height:1px; background:var(--border-subtle);"></div>
+          </div>
         </div>
 
         <div class="form-group">
