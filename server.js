@@ -642,10 +642,10 @@ app.get('/api/tdd/run', (req, res) => {
 // ----------------------------------------------------
 
 app.post('/api/admin/events/create', (req, res) => {
-  const { cca_id, title, datetime, location, capacity, description, student_id } = req.body;
+  const { cca_id, title, datetime, location, capacity, description, student_id, image_url, remarks, links, tag } = req.body;
 
   if (!cca_id || !title || !datetime || !location || !capacity) {
-    return res.status(400).json({ success: false, message: 'All event fields are required.' });
+    return res.status(400).json({ success: false, message: 'Title, Date/Time, Location, and Capacity fields are required.' });
   }
 
   if (student_id) {
@@ -665,7 +665,11 @@ app.post('/api/admin/events/create', (req, res) => {
     capacity: parseInt(capacity, 10),
     signup_count: 0,
     signups: [],
-    description: description || ''
+    description: description || '',
+    remarks: remarks || '',
+    links: links || '',
+    tag: tag || 'General',
+    image_url: image_url || 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600&auto=format&fit=crop'
   };
 
   events.push(newEvent);

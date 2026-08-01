@@ -227,6 +227,80 @@
     </div>
   </div>
 
+  <!-- Event Creation Dashboard Modal (EXCO Lead Event Maker) -->
+  <div id="createEventModal" class="modal-overlay">
+    <div class="modal-card" style="max-width:680px; max-height:90vh; overflow-y:auto;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; border-bottom:1px solid var(--border-subtle); padding-bottom:0.8rem;">
+        <div>
+          <h3 class="modal-title">Create & Publish CCA Event 📅</h3>
+          <span id="createEvtCcaBadge" style="font-size:0.75rem; color:var(--text-secondary); font-weight:600;">CCA: Loading...</span>
+        </div>
+        <button class="btn btn-outline btn-sm" onclick="closeModal('createEventModal')">✕ Close</button>
+      </div>
+
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
+        <div class="form-group" style="grid-column: span 2;">
+          <label class="form-label">Event Title *</label>
+          <input type="text" id="evtTitle" class="form-control" placeholder="e.g. Annual LegalTech AI Workshop & Networking 2026">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Event Category / Tag</label>
+          <select id="evtCategory" class="form-control">
+            <option value="Workshop" selected>Workshop / Masterclass</option>
+            <option value="Hackathon">Hackathon / Competition</option>
+            <option value="Training">Training & Practice</option>
+            <option value="Networking">Networking & Social</option>
+            <option value="General">General Meeting</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Max Student Capacity (Seats) *</label>
+          <input type="number" id="evtCapacity" class="form-control" value="40" min="1" max="500">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Date & Time *</label>
+          <input type="datetime-local" id="evtDatetime" class="form-control">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Venue / Location *</label>
+          <input type="text" id="evtLocation" class="form-control" placeholder="e.g. Blk 31 (ICT) Room 402 or Zoom Link">
+        </div>
+
+        <div class="form-group" style="grid-column: span 2;">
+          <label class="form-label">Event Description & Agenda</label>
+          <textarea id="evtDescription" class="form-control" rows="3" placeholder="Describe event details, agenda, key takeaways, and speaker details..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Special Remarks / What to Bring</label>
+          <input type="text" id="evtRemarks" class="form-control" placeholder="e.g. Bring laptop with VS Code & Student ID">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">External / Registration Link</label>
+          <input type="url" id="evtLink" class="form-control" placeholder="e.g. https://t.me/np_cca_group">
+        </div>
+
+        <div class="form-group" style="grid-column: span 2;">
+          <label class="form-label">Cover Poster Image URL (Optional)</label>
+          <input type="url" id="evtImageUrl" class="form-control" placeholder="https://images.unsplash.com/photo-..." oninput="previewEvtImage()">
+          <div id="evtImagePreviewBox" style="margin-top:10px; display:none; border-radius:10px; overflow:hidden; max-height:140px; border:1px solid var(--border-subtle);">
+            <img id="evtImagePreviewImg" src="" style="width:100%; height:140px; object-fit:cover;">
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:12px; margin-top:1.4rem; padding-top:1rem; border-top:1px solid var(--border-subtle);">
+        <button class="btn btn-outline" onclick="closeModal('createEventModal')">Cancel</button>
+        <button class="btn btn-primary" onclick="submitCreateEvent()">🚀 Publish Event to Campus</button>
+      </div>
+    </div>
+  </div>
+
   <!-- CCA Detail Modal -->
   <div id="ccaDetailModal" class="modal-overlay">
     <div class="modal-card" style="max-width:660px;">

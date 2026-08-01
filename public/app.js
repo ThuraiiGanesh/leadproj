@@ -284,14 +284,64 @@ async function viewAdminRoster(eventId) {
   }
 }
 
-async function openCreateEventModal() {
+function openCreateEventModal() {
   if (!currentUser || !currentUser.is_exco || !selectedAdminCcaId) {
     showToast("Only EXCO members can create events.", "error");
     return;
   }
 
-  const title = prompt("Enter Event Title:", "EXCO Workshop 2026");
-  if (!title) return;
+  const selectedCcaObj = allCcas.find(c => c.id === selectedAdminCcaId) || { name: 'Your Managed CCA' };
+  const badge = document.getElementById('createEvtCcaBadge');
+  if (badge) badge.textContent = `CCA: ${selectedCcaObj.name}`;
+
+  document.getElementById('evtTitle').value = '';
+  document.getElementById('evtDescription').value = '';
+  document.getElementById('evtRemarks').value = '';
+  document.getElementById('evtLink').value = '';
+  document.getElementById('evtImageUrl').value = '';
+  document.getElementById('evtCapacity').value = '40';
+  document.getElementById('evtLocation').value = 'Blk 31 (ICT) Room 402';
+
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  tomorrow.setHours(16, 0, 0, 0);
+  const localIso = new Date(tomorrow.getTime() - (tomorrow.getTimezoneOffset() * 60000)).toISOString().slice(0, 16);
+  document.getElementById('evtDatetime').value = localIso;
+
+  const box = document.getElementById('evtImagePreviewBox');
+  if (box) box.style.display = 'none';
+
+  const modal = document.getElementById('createEventModal');
+  if (modal) modal.classList.add('active');
+}
+
+function previewEvtImage() {
+  const url = document.getElementById('evtImageUrl').value.trim();
+  const box = document.getElementById('evtImagePreviewBox');
+  const img = document.getElementById('evtImagePreviewImg');
+  if (url && (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:image/'))) {
+    img.src = url;
+    box.style.display = 'block';
+  } else {
+    box.style.display = 'none';
+  }
+}
+
+async function submitCreateEvent() {
+  const title = document.getElementById('evtTitle').value.trim();
+  const category = document.getElementById('evtCategory').value;
+  const capacity = document.getElementById('evtCapacity').value;
+  const datetime = document.getElementById('evtDatetime').value;
+  const location = document.getElementById('evtLocation').value.trim();
+  const description = document.getElementById('evtDescription').value.trim();
+  const remarks = document.getElementById('evtRemarks').value.trim();
+  const link = document.getElementById('evtLink').value.trim();
+  const imageUrl = document.getElementById('evtImageUrl').value.trim();
+
+  if (!title || !datetime || !location || !capacity) {
+    showToast("Please fill in Event Title, Date & Time, Venue, and Capacity.", "error");
+    return;
+  }
 
   try {
     const res = await fetch('/api/admin/events/create', {
@@ -300,24 +350,29 @@ async function openCreateEventModal() {
       body: JSON.stringify({
         cca_id: selectedAdminCcaId,
         student_id: currentUser.id,
-        title: title,
-        datetime: '2026-08-25T16:00:00',
-        location: 'Blk 31 (ICT) Room 402',
-        capacity: 25,
-        description: 'Published by authorized EXCO member.'
+        title,
+        tag: category,
+        capacity: parseInt(capacity, 10),
+        datetime,
+        location,
+        description,
+        remarks,
+        links: link,
+        image_url: imageUrl
       })
     });
     const data = await res.json();
 
     if (data.success) {
-      showToast("🎉 Event published by CCA EXCO!", "success");
+      showToast("🎉 Event successfully published to Campus LaunchPad!", "success");
+      closeModal('createEventModal');
       renderAdminDashboard();
       fetchCcas();
     } else {
       showToast(`Publish Error: ${data.message}`, "error");
     }
   } catch (err) {
-    showToast("Failed to create event.", "error");
+    showToast("Failed to publish event.", "error");
   }
 }
 
