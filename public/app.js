@@ -72,56 +72,17 @@ function openLoginModal(isMandatory = false) {
 
 async function loginWithMicrosoft() {
   try {
+    showToast("Redirecting to official Microsoft 365 login portal...", "info");
     const res = await fetch('/api/auth/microsoft');
     const data = await res.json();
 
-    if (data.mode === 'live_azure' && data.url) {
-      showToast("Redirecting to Microsoft 365 official login portal...", "info");
+    if (data && data.url) {
       window.location.href = data.url;
-      return;
-    }
-
-    // Opens Interactive Microsoft 365 Identity Dialog asking user for their account
-    closeModal('loginModal');
-    const msModal = document.getElementById('microsoftModal');
-    if (msModal) msModal.classList.add('active');
-  } catch (err) {
-    showToast("Microsoft SSO connection error.", "error");
-  }
-}
-
-async function submitMicrosoftSso() {
-  const emailInput = document.getElementById('msEmailInput').value.trim();
-  if (!emailInput) {
-    showToast("Please enter your NP Student Email or ID.", "error");
-    return;
-  }
-
-  try {
-    const simRes = await fetch('/api/auth/microsoft/simulated', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ student_id: emailInput })
-    });
-    const simData = await simRes.json();
-
-    if (simData.success) {
-      currentUser = simData.user;
-      closeModal('microsoftModal');
-      updateUserUI();
-
-      if (currentUser.is_exco) {
-        showToast(`🎉 Microsoft 365 SSO Success! Welcome EXCO Lead, ${currentUser.name}.`, "success");
-      } else {
-        showToast(`🎉 Microsoft 365 SSO Success! Logged in as ${currentUser.name}.`, "success");
-      }
-
-      openSurveyModal();
     } else {
-      showToast("Microsoft SSO login failed.", "error");
+      showToast("Unable to load Microsoft OAuth portal.", "error");
     }
   } catch (err) {
-    showToast("Microsoft SSO connection error.", "error");
+    showToast("Microsoft login connection error.", "error");
   }
 }
 

@@ -163,23 +163,23 @@ function calculateMatchScore(studentAnswers, cca) {
 // ----------------------------------------------------
 // MICROSOFT 365 / AZURE AD SSO CONFIGURATION & ENDPOINTS
 // ----------------------------------------------------
-const AZURE_CLIENT_ID = process.env.AZURE_CLIENT_ID || '';
+const AZURE_CLIENT_ID = process.env.AZURE_CLIENT_ID || '4b2377b5-22e3-40f4-a0c5-55c3258c704f';
 const AZURE_CLIENT_SECRET = process.env.AZURE_CLIENT_SECRET || '';
 const AZURE_TENANT_ID = process.env.AZURE_TENANT_ID || 'common';
-const REDIRECT_URI = process.env.REDIRECT_URI || 'http://localhost:3000/api/auth/microsoft/callback';
 
-// Microsoft 365 SSO Authorization Redirect or State Check
+// Microsoft 365 SSO Authorization Redirect (Real login.microsoftonline.com OAuth portal)
 app.get('/api/auth/microsoft', (req, res) => {
-  if (AZURE_CLIENT_ID) {
-    const authUrl = `https://login.microsoftonline.com/${AZURE_TENANT_ID}/oauth2/v2.0/authorize?client_id=${AZURE_CLIENT_ID}&response_type=code&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_mode=query&scope=openid%20profile%20email`;
-    return res.json({ success: true, mode: 'live_azure', url: authUrl });
-  } else {
-    return res.json({ 
-      success: true, 
-      mode: 'simulated_sso', 
-      message: 'Azure AD Client ID not configured. Operating in Microsoft 365 SSO Sandbox Mode.'
-    });
-  }
+  const host = req.get('host');
+  const protocol = (req.headers['x-forwarded-proto'] || req.protocol || 'http').split(',')[0];
+  const redirectUri = process.env.REDIRECT_URI || `${protocol}://${host}/api/auth/microsoft/callback`;
+
+  const authUrl = `https://login.microsoftonline.com/${AZURE_TENANT_ID}/oauth2/v2.0/authorize?client_id=${AZURE_CLIENT_ID}&response_type=code&redirect_uri=${encodeURIComponent(redirectUri)}&response_mode=query&scope=openid%20profile%20email%20User.Read&prompt=select_account`;
+
+  return res.json({ 
+    success: true, 
+    provider: 'microsoft_365_azure_ad', 
+    url: authUrl 
+  });
 });
 
 // Microsoft 365 SSO Callback Endpoint (Live Azure OAuth2 Code Exchange)
