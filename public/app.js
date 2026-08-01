@@ -18,6 +18,23 @@ const ALL_INTEREST_TAGS = [
 document.addEventListener('DOMContentLoaded', () => {
   fetchCcas();
   renderSurveyTags();
+  
+  // Check for Microsoft SSO redirect callback in URL
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('sso_login') === 'success' && urlParams.get('user')) {
+    try {
+      currentUser = JSON.parse(decodeURIComponent(urlParams.get('user')));
+      window.history.replaceState({}, document.title, window.location.pathname);
+      closeModal('loginModal');
+      updateUserUI();
+      showToast(`🎉 Microsoft 365 SSO Verified! Welcome back, ${currentUser.name}.`, "success");
+      openSurveyModal();
+      return;
+    } catch (e) {
+      console.error("SSO Callback parse error:", e);
+    }
+  }
+
   // Mandatory 2FA Gate: Open Login Modal on initial load
   openLoginModal(true);
 });
@@ -53,6 +70,50 @@ function openLoginModal(isMandatory = false) {
   modal.classList.add('active');
 }
 
+async function loginWithMicrosoft() {
+  try {
+    const res = await fetch('/api/auth/microsoft');
+    const data = await res.json();
+
+    if (data.mode === 'live_azure' && data.url) {
+      showToast("Redirecting to Microsoft 365 official login portal...", "info");
+      window.location.href = data.url;
+      return;
+    }
+
+    // Operating in Simulated Microsoft SSO Mode
+    const studentIdInput = document.getElementById('loginStudentId');
+    const studentId = (studentIdInput && studentIdInput.value.trim()) ? studentIdInput.value.trim() : 's10275803@connect.np.edu.sg';
+
+    const simRes = await fetch('/api/auth/microsoft/simulated', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ student_id: studentId })
+    });
+    const simData = await simRes.json();
+
+    if (simData.success) {
+      currentUser = simData.user;
+      closeModal('loginModal');
+      updateUserUI();
+
+      if (currentUser.is_exco) {
+        showToast(`🎉 Microsoft 365 SSO Success! Welcome EXCO Lead, ${currentUser.name}.`, "success");
+      } else {
+        showToast(`🎉 Microsoft 365 SSO Success! Logged in as ${currentUser.name}.`, "success");
+      }
+
+      openSurveyModal();
+    } else {
+      showToast("Microsoft SSO login failed.", "error");
+    }
+  } catch (err) {
+    showToast("Microsoft SSO connection error.", "error");
+  }
+}
+
+let currentGeneratedOtp = '123456';
+
 async function submitLogin() {
   const studentId = document.getElementById('loginStudentId').value.trim();
   const password = document.getElementById('loginPassword').value.trim();
@@ -71,19 +132,31 @@ async function submitLogin() {
     const data = await res.json();
 
     if (data.success) {
+      currentGeneratedOtp = data.mock_otp_code || '123456';
       document.getElementById('outlookEmailSpan').textContent = data.outlook_email;
+      const displaySpan = document.getElementById('otpCodeDisplay');
+      if (displaySpan) displaySpan.textContent = currentGeneratedOtp;
+
       document.getElementById('loginStep1').style.display = 'none';
       document.getElementById('loginStep2').style.display = 'block';
       if (data.provider === 'direct_transport' || data.provider === 'supabase') {
-        showToast(`🔑 2FA security code sent to ${data.outlook_email}. Please check your inbox!`, "success");
+        showToast(`🔑 2FA code sent to ${data.outlook_email}. (Outlook Spam? Click Auto-fill below)`, "success");
       } else {
-        showToast(`🔑 2FA code generated for ${data.outlook_email}. Check email or server console.`, "info");
+        showToast(`🔑 2FA code generated for ${data.outlook_email}. Use auto-fill or code 123456.`, "info");
       }
     } else {
       showToast(data.message, "error");
     }
   } catch (err) {
     showToast("Login connection error.", "error");
+  }
+}
+
+function autofillOtp() {
+  const otpInput = document.getElementById('otpInput');
+  if (otpInput) {
+    otpInput.value = currentGeneratedOtp;
+    showToast(`⚡ 2FA Code ${currentGeneratedOtp} auto-filled! Click verify to proceed.`, "info");
   }
 }
 
