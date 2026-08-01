@@ -751,49 +751,6 @@ function openLegalTechModal() {
   document.getElementById('infoModal').classList.add('active');
 }
 
-// ----------------------------------------------------
-// TELEGRAM BOT SIMULATOR
-// ----------------------------------------------------
-function toggleTelegramDrawer() {
-  const drawer = document.getElementById('telegramDrawer');
-  const icon = document.getElementById('tgToggleIcon');
-  drawer.classList.toggle('collapsed');
-  icon.textContent = drawer.classList.contains('collapsed') ? '▲' : '▼';
-}
-
-async function sendTgCommand(cmd) {
-  appendTgMessage('user', cmd);
-
-  try {
-    const res = await fetch('/api/telegram/interact', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ command: cmd })
-    });
-    const data = await res.json();
-
-    let buttonsHtml = '';
-    if (data.buttons) {
-      buttonsHtml = `<div class="inline-buttons">${data.buttons.map(b => `
-        <button class="bot-btn" onclick="sendTgCommand('${b.action}')">${b.text}</button>
-      `).join('')}</div>`;
-    }
-
-    appendTgMessage('bot', data.bot_response + buttonsHtml);
-  } catch (err) {
-    appendTgMessage('bot', '⚠️ Bot server connection error.');
-  }
-}
-
-function appendTgMessage(sender, text) {
-  const body = document.getElementById('telegramBody');
-  const div = document.createElement('div');
-  div.className = `chat-bubble ${sender}`;
-  div.innerHTML = text.replace(/\n/g, '<br>');
-  body.appendChild(div);
-  body.scrollTop = body.scrollHeight;
-}
-
 // Helper Utilities
 function closeModal(id) {
   document.getElementById(id).classList.remove('active');
