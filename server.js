@@ -163,23 +163,30 @@ function calculateMatchScore(studentAnswers, cca) {
 // ----------------------------------------------------
 // MICROSOFT 365 / AZURE AD SSO CONFIGURATION & ENDPOINTS
 // ----------------------------------------------------
-const AZURE_CLIENT_ID = process.env.AZURE_CLIENT_ID || '4b2377b5-22e3-40f4-a0c5-55c3258c704f';
+const AZURE_CLIENT_ID = process.env.AZURE_CLIENT_ID || '';
 const AZURE_CLIENT_SECRET = process.env.AZURE_CLIENT_SECRET || '';
 const AZURE_TENANT_ID = process.env.AZURE_TENANT_ID || 'common';
 
-// Microsoft 365 SSO Authorization Redirect (Real login.microsoftonline.com OAuth portal)
+// Microsoft 365 SSO Authorization Redirect
 app.get('/api/auth/microsoft', (req, res) => {
   const host = req.get('host');
   const protocol = (req.headers['x-forwarded-proto'] || req.protocol || 'http').split(',')[0];
   const redirectUri = process.env.REDIRECT_URI || `${protocol}://${host}/api/auth/microsoft/callback`;
 
-  const authUrl = `https://login.microsoftonline.com/${AZURE_TENANT_ID}/oauth2/v2.0/authorize?client_id=${AZURE_CLIENT_ID}&response_type=code&redirect_uri=${encodeURIComponent(redirectUri)}&response_mode=query&scope=openid%20profile%20email%20User.Read&prompt=select_account`;
-
-  return res.json({ 
-    success: true, 
-    provider: 'microsoft_365_azure_ad', 
-    url: authUrl 
-  });
+  if (AZURE_CLIENT_ID) {
+    const authUrl = `https://login.microsoftonline.com/${AZURE_TENANT_ID}/oauth2/v2.0/authorize?client_id=${AZURE_CLIENT_ID}&response_type=code&redirect_uri=${encodeURIComponent(redirectUri)}&response_mode=query&scope=openid%20profile%20email%20User.Read&prompt=select_account`;
+    return res.json({ 
+      success: true, 
+      has_live_azure: true, 
+      url: authUrl 
+    });
+  } else {
+    return res.json({ 
+      success: true, 
+      has_live_azure: false, 
+      message: 'AZURE_CLIENT_ID not configured in .env. Opening NP Connect login prompt.' 
+    });
+  }
 });
 
 // Microsoft 365 SSO Callback Endpoint (Live Azure OAuth2 Code Exchange)

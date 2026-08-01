@@ -72,14 +72,20 @@ function openLoginModal(isMandatory = false) {
 
 async function loginWithMicrosoft() {
   try {
-    showToast("Redirecting to official Microsoft 365 login portal...", "info");
     const res = await fetch('/api/auth/microsoft');
     const data = await res.json();
 
-    if (data && data.url) {
+    if (data.has_live_azure && data.url) {
+      showToast("Redirecting to official Microsoft 365 login portal...", "info");
       window.location.href = data.url;
-    } else {
-      showToast("Unable to load Microsoft OAuth portal.", "error");
+      return;
+    }
+
+    showToast("ℹ️ Enter your NP Student Email below to log in.", "info");
+    const input = document.getElementById('loginStudentId');
+    if (input) {
+      input.focus();
+      input.placeholder = "Enter your NP email (e.g. s10234567@connect.np.edu.sg)";
     }
   } catch (err) {
     showToast("Microsoft login connection error.", "error");
