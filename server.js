@@ -63,6 +63,14 @@ function loadData() {
     if (fs.existsSync(EVENTS_FILE)) {
       events = JSON.parse(fs.readFileSync(EVENTS_FILE, 'utf8'));
     }
+    if (supabase) {
+      supabase.from('events').select('*').then(({ data, error }) => {
+        if (!error && data && data.length > 0) {
+          events = data;
+          console.log(`✅ Loaded ${data.length} events from Supabase Postgres DB.`);
+        }
+      }).catch(err => console.warn("Supabase events fetch notice:", err.message));
+    }
   } catch (err) {
     console.error("Error loading JSON datasets:", err);
   }

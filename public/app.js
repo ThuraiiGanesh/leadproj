@@ -35,7 +35,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Mandatory 2FA Gate: Open Login Modal on initial load
+  // Restore persistent browser session from localStorage
+  const savedUser = localStorage.getItem('np_match_user');
+  if (savedUser) {
+    try {
+      currentUser = JSON.parse(savedUser);
+      updateUserUI();
+      closeModal('loginModal');
+      return;
+    } catch (e) {
+      localStorage.removeItem('np_match_user');
+    }
+  }
+
+  // Mandatory 2FA Gate: Open Login Modal on initial load if not logged in
   openLoginModal(true);
 });
 
@@ -180,6 +193,13 @@ async function submit2FA() {
 
 function updateUserUI() {
   if (currentUser) {
+    // Persist session to browser localStorage
+    try {
+      localStorage.setItem('np_match_user', JSON.stringify(currentUser));
+    } catch (e) {
+      console.error("Failed to save session to localStorage", e);
+    }
+
     // User avatar pill
     document.getElementById('userAvatarPill').style.display = 'flex';
     document.getElementById('userStatusText').textContent = currentUser.name;
@@ -188,10 +208,12 @@ function updateUserUI() {
     
     document.getElementById('loginNavBtn').style.display = 'none';
     document.getElementById('myCcasBtn').style.display = 'inline-flex';
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) logoutBtn.style.display = 'inline-flex';
 
     // Role Switcher visibility based on EXCO status (RBAC)
     const roleSwitcher = document.getElementById('roleSwitcher');
-    if (currentUser.is_exco && currentUser.managed_ccas.length > 0) {
+    if (currentUser.is_exco && currentUser.managed_ccas && currentUser.managed_ccas.length > 0) {
       roleSwitcher.style.display = 'flex';
       setupAdminCcaSelector();
     } else {
@@ -199,6 +221,15 @@ function updateUserUI() {
       switchRole('student');
     }
   }
+}
+
+function logoutUser() {
+  localStorage.removeItem('np_match_user');
+  currentUser = null;
+  showToast("Logged out successfully.", "info");
+  setTimeout(() => {
+    location.reload();
+  }, 400);
 }
 
 // ----------------------------------------------------
