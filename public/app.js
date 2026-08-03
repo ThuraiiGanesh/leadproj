@@ -5,15 +5,31 @@ let currentRole = 'student'; // 'student' | 'admin'
 let allCcas = [];
 let activeCategory = 'All';
 let searchQuery = '';
-let bookmarkedCcaIds = new Set();
-let signedUpEventIds = new Set();
+let bookmarkedCcaIds = new Set(JSON.parse(localStorage.getItem('np_bookmarked_ccas') || '[]'));
+let enrolledCcaIds = new Set(JSON.parse(localStorage.getItem('np_enrolled_ccas') || '[]'));
+let signedUpEventIds = new Set(JSON.parse(localStorage.getItem('np_signed_up_events') || '[]'));
+let signedUpEventsDetails = JSON.parse(localStorage.getItem('np_signed_up_events_details') || '[]');
 let selectedAdminCcaId = null;
 
-const ALL_INTEREST_TAGS = [
-  'tech', 'ai', 'coding', 'law', 'sports', 'fitness', 
-  'arts', 'dance', 'photography', 'community', 'volunteering', 
-  'business', 'startup', 'robotics', 'hardware'
+const SPEC_INTEREST_TAGS = [
+  { id: 'dance', label: 'Dance & Performance' },
+  { id: 'music', label: 'Music & Instruments' },
+  { id: 'drama', label: 'Theatre & Drama' },
+  { id: 'arts', label: 'Visual Arts & Media' },
+  { id: 'culture', label: 'Cultural & Language' },
+  { id: 'sports', label: 'Team Sports' },
+  { id: 'combat', label: 'Combat & Martial Arts' },
+  { id: 'water', label: 'Water Sports' },
+  { id: 'racket', label: 'Racquet & Precision Sports' },
+  { id: 'volunteering', label: 'Community Service & Volunteering' },
+  { id: 'faith', label: 'Faith & Spirituality' },
+  { id: 'debate', label: 'Academic & Debate' },
+  { id: 'stem', label: 'STEM & Innovation' },
+  { id: 'games', label: 'Games & Strategy' },
+  { id: 'leadership', label: 'Leadership & Peer Support' }
 ];
+
+const ALL_INTEREST_TAGS = SPEC_INTEREST_TAGS.map(t => t.id);
 
 document.addEventListener('DOMContentLoaded', () => {
   fetchCcas();
@@ -134,11 +150,7 @@ async function submitLogin() {
 
       document.getElementById('loginStep1').style.display = 'none';
       document.getElementById('loginStep2').style.display = 'block';
-      if (data.provider === 'direct_transport' || data.provider === 'supabase') {
-        showToast(`🔑 2FA code sent to ${data.outlook_email}. (Outlook Spam? Click Auto-fill below)`, "success");
-      } else {
-        showToast(`🔑 2FA code generated for ${data.outlook_email}. Use auto-fill or code 123456.`, "info");
-      }
+      showToast(`🔑 2FA security verification code sent to ${data.outlook_email}.`, "success");
     } else {
       showToast(data.message, "error");
     }
@@ -414,10 +426,11 @@ async function submitCreateEvent() {
 // ----------------------------------------------------
 function renderSurveyTags() {
   const container = document.getElementById('surveyTagsContainer');
-  container.innerHTML = ALL_INTEREST_TAGS.map(tag => `
-    <label style="background:var(--bg-surface-elevated); border:1px solid var(--border-subtle); padding:5px 12px; border-radius:18px; font-size:0.8rem; cursor:pointer; display:flex; align-items:center; gap:6px; color:#c4b5fd;">
-      <input type="checkbox" value="${tag}" ${['tech', 'ai', 'coding'].includes(tag) ? 'checked' : ''}>
-      #${tag}
+  if (!container) return;
+  container.innerHTML = SPEC_INTEREST_TAGS.map(t => `
+    <label style="background:var(--bg-surface-elevated); border:1px solid var(--border-subtle); padding:6px 14px; border-radius:18px; font-size:0.8rem; cursor:pointer; display:flex; align-items:center; gap:6px; color:#c4b5fd;">
+      <input type="checkbox" value="${t.id}" ${['sports', 'arts', 'leadership', 'culture'].includes(t.id) ? 'checked' : ''}>
+      ${t.label}
     </label>
   `).join('');
 }
@@ -442,6 +455,7 @@ async function submitSurvey() {
   const selectedTags = Array.from(document.querySelectorAll('#surveyTagsContainer input:checked')).map(cb => cb.value);
   const commitment = document.getElementById('surveyCommitment').value;
   const style = document.getElementById('surveyStyle').value;
+  const availability = Array.from(document.querySelectorAll('#surveyAvailabilityContainer input:checked')).map(cb => cb.value);
 
   if (selectedTags.length === 0) {
     showToast("Please select at least 1 interest tag.", "error");
@@ -453,7 +467,8 @@ async function submitSurvey() {
     currentUser.survey_answers = {
       interest_tags: selectedTags,
       commitment_level: commitment,
-      style: style
+      style: style,
+      weekly_availability: availability
     };
   }
 
@@ -571,6 +586,24 @@ function toggleBookmark(ccaId) {
     bookmarkedCcaIds.add(ccaId);
     showToast("⭐ CCA bookmarked to My CCAs!", "success");
   }
+  localStorage.setItem('np_bookmarked_ccas', JSON.stringify(Array.from(bookmarkedCcaIds)));
+  renderCcaFeed();
+  renderMyCcasFeed();
+}
+
+function toggleEnrolment(ccaId) {
+  const cca = allCcas.find(c => c.id === ccaId);
+  const ccaName = cca ? cca.name : 'CCA';
+
+  if (enrolledCcaIds.has(ccaId)) {
+    enrolledCcaIds.delete(ccaId);
+    showToast(`Left ${ccaName} membership.`, "info");
+  } else {
+    enrolledCcaIds.add(ccaId);
+    showToast(`🎓 Officially joined ${ccaName} as a registered member!`, "success");
+    appendTgMessage('bot', `🎓 **CCA Membership Confirmed!**\n\nYou are now an official registered member of **${ccaName}**.`);
+  }
+  localStorage.setItem('np_enrolled_ccas', JSON.stringify(Array.from(enrolledCcaIds)));
   renderCcaFeed();
   renderMyCcasFeed();
 }
@@ -587,7 +620,6 @@ function showMyCcasSection() {
 
   renderMyCcasFeed();
 
-  // Scroll smoothly to section
   if (mySection) {
     mySection.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
@@ -609,15 +641,19 @@ function renderMyCcasFeed() {
   const container = document.getElementById('myCcasFeed');
   if (!container) return;
 
-  const myCcas = allCcas.filter(cca => bookmarkedCcaIds.has(cca.id));
+  const joinedCcas = allCcas.filter(cca => enrolledCcaIds.has(cca.id));
+  const bookmarkedCcas = allCcas.filter(cca => bookmarkedCcaIds.has(cca.id));
+  const registeredEvents = signedUpEventsDetails || [];
 
-  if (myCcas.length === 0) {
+  const totalItems = joinedCcas.length + bookmarkedCcas.length + registeredEvents.length;
+
+  if (totalItems === 0) {
     container.innerHTML = `
       <div style="grid-column: 1/-1; text-align:center; padding:3.5rem 1.5rem; background:rgba(255,255,255,0.02); border:1px dashed var(--border-subtle); border-radius:24px;">
         <div style="font-size:3rem; margin-bottom:0.75rem;">⭐</div>
         <h3 style="color:#c4b5fd; font-family:var(--font-heading); font-size:1.4rem; font-weight:700;">You currently have no cca</h3>
         <p style="color:var(--text-muted); font-size:0.9rem; max-width:440px; margin:0.6rem auto 1.5rem auto;">
-          You haven't bookmarked or registered for any CCAs yet. Explore the CCA directory to find your fit!
+          You haven't joined, bookmarked, or registered for any CCAs or events yet. Explore the directory to build your campus schedule!
         </p>
         <button class="btn btn-primary" onclick="showAllCcasSection()">Explore CCAs ✨</button>
       </div>
@@ -627,51 +663,124 @@ function renderMyCcasFeed() {
 
   const studentTags = (currentUser && currentUser.survey_answers) ? currentUser.survey_answers.interest_tags.map(t => t.toLowerCase()) : [];
 
-  container.innerHTML = myCcas.map((cca, index) => {
-    const isBookmarked = bookmarkedCcaIds.has(cca.id);
-    const hasScore = cca.match_score !== null && cca.match_score !== undefined;
-    const staggerClass = `stagger-${(index % 5) + 1}`;
+  let html = '';
 
-    return `
-      <div class="cca-card reveal-on-scroll ${staggerClass}">
-        <div>
-          <div class="cca-header">
+  // SECTION 1: JOINED CCAS / OFFICIAL MEMBERSHIPS
+  if (joinedCcas.length > 0) {
+    html += `
+      <div style="grid-column: 1/-1; margin-bottom:1rem;">
+        <h3 style="font-family:var(--font-heading); font-size:1.25rem; color:#6ee7b7; display:flex; align-items:center; gap:8px;">
+          🎓 Official Joined Memberships (${joinedCcas.length})
+        </h3>
+        <p style="font-size:0.825rem; color:var(--text-muted);">CCAs you are registered as an active official student member.</p>
+      </div>
+      <div class="cca-grid" style="grid-column: 1/-1; margin-bottom:2rem;">
+        ${joinedCcas.map(cca => `
+          <div class="cca-card" style="border-color:rgba(16,185,129,0.4);">
             <div>
-              <span class="cca-category">${cca.category}</span>
-              <h3 class="cca-name">${cca.name}</h3>
-            </div>
-            ${hasScore ? `
-              <div class="score-badge">
-                <span>${cca.match_score}%</span>
-                ${cca.is_recommended ? `<span class="rec-tag">PRO MATCH</span>` : ''}
+              <div class="cca-header">
+                <div>
+                  <span class="cca-category">${cca.category}</span>
+                  <h3 class="cca-name">${cca.name}</h3>
+                </div>
+                <span style="font-size:0.75rem; background:rgba(16,185,129,0.2); color:#6ee7b7; border:1px solid rgba(16,185,129,0.4); padding:4px 10px; border-radius:12px; font-weight:700;">OFFICIAL MEMBER</span>
               </div>
-            ` : ''}
+              <p class="cca-desc">${cca.description}</p>
+              <div class="tags-list">
+                ${cca.tags.map(tag => `<span class="tag-pill ${studentTags.includes(tag.toLowerCase()) ? 'matched' : ''}">#${tag}</span>`).join('')}
+              </div>
+            </div>
+            <div class="cca-footer">
+              <span class="meta-info">📍 ${cca.location}</span>
+              <div style="display:flex; gap:8px;">
+                <button class="btn btn-outline btn-sm" style="font-size:0.75rem; color:#ef4444; border-color:rgba(239,68,68,0.4);" onclick="toggleEnrolment('${cca.id}')">Leave CCA</button>
+                <button class="action-arrow-btn" onclick="openCcaDetail('${cca.id}')">↗</button>
+              </div>
+            </div>
           </div>
-
-          <p class="cca-desc">${cca.description}</p>
-
-          <div class="tags-list">
-            ${cca.tags.map(tag => {
-              const isMatched = studentTags.includes(tag.toLowerCase());
-              return `<span class="tag-pill ${isMatched ? 'matched' : ''}">#${tag}</span>`;
-            }).join('')}
-          </div>
-        </div>
-
-        <div class="cca-footer">
-          <span class="meta-info">📍 ${cca.location}</span>
-          <div style="display:flex; align-items:center; gap:10px;">
-            <button class="bookmark-icon-btn active" style="background:transparent; border:none; color:#f59e0b; font-size:1.25rem; cursor:pointer;" onclick="toggleBookmark('${cca.id}')">
-              ★
-            </button>
-            <button class="action-arrow-btn" title="View CCA Details" onclick="openCcaDetail('${cca.id}')">↗</button>
-          </div>
-        </div>
+        `).join('')}
       </div>
     `;
-  }).join('');
+  }
 
+  // SECTION 2: BOOKMARKED / SAVED CCAS
+  if (bookmarkedCcas.length > 0) {
+    html += `
+      <div style="grid-column: 1/-1; margin-bottom:1rem;">
+        <h3 style="font-family:var(--font-heading); font-size:1.25rem; color:#fde68a; display:flex; align-items:center; gap:8px;">
+          📌 Saved & Bookmarked CCAs (${bookmarkedCcas.length})
+        </h3>
+        <p style="font-size:0.825rem; color:var(--text-muted);">Activities you are exploring or considering joining.</p>
+      </div>
+      <div class="cca-grid" style="grid-column: 1/-1; margin-bottom:2rem;">
+        ${bookmarkedCcas.map(cca => `
+          <div class="cca-card">
+            <div>
+              <div class="cca-header">
+                <div>
+                  <span class="cca-category">${cca.category}</span>
+                  <h3 class="cca-name">${cca.name}</h3>
+                </div>
+              </div>
+              <p class="cca-desc">${cca.description}</p>
+            </div>
+            <div class="cca-footer">
+              <span class="meta-info">📍 ${cca.location}</span>
+              <div style="display:flex; gap:8px; align-items:center;">
+                <button class="btn btn-primary btn-sm" style="font-size:0.75rem;" onclick="toggleEnrolment('${cca.id}')">Join CCA</button>
+                <button class="bookmark-icon-btn active" style="background:transparent; border:none; color:#f59e0b; font-size:1.2rem; cursor:pointer;" onclick="toggleBookmark('${cca.id}')">★</button>
+                <button class="action-arrow-btn" onclick="openCcaDetail('${cca.id}')">↗</button>
+              </div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  // SECTION 3: REGISTERED EVENTS & SCHEDULE
+  if (registeredEvents.length > 0) {
+    html += `
+      <div style="grid-column: 1/-1; margin-bottom:1rem;">
+        <h3 style="font-family:var(--font-heading); font-size:1.25rem; color:#a78bfa; display:flex; align-items:center; gap:8px;">
+          🎟️ Registered Events & Schedule (${registeredEvents.length})
+        </h3>
+        <p style="font-size:0.825rem; color:var(--text-muted);">Your confirmed event registrations and schedule check.</p>
+      </div>
+      <div style="grid-column: 1/-1; display:flex; flex-direction:column; gap:1rem;">
+        ${registeredEvents.map(evt => `
+          <div style="background:var(--bg-surface-elevated); border:1px solid var(--border-subtle); border-radius:18px; padding:1.2rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
+            <div>
+              <span style="font-size:0.75rem; color:#c4b5fd; font-weight:700;">EVENT REGISTRATION</span>
+              <h4 style="font-size:1.05rem; font-weight:700; color:#fff; margin-top:2px;">${evt.title}</h4>
+              <p style="font-size:0.825rem; color:var(--text-muted); margin-top:4px;">
+                📅 ${new Date(evt.datetime).toLocaleString()} | 📍 ${evt.location}
+              </p>
+              ${evt.registration_deadline ? `
+                <span style="font-size:0.75rem; color:#fde68a;">⏳ Reg Deadline: ${new Date(evt.registration_deadline).toLocaleString()}</span>
+              ` : ''}
+            </div>
+            <div style="display:flex; align-items:center; gap:10px;">
+              <span style="color:#10b981; font-size:0.825rem; font-weight:700;">✅ Confirmed</span>
+              <button class="btn btn-outline btn-sm" style="color:#ef4444; border-color:rgba(239,68,68,0.4);" onclick="cancelEventSignup('${evt.id}')">Cancel</button>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  container.innerHTML = html;
   initScrollObserver();
+}
+
+function cancelEventSignup(eventId) {
+  signedUpEventIds.delete(eventId);
+  signedUpEventsDetails = signedUpEventsDetails.filter(e => e.id !== eventId);
+  localStorage.setItem('np_signed_up_events', JSON.stringify(Array.from(signedUpEventIds)));
+  localStorage.setItem('np_signed_up_events_details', JSON.stringify(signedUpEventsDetails));
+  showToast("Event registration cancelled.", "info");
+  renderMyCcasFeed();
 }
 
 // ----------------------------------------------------
@@ -687,6 +796,7 @@ async function openCcaDetail(ccaId) {
     const cca = data.cca;
     const events = data.events;
     const isBookmarked = bookmarkedCcaIds.has(cca.id);
+    const isEnrolled = enrolledCcaIds.has(cca.id);
 
     const container = document.getElementById('ccaDetailContent');
     container.innerHTML = `
@@ -734,24 +844,32 @@ async function openCcaDetail(ccaId) {
             const isSignedUp = signedUpEventIds.has(evt.id);
             const isFull = evt.signup_count >= evt.capacity;
             const isPast = new Date(evt.datetime) <= new Date();
+            const deadlinePassed = evt.registration_deadline && new Date() > new Date(evt.registration_deadline);
 
             return `
-              <div style="background:var(--bg-primary); border:1px solid var(--border-subtle); padding:1.1rem; border-radius:var(--radius-sm); display:flex; justify-content:space-between; align-items:center;">
+              <div style="background:var(--bg-primary); border:1px solid var(--border-subtle); padding:1.1rem; border-radius:var(--radius-sm); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
                 <div>
                   <h4 style="font-size:0.98rem; font-weight:700; color:#fff;">${evt.title}</h4>
                   <p style="font-size:0.825rem; color:var(--text-muted); margin-top:3px;">
                     📅 ${new Date(evt.datetime).toLocaleString()} | 📍 ${evt.location}
                   </p>
-                  <span style="font-size:0.78rem; color:${isFull ? '#ef4444' : '#10b981'};">
-                    Capacity: ${evt.signup_count} / ${evt.capacity} signed up
-                  </span>
+                  <div style="display:flex; gap:12px; margin-top:4px; font-size:0.78rem;">
+                    <span style="color:${isFull ? '#ef4444' : '#10b981'};">
+                      Capacity: ${evt.signup_count} / ${evt.capacity} signed up
+                    </span>
+                    ${evt.registration_deadline ? `
+                      <span style="color:${deadlinePassed ? '#ef4444' : '#fde68a'};">
+                        ⏳ Reg Deadline: ${new Date(evt.registration_deadline).toLocaleString()}
+                      </span>
+                    ` : ''}
+                  </div>
                 </div>
                 <div>
                   ${isSignedUp ? `
                     <span style="color:#10b981; font-size:0.825rem; font-weight:700;">✅ Registered</span>
                   ` : `
-                    <button class="btn btn-primary btn-sm" ${isFull || isPast ? 'disabled' : ''} onclick="signUpForEvent('${evt.id}')">
-                      ${isFull ? 'Full' : (isPast ? 'Closed' : 'Sign Up')}
+                    <button class="btn btn-primary btn-sm" ${isFull || isPast || deadlinePassed ? 'disabled' : ''} onclick="signUpForEvent('${evt.id}', '${cca.name}')">
+                      ${isFull ? 'Full' : (deadlinePassed ? 'Deadline Passed' : (isPast ? 'Closed' : 'Sign Up'))}
                     </button>
                   `}
                 </div>
@@ -760,11 +878,16 @@ async function openCcaDetail(ccaId) {
           }).join('')}
       </div>
 
-      <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--border-subtle); padding-top:1.1rem;">
-        <button class="btn btn-outline btn-sm" onclick="toggleBookmark('${cca.id}')">
-          ${isBookmarked ? '★ Bookmarked' : '☆ Bookmark CCA'}
-        </button>
-        <span style="font-size:0.825rem; color:var(--text-muted);">📩 Contact: ${cca.contact.telegram}</span>
+      <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--border-subtle); padding-top:1.1rem; flex-wrap:wrap; gap:1rem;">
+        <div style="display:flex; gap:10px;">
+          <button class="btn btn-primary btn-sm" onclick="toggleEnrolment('${cca.id}')">
+            ${isEnrolled ? '✓ Official Member' : '🎓 Join CCA / Enrol'}
+          </button>
+          <button class="btn btn-outline btn-sm" onclick="toggleBookmark('${cca.id}')">
+            ${isBookmarked ? '★ Bookmarked' : '☆ Bookmark CCA'}
+          </button>
+        </div>
+        <span style="font-size:0.825rem; color:var(--text-muted);">📩 Contact: ${cca.contact ? cca.contact.telegram : 'N/A'}</span>
       </div>
     `;
 
@@ -774,11 +897,21 @@ async function openCcaDetail(ccaId) {
   }
 }
 
-async function signUpForEvent(eventId) {
+async function signUpForEvent(eventId, ccaName = '') {
   if (!currentUser) {
     showToast("Please complete 2FA authentication first.", "error");
     openLoginModal(true);
     return;
+  }
+
+  // Schedule Clash Check across existing signed up events
+  const clashingEvt = signedUpEventsDetails.find(e => {
+    return e.id !== eventId && new Date(e.datetime).toDateString() === new Date().toDateString();
+  });
+
+  if (clashingEvt) {
+    const confirmProceed = confirm(`⚠️ Schedule Clash Warning!\n\nYou are registered for "${clashingEvt.title}" around this timeframe.\n\nDo you still want to confirm signup for this event?`);
+    if (!confirmProceed) return;
   }
 
   try {
@@ -794,11 +927,20 @@ async function signUpForEvent(eventId) {
 
     if (data.success) {
       signedUpEventIds.add(eventId);
+      localStorage.setItem('np_signed_up_events', JSON.stringify(Array.from(signedUpEventIds)));
+
+      if (data.event) {
+        signedUpEventsDetails = signedUpEventsDetails.filter(e => e.id !== eventId);
+        signedUpEventsDetails.push(data.event);
+        localStorage.setItem('np_signed_up_events_details', JSON.stringify(signedUpEventsDetails));
+      }
+
       closeModal('ccaDetailModal');
       showToast(`🎉 ${data.message}`, "success");
       appendTgMessage('bot', `✅ **Event Registration Success!**\n\nRegistered for **${data.event.title}**.\n🔔 Automated Outlook + Telegram reminder activated!`);
+      renderMyCcasFeed();
     } else {
-      showToast(`Signup Failed (TDD Rule): ${data.message}`, "error");
+      showToast(`Signup Failed: ${data.message}`, "error");
     }
   } catch (err) {
     showToast("Event signup request error.", "error");

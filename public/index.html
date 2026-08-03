@@ -56,12 +56,9 @@
           <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
             <button class="btn btn-primary" onclick="openSurveyModal()">Take Match Survey ✨</button>
             <div class="bento-widget-match">
-              <div class="match-ring">
-                <span class="match-ring-text">98%</span>
-              </div>
-              <div>
-                <div style="font-weight:700; font-size:0.9rem; color:#fff;">NP Ambassadors</div>
-                <div style="font-size:0.75rem; color:#c4b5fd;">Top Recommended CCA</div>
+              <div style="text-align:right;">
+                <div style="font-weight:700; font-size:0.9rem; color:#fff;">Personalized Match Engine</div>
+                <div style="font-size:0.75rem; color:#c4b5fd;">Take survey to compute your scores</div>
               </div>
             </div>
           </div>
@@ -79,7 +76,7 @@
               <div class="pulse-dot"></div>
               <span>SMTP Transport Active</span>
             </div>
-            <div style="font-size:0.8rem; color:#c4b5fd; font-family:monospace;">s10275803@connect.np.edu.sg</div>
+            <div style="font-size:0.8rem; color:#c4b5fd; font-family:monospace;">s99999999@connect.np.edu.sg</div>
           </div>
         </div>
 
@@ -99,10 +96,10 @@
         <div class="bento-card reveal-on-scroll stagger-4">
           <div>
             <div class="bento-tag">💬 Cross-Platform</div>
-            <h3 class="bento-title" style="font-size:1.4rem;">Telegram Bot Sync</h3>
-            <p class="bento-desc" style="font-size:0.875rem;">Interactive bot drawer for browsing CCAs and instant event signups directly inside Telegram.</p>
+            <h3 class="bento-title" style="font-size:1.4rem;">Bot Experience Preview</h3>
+            <p class="bento-desc" style="font-size:0.875rem;">Interactive bot preview for browsing CCAs and instant event signups directly inside Telegram.</p>
           </div>
-          <button class="btn btn-outline btn-sm" onclick="toggleTelegramDrawer()">Open Bot Simulator 🤖</button>
+          <button class="btn btn-outline btn-sm" onclick="toggleTelegramDrawer()">Open Bot Experience 🤖</button>
         </div>
 
         <!-- Tile 5: TDD Quality Assurance (Wide Card) -->
@@ -132,13 +129,13 @@
           <div>
             <div class="bento-tag" style="margin-bottom:0.4rem;">⭐ Student Portal</div>
             <h2 class="section-title" style="margin-bottom:0.2rem;">My CCAs & Saved Activities</h2>
-            <p class="meta-info" style="color:#c4b5fd;">Your personal list of bookmarked CCAs and active campus memberships.</p>
+            <p class="meta-info" style="color:#c4b5fd;">Your official memberships, saved bookmarks, and registered event schedule.</p>
           </div>
           <button class="btn btn-outline btn-sm" onclick="showAllCcasSection()">← Back to Explore All CCAs</button>
         </div>
 
         <div id="myCcasFeed" class="cca-grid">
-          <!-- Rendered dynamically by app.js -->
+          <!-- Rendered dynamically by app.js with Joined CCAs, Bookmarks & Events -->
         </div>
       </section>
 
@@ -191,20 +188,22 @@
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.6rem;">
         <!-- Published Events Card -->
         <div style="background:var(--bg-surface); border:1px solid var(--border-subtle); border-radius:var(--radius-lg); padding:1.6rem;">
-          <h3 style="font-family:var(--font-heading); font-size:1.3rem; margin-bottom:1.1rem; color:#fff;">📢 Published CCA Events</h3>
-          <div id="adminEventsList" style="display:flex; flex-direction:column; gap:0.85rem;">
-            <!-- Rendered by app.js -->
+          <h3 style="font-family:var(--font-heading); font-size:1.15rem; color:#fff; margin-bottom:1.2rem;">📅 Published CCA Events</h3>
+          <div id="adminEventsList">
+            <!-- Rendered dynamically -->
           </div>
         </div>
 
-        <!-- Student Roster Inspector -->
+        <!-- Student Signups & Roster Card (PDPA Protected) -->
         <div style="background:var(--bg-surface); border:1px solid var(--border-subtle); border-radius:var(--radius-lg); padding:1.6rem;">
-          <h3 style="font-family:var(--font-heading); font-size:1.3rem; margin-bottom:0.6rem; color:#fff;">📋 Student Signup Roster</h3>
-          <div style="background:rgba(245, 158, 11, 0.12); border:1px solid rgba(245, 158, 11, 0.35); padding:10px 14px; border-radius:12px; font-size:0.78rem; color:#fde68a; margin-bottom:1.1rem;">
-            🛡️ <strong>CIA Confidentiality Control Enforced:</strong> Admin view displays ONLY Name and Student ID. Passwords and Survey Answers are strictly isolated under PDPA rules.
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.2rem;">
+            <h3 style="font-family:var(--font-heading); font-size:1.15rem; color:#fff;">👥 Signed-up Student Roster</h3>
+            <span style="font-size:0.75rem; color:#6ee7b7; background:rgba(16,185,129,0.15); padding:4px 8px; border-radius:8px;">🛡️ PDPA Shield</span>
           </div>
-          <div id="adminRosterContainer">
-            <p style="color:var(--text-muted); font-size:0.875rem;">Select an event on the left to view signed-up student roster.</p>
+          <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1rem;">Student names and IDs are displayed for event logistics only. Survey preferences remain private.</p>
+          
+          <div id="adminRosterList">
+            <!-- Rendered dynamically -->
           </div>
         </div>
       </div>
@@ -212,21 +211,15 @@
 
   </main>
 
-  <!-- MODALS -->
-
-  <!-- Mandatory Auth & 2FA Modal Gate -->
-  <div id="loginModal" class="modal-overlay active">
+  <!-- AUTH / 2FA LOGIN MODAL -->
+  <div id="loginModal" class="modal-overlay">
     <div class="modal-card">
       <div id="loginStep1">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
-          <h3 class="modal-title">Authentication Required</h3>
-          <span style="font-size:0.75rem; color:var(--accent-violet); background:rgba(139,92,246,0.2); padding:2px 8px; border-radius:12px; font-weight:700;">2FA GATE</span>
-        </div>
-        <p style="color:#c4b5fd; font-size:0.875rem; margin-bottom:1.6rem;">Log in with your email or NP Student ID to receive your 2FA security code.</p>
-        
-        <!-- Microsoft 365 / Azure AD SSO Button (Hidden from UI, code preserved) -->
-        <div id="msSsoSection" style="display:none;">
-          <button class="btn btn-microsoft" style="margin-bottom:1rem;" onclick="loginWithMicrosoft()">
+        <h3 class="modal-title">NP LEAD LaunchPad Sign In</h3>
+        <p style="color:#c4b5fd; font-size:0.875rem; margin-bottom:1.6rem;">Sign in with your official Ngee Ann Polytechnic student identity.</p>
+
+        <div style="margin-bottom:1.4rem;">
+          <button class="btn btn-outline" style="width:100%; font-size:0.9rem; padding:12px; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.04); border-color:rgba(255,255,255,0.15); color:#fff;" onclick="loginWithMicrosoft()">
             <svg width="18" height="18" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right:10px;">
               <path d="M10 0H0V10H10V0Z" fill="#F25022"/>
               <path d="M21 0H11V10H21V0Z" fill="#7FBA00"/>
@@ -236,16 +229,16 @@
             Sign in with Microsoft 365 (NP Connect)
           </button>
 
-          <div style="display:flex; align-items:center; margin-bottom:1.2rem; text-align:center;">
+          <div style="display:flex; align-items:center; margin-bottom:1.2rem; margin-top:1.2rem; text-align:center;">
             <div style="flex:1; height:1px; background:var(--border-subtle);"></div>
-            <span style="padding:0 10px; font-size:0.725rem; color:var(--text-muted); font-weight:700; letter-spacing:1px;">OR TRADITIONAL EMAIL / 2FA</span>
+            <span style="padding:0 10px; font-size:0.725rem; color:var(--text-muted); font-weight:700; letter-spacing:1px;">OR NP STUDENT ID</span>
             <div style="flex:1; height:1px; background:var(--border-subtle);"></div>
           </div>
         </div>
 
         <div class="form-group">
           <label class="form-label">Email / NP Student ID</label>
-          <input type="text" id="loginStudentId" class="form-control" placeholder="e.g. s10234567@connect.np.edu.sg">
+          <input type="text" id="loginStudentId" class="form-control" placeholder="e.g. s99999999@connect.np.edu.sg">
         </div>
         <div class="form-group">
           <label class="form-label">Password</label>
@@ -256,24 +249,11 @@
 
       <div id="loginStep2" style="display:none;">
         <h3 class="modal-title">Verify 2FA Security Code</h3>
-        <p style="color:#c4b5fd; font-size:0.875rem; margin-bottom:1.2rem;">A 6-digit code has been dispatched to <strong id="outlookEmailSpan" style="color:#fff;">s10234567@connect.np.edu.sg</strong>.</p>
-        
-        <!-- 2FA Code Banner with Outlook Spam Fallback -->
-        <div id="otpFallbackContainer" style="background: rgba(139, 92, 246, 0.12); border: 1px dashed var(--accent-violet); padding: 12px 14px; border-radius: 10px; margin-bottom: 1.2rem;">
-          <div style="display:flex; justify-content:space-between; align-items:center;">
-            <span style="font-size:0.8rem; color:#c4b5fd;">Didn't get email in Outlook?</span>
-            <button class="btn btn-outline btn-sm" style="font-size:0.75rem; padding:3px 8px; border-color:var(--accent-violet); color:#fff;" onclick="autofillOtp()">
-              ⚡ Auto-fill Code (<span id="otpCodeDisplay">------</span>)
-            </button>
-          </div>
-          <p style="font-size:0.725rem; color:var(--text-muted); margin-top:6px; margin-bottom:0;">
-            ℹ️ <em>Outlook/Exchange may block external automated emails. Use the code above or master code <strong>123456</strong>.</em>
-          </p>
-        </div>
+        <p style="color:#c4b5fd; font-size:0.875rem; margin-bottom:1.4rem;">A 6-digit verification code has been sent to your Outlook inbox (<strong id="outlookEmailSpan" style="color:#fff;">s99999999@connect.np.edu.sg</strong>).</p>
 
         <div class="form-group">
-          <label class="form-label">Enter 6-Digit Code</label>
-          <input type="text" id="otpInput" class="form-control" placeholder="123456" maxlength="6" style="text-align:center; font-size:1.3rem; letter-spacing:5px;">
+          <label class="form-label">Enter 6-Digit Verification Code</label>
+          <input type="text" id="otpInput" class="form-control" placeholder="______" maxlength="6" style="text-align:center; font-size:1.3rem; letter-spacing:5px;">
         </div>
         <button class="btn btn-primary" style="width:100%;" onclick="submit2FA()">Verify 2FA & Access LaunchPad</button>
       </div>
@@ -282,15 +262,15 @@
 
   <!-- Survey Modal -->
   <div id="surveyModal" class="modal-overlay">
-    <div class="modal-card">
+    <div class="modal-card" style="max-width:560px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
         <h3 class="modal-title">CCA Matching Survey</h3>
         <button class="btn btn-outline btn-sm" onclick="skipSurvey()">Skip Survey</button>
       </div>
-      <p style="color:#c4b5fd; font-size:0.875rem; margin-bottom:1.6rem;">Answer 3 quick questions to calculate your weighted match score across all NP CCAs.</p>
+      <p style="color:#c4b5fd; font-size:0.875rem; margin-bottom:1.4rem;">Answer 4 quick questions to calculate your weighted match score across all 81 NP CCAs.</p>
 
       <div class="form-group">
-        <label class="form-label">1. Select Your Interest Tags (Multi-select)</label>
+        <label class="form-label">1. Select Your Interest Tags (Choose 2+)</label>
         <div id="surveyTagsContainer" style="display:flex; flex-wrap:wrap; gap:8px; margin-top:8px;">
           <!-- Rendered dynamically -->
         </div>
@@ -312,6 +292,24 @@
           <option value="solo">Solo (Independent projects, individual practice)</option>
           <option value="mixed">Mixed (Flexible team and solo balance)</option>
         </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">4. Weekly Availability (Powers Schedule Clash Check)</label>
+        <div id="surveyAvailabilityContainer" style="display:flex; flex-wrap:wrap; gap:8px; margin-top:8px;">
+          <label style="background:rgba(255,255,255,0.06); padding:6px 12px; border-radius:9999px; font-size:0.8rem; cursor:pointer; color:#fff; border:1px solid rgba(255,255,255,0.15);">
+            <input type="checkbox" value="weekday_afternoons" checked style="margin-right:6px;"> Weekday Afternoons
+          </label>
+          <label style="background:rgba(255,255,255,0.06); padding:6px 12px; border-radius:9999px; font-size:0.8rem; cursor:pointer; color:#fff; border:1px solid rgba(255,255,255,0.15);">
+            <input type="checkbox" value="weekday_evenings" checked style="margin-right:6px;"> Weekday Evenings
+          </label>
+          <label style="background:rgba(255,255,255,0.06); padding:6px 12px; border-radius:9999px; font-size:0.8rem; cursor:pointer; color:#fff; border:1px solid rgba(255,255,255,0.15);">
+            <input type="checkbox" value="saturday" style="margin-right:6px;"> Saturdays
+          </label>
+          <label style="background:rgba(255,255,255,0.06); padding:6px 12px; border-radius:9999px; font-size:0.8rem; cursor:pointer; color:#fff; border:1px solid rgba(255,255,255,0.15);">
+            <input type="checkbox" value="sunday" style="margin-right:6px;"> Sundays
+          </label>
+        </div>
       </div>
 
       <button class="btn btn-primary" style="width:100%; margin-top:1.2rem;" onclick="submitSurvey()">Calculate My Match Scores ✨</button>
