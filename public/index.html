@@ -32,7 +32,7 @@
           <span id="userStatusText" style="font-size:0.85rem; font-weight:600;">Student User</span>
         </div>
         <button id="loginNavBtn" class="btn btn-primary btn-sm" onclick="openLoginModal(false)">Log In / 2FA</button>
-        <button id="myCcasBtn" class="btn btn-outline btn-sm" style="display:none;" onclick="openMyCcasModal()">⭐ My CCAs</button>
+        <button id="myCcasBtn" class="btn btn-outline btn-sm" style="display:none;" onclick="showMyCcasSection()">⭐ My CCAs</button>
         <button id="logoutBtn" class="btn btn-outline btn-sm" style="display:none; border-color:rgba(239, 68, 68, 0.4); color:#f87171;" onclick="logoutUser()">🚪 Log Out</button>
       </div>
     </div>
@@ -125,28 +125,48 @@
 
     <!-- STUDENT VIEW -->
     <div id="studentView">
-      <div class="section-header reveal-on-scroll">
-        <div>
-          <h2 class="section-title">Explore CCAs & Events</h2>
-          <p id="surveyBanner" class="meta-info" style="margin-top: 4px; color:#c4b5fd;">
-            Showing all CCAs. Take the <a href="#" onclick="openSurveyModal()" style="color:#fff; font-weight:700; text-decoration:underline;">Matching Survey</a> to get weighted match scores.
-          </p>
+      
+      <!-- MY CCAs DEDICATED SECTION -->
+      <section id="myCcasSection" class="reveal-on-scroll" style="display:none; margin-bottom: 2.8rem; background: rgba(26, 21, 51, 0.75); backdrop-filter: blur(28px) saturate(190%); border: 1px solid rgba(167, 139, 250, 0.3); border-top: 1px solid rgba(255, 255, 255, 0.25); border-radius: 28px; padding: 2.2rem; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; margin-bottom:1.8rem; border-bottom:1px solid var(--border-subtle); padding-bottom:1.2rem;">
+          <div>
+            <div class="bento-tag" style="margin-bottom:0.4rem;">⭐ Student Portal</div>
+            <h2 class="section-title" style="margin-bottom:0.2rem;">My CCAs & Saved Activities</h2>
+            <p class="meta-info" style="color:#c4b5fd;">Your personal list of bookmarked CCAs and active campus memberships.</p>
+          </div>
+          <button class="btn btn-outline btn-sm" onclick="showAllCcasSection()">← Back to Explore All CCAs</button>
         </div>
 
-        <div class="filter-group">
-          <input type="text" id="searchInput" class="search-input" placeholder="🔍 Search CCAs or tags..." oninput="handleFilterChange()">
-          <button class="category-chip active" onclick="setCategoryFilter('All', this)">All</button>
-          <button class="category-chip" onclick="setCategoryFilter('Special Interest', this)">Special Interest</button>
-          <button class="category-chip" onclick="setCategoryFilter('Academic', this)">Academic & Tech</button>
-          <button class="category-chip" onclick="setCategoryFilter('Sports', this)">Sports</button>
-          <button class="category-chip" onclick="setCategoryFilter('Arts', this)">Arts & Culture</button>
-          <button class="category-chip" onclick="setCategoryFilter('Community', this)">Community</button>
+        <div id="myCcasFeed" class="cca-grid">
+          <!-- Rendered dynamically by app.js -->
         </div>
-      </div>
+      </section>
 
-      <!-- CCA Card Feed -->
-      <div id="ccaFeed" class="cca-grid">
-        <!-- Rendered dynamically by app.js -->
+      <!-- ALL CCAs SECTION -->
+      <div id="allCcasSection">
+        <div class="section-header reveal-on-scroll">
+          <div>
+            <h2 class="section-title">Explore CCAs & Events</h2>
+            <p id="surveyBanner" class="meta-info" style="margin-top: 4px; color:#c4b5fd;">
+              Showing all CCAs. Take the <a href="#" onclick="openSurveyModal()" style="color:#fff; font-weight:700; text-decoration:underline;">Matching Survey</a> to get weighted match scores.
+            </p>
+          </div>
+
+          <div class="filter-group">
+            <input type="text" id="searchInput" class="search-input" placeholder="🔍 Search CCAs or tags..." oninput="handleFilterChange()">
+            <button class="category-chip active" onclick="setCategoryFilter('All', this)">All</button>
+            <button class="category-chip" onclick="setCategoryFilter('Special Interest', this)">Special Interest</button>
+            <button class="category-chip" onclick="setCategoryFilter('Academic', this)">Academic & Tech</button>
+            <button class="category-chip" onclick="setCategoryFilter('Sports', this)">Sports</button>
+            <button class="category-chip" onclick="setCategoryFilter('Arts', this)">Arts & Culture</button>
+            <button class="category-chip" onclick="setCategoryFilter('Community', this)">Community</button>
+          </div>
+        </div>
+
+        <!-- CCA Card Feed -->
+        <div id="ccaFeed" class="cca-grid">
+          <!-- Rendered dynamically by app.js -->
+        </div>
       </div>
     </div>
 

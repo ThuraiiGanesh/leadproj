@@ -572,6 +572,106 @@ function toggleBookmark(ccaId) {
     showToast("⭐ CCA bookmarked to My CCAs!", "success");
   }
   renderCcaFeed();
+  renderMyCcasFeed();
+}
+
+// ----------------------------------------------------
+// DEDICATED "MY CCAs" SECTION FLOW
+// ----------------------------------------------------
+function showMyCcasSection() {
+  const mySection = document.getElementById('myCcasSection');
+  const allSection = document.getElementById('allCcasSection');
+
+  if (mySection) mySection.style.display = 'block';
+  if (allSection) allSection.style.display = 'none';
+
+  renderMyCcasFeed();
+
+  // Scroll smoothly to section
+  if (mySection) {
+    mySection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+function showAllCcasSection() {
+  const mySection = document.getElementById('myCcasSection');
+  const allSection = document.getElementById('allCcasSection');
+
+  if (mySection) mySection.style.display = 'none';
+  if (allSection) allSection.style.display = 'block';
+
+  if (allSection) {
+    allSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+function renderMyCcasFeed() {
+  const container = document.getElementById('myCcasFeed');
+  if (!container) return;
+
+  const myCcas = allCcas.filter(cca => bookmarkedCcaIds.has(cca.id));
+
+  if (myCcas.length === 0) {
+    container.innerHTML = `
+      <div style="grid-column: 1/-1; text-align:center; padding:3.5rem 1.5rem; background:rgba(255,255,255,0.02); border:1px dashed var(--border-subtle); border-radius:24px;">
+        <div style="font-size:3rem; margin-bottom:0.75rem;">⭐</div>
+        <h3 style="color:#c4b5fd; font-family:var(--font-heading); font-size:1.4rem; font-weight:700;">You currently have no cca</h3>
+        <p style="color:var(--text-muted); font-size:0.9rem; max-width:440px; margin:0.6rem auto 1.5rem auto;">
+          You haven't bookmarked or registered for any CCAs yet. Explore the CCA directory to find your fit!
+        </p>
+        <button class="btn btn-primary" onclick="showAllCcasSection()">Explore CCAs ✨</button>
+      </div>
+    `;
+    return;
+  }
+
+  const studentTags = (currentUser && currentUser.survey_answers) ? currentUser.survey_answers.interest_tags.map(t => t.toLowerCase()) : [];
+
+  container.innerHTML = myCcas.map((cca, index) => {
+    const isBookmarked = bookmarkedCcaIds.has(cca.id);
+    const hasScore = cca.match_score !== null && cca.match_score !== undefined;
+    const staggerClass = `stagger-${(index % 5) + 1}`;
+
+    return `
+      <div class="cca-card reveal-on-scroll ${staggerClass}">
+        <div>
+          <div class="cca-header">
+            <div>
+              <span class="cca-category">${cca.category}</span>
+              <h3 class="cca-name">${cca.name}</h3>
+            </div>
+            ${hasScore ? `
+              <div class="score-badge">
+                <span>${cca.match_score}%</span>
+                ${cca.is_recommended ? `<span class="rec-tag">PRO MATCH</span>` : ''}
+              </div>
+            ` : ''}
+          </div>
+
+          <p class="cca-desc">${cca.description}</p>
+
+          <div class="tags-list">
+            ${cca.tags.map(tag => {
+              const isMatched = studentTags.includes(tag.toLowerCase());
+              return `<span class="tag-pill ${isMatched ? 'matched' : ''}">#${tag}</span>`;
+            }).join('')}
+          </div>
+        </div>
+
+        <div class="cca-footer">
+          <span class="meta-info">📍 ${cca.location}</span>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <button class="bookmark-icon-btn active" style="background:transparent; border:none; color:#f59e0b; font-size:1.25rem; cursor:pointer;" onclick="toggleBookmark('${cca.id}')">
+              ★
+            </button>
+            <button class="action-arrow-btn" title="View CCA Details" onclick="openCcaDetail('${cca.id}')">↗</button>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  initScrollObserver();
 }
 
 // ----------------------------------------------------
