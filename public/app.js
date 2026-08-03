@@ -18,6 +18,8 @@ const ALL_INTEREST_TAGS = [
 document.addEventListener('DOMContentLoaded', () => {
   fetchCcas();
   renderSurveyTags();
+  initScrollObserver();
+  initSpotlightTracking();
   
   // Check for Microsoft SSO redirect callback in URL
   const urlParams = new URLSearchParams(window.location.search);
@@ -502,12 +504,13 @@ function renderCcaFeed() {
 
   const studentTags = (currentUser && currentUser.survey_answers) ? currentUser.survey_answers.interest_tags.map(t => t.toLowerCase()) : [];
 
-  container.innerHTML = allCcas.map(cca => {
+  container.innerHTML = allCcas.map((cca, index) => {
     const isBookmarked = bookmarkedCcaIds.has(cca.id);
     const hasScore = cca.match_score !== null && cca.match_score !== undefined;
+    const staggerClass = `stagger-${(index % 5) + 1}`;
 
     return `
-      <div class="cca-card">
+      <div class="cca-card reveal-on-scroll ${staggerClass}">
         <div>
           <div class="cca-header">
             <div>
@@ -544,6 +547,8 @@ function renderCcaFeed() {
       </div>
     `;
   }).join('');
+
+  initScrollObserver();
 }
 
 function setCategoryFilter(cat, btn) {
@@ -769,4 +774,40 @@ function showToast(msg, type = "success") {
   setTimeout(() => {
     toast.remove();
   }, 4000);
+}
+
+// ----------------------------------------------------
+// SCROLL REVEAL & GLASS SPOTLIGHT HOVER ANIMATIONS
+// ----------------------------------------------------
+function initScrollObserver() {
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -40px 0px'
+  };
+
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        obs.unobserve(entry.target);
+      }
+    });
+  }, observerOptions);
+
+  document.querySelectorAll('.reveal-on-scroll:not(.is-visible)').forEach(el => {
+    observer.observe(el);
+  });
+}
+
+function initSpotlightTracking() {
+  document.addEventListener('mousemove', (e) => {
+    const cards = document.querySelectorAll('.bento-card, .cca-card');
+    cards.forEach(card => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      card.style.setProperty('--mouse-x', `${x}px`);
+      card.style.setProperty('--mouse-y', `${y}px`);
+    });
+  });
 }

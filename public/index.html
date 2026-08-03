@@ -41,20 +41,91 @@
   <!-- Main Container -->
   <main class="container">
 
-    <!-- Gradient Hero Banner -->
-    <section class="hero-banner">
-      <div class="hero-content">
-        <h2>Unlock Your Campus Life Potential 🚀</h2>
-        <p>Discover personalized CCA recommendations powered by weighted matching algorithms, instant event signups, and campus life discovery.</p>
-        <div style="display:flex; gap:1rem;">
-          <button class="btn btn-primary" onclick="openSurveyModal()">Take Match Survey ✨</button>
+    <!-- Apple Bento Grid Showcase -->
+    <section class="bento-section">
+      <div class="bento-grid">
+        
+        <!-- Tile 1: Featured AI Weighted Engine (Wide Main Card) -->
+        <div class="bento-card bento-hero-main reveal-on-scroll stagger-1">
+          <div>
+            <div class="bento-tag">✨ Analytics Engine</div>
+            <h2 class="bento-title">Unlock Your Ultimate Campus Life Potential 🚀</h2>
+            <p class="bento-desc">Personalized CCA recommendations powered by multi-factor weighted matching analytics — aligning your interests, commitment level, and teamwork preferences.</p>
+          </div>
+          
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
+            <button class="btn btn-primary" onclick="openSurveyModal()">Take Match Survey ✨</button>
+            <div class="bento-widget-match">
+              <div class="match-ring">
+                <span class="match-ring-text">98%</span>
+              </div>
+              <div>
+                <div style="font-weight:700; font-size:0.9rem; color:#fff;">NP LegalTech SIG</div>
+                <div style="font-size:0.75rem; color:#c4b5fd;">Top Recommended CCA</div>
+              </div>
+            </div>
+          </div>
         </div>
+
+        <!-- Tile 2: 2FA Auth Security (Tall Card) -->
+        <div class="bento-card bento-card-tall reveal-on-scroll stagger-2">
+          <div>
+            <div class="bento-tag">🛡️ Defense & Auth</div>
+            <h3 class="bento-title" style="font-size:1.4rem;">2FA Security Gate</h3>
+            <p class="bento-desc" style="font-size:0.875rem;">Direct Gmail SMTP delivering 6-digit OTP codes directly to NP student emails for authentic identity verification.</p>
+          </div>
+          <div style="background:rgba(11,9,20,0.6); padding:1rem; border-radius:18px; border:1px solid rgba(139,92,246,0.3);">
+            <div class="pulse-badge" style="margin-bottom:8px;">
+              <div class="pulse-dot"></div>
+              <span>SMTP Transport Active</span>
+            </div>
+            <div style="font-size:0.8rem; color:#c4b5fd; font-family:monospace;">s10275803@connect.np.edu.sg</div>
+          </div>
+        </div>
+
+        <!-- Tile 3: EXCO Lead Dashboard (Medium Card) -->
+        <div class="bento-card reveal-on-scroll stagger-3">
+          <div>
+            <div class="bento-tag">🔑 Leadership</div>
+            <h3 class="bento-title" style="font-size:1.4rem;">EXCO Lead Portal</h3>
+            <p class="bento-desc" style="font-size:0.875rem;">Scoped event publishing, live signup tracking, and privacy-shielded roster management for verified student leaders.</p>
+          </div>
+          <div style="font-size:0.8rem; color:#6ee7b7; background:rgba(16,185,129,0.12); padding:8px 12px; border-radius:12px; border:1px solid rgba(16,185,129,0.3);">
+            🛡️ PDPA & Confidentiality Shield Enforced
+          </div>
+        </div>
+
+        <!-- Tile 4: Telegram Bot Integration (Medium Card) -->
+        <div class="bento-card reveal-on-scroll stagger-4">
+          <div>
+            <div class="bento-tag">💬 Cross-Platform</div>
+            <h3 class="bento-title" style="font-size:1.4rem;">Telegram Bot Sync</h3>
+            <p class="bento-desc" style="font-size:0.875rem;">Interactive bot drawer for browsing CCAs and instant event signups directly inside Telegram.</p>
+          </div>
+          <button class="btn btn-outline btn-sm" onclick="toggleTelegramDrawer()">Open Bot Simulator 🤖</button>
+        </div>
+
+        <!-- Tile 5: TDD Quality Assurance (Wide Card) -->
+        <div class="bento-card bento-card-wide reveal-on-scroll stagger-5">
+          <div style="display:flex; justify-content:space-between; align-items:center; width:100%; flex-wrap:wrap; gap:1rem;">
+            <div>
+              <div class="bento-tag" style="background:rgba(20,184,166,0.2); color:#5eead4; border-color:rgba(20,184,166,0.35);">⚡ Software Engineering</div>
+              <h3 class="bento-title" style="font-size:1.4rem; margin-bottom:0.4rem;">100% Automated TDD Suite</h3>
+              <p class="bento-desc" style="font-size:0.875rem; margin-bottom:0;">Automated boundary tests verifying capacity limits, expiry dates, and duplicate signup prevention.</p>
+            </div>
+            <div style="background:rgba(20,184,166,0.15); border:1px solid rgba(20,184,166,0.4); padding:1rem 1.4rem; border-radius:20px; text-align:center; flex-shrink:0;">
+              <div style="font-family:var(--font-heading); font-size:1.6rem; font-weight:800; color:#5eead4;">5 / 5</div>
+              <div style="font-size:0.75rem; color:#99f6e4; font-weight:700;">PASSED</div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </section>
 
     <!-- STUDENT VIEW -->
     <div id="studentView">
-      <div class="section-header">
+      <div class="section-header reveal-on-scroll">
         <div>
           <h2 class="section-title">Explore CCAs & Events</h2>
           <p id="surveyBanner" class="meta-info" style="margin-top: 4px; color:#c4b5fd;">
