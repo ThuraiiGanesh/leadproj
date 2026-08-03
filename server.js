@@ -674,7 +674,7 @@ app.get('/api/tdd/run', (req, res) => {
 // ----------------------------------------------------
 
 app.post('/api/admin/events/create', (req, res) => {
-  const { cca_id, title, datetime, location, capacity, description, student_id, image_url, remarks, links, tag } = req.body;
+  const { cca_id, title, datetime, registration_deadline, location, capacity, description, student_id, image_url, remarks, links, tag } = req.body;
 
   if (!cca_id || !title || !datetime || !location || !capacity) {
     return res.status(400).json({ success: false, message: 'Title, Date/Time, Location, and Capacity fields are required.' });
@@ -693,6 +693,7 @@ app.post('/api/admin/events/create', (req, res) => {
     cca_id,
     title,
     datetime,
+    registration_deadline: registration_deadline || datetime,
     location,
     capacity: parseInt(capacity, 10),
     signup_count: 0,

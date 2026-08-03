@@ -3,37 +3,45 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NP CCA Match — LEAD LaunchPad</title>
+  <title>NP CCA Match — Campus Life Discovery</title>
   <meta name="description" content="Ngee Ann Polytechnic Campus Life CCA Matching Platform">
   <link rel="stylesheet" href="style.css">
+  <!-- Lucide Icons Library -->
+  <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
 
   <!-- Top Navigation Bar -->
   <header class="navbar">
     <div class="brand">
-      <div class="brand-icon">✨</div>
+      <div class="brand-icon">
+        <i data-lucide="compass" style="width:24px; height:24px;"></i>
+      </div>
       <div class="brand-text">
         <h1>NP CCA Match</h1>
-        <span class="brand-badge">LEAD LaunchPad</span>
+        <span class="brand-badge">Campus Life</span>
       </div>
     </div>
 
-    <div class="nav-controls">
+    <div class="nav-controls" style="display:flex; align-items:center; gap:1rem;">
       <!-- Role Switcher (Hidden until EXCO user authenticates) -->
       <div id="roleSwitcher" class="role-switcher" style="display:none;">
-        <button id="roleStudentBtn" class="role-btn active" onclick="switchRole('student')">🎓 Student View</button>
-        <button id="roleAdminBtn" class="role-btn" onclick="switchRole('admin')">🔑 CCA Lead Dashboard</button>
+        <button id="roleStudentBtn" class="role-btn active" onclick="switchRole('student')">
+          <i data-lucide="user" style="width:14px; height:14px; vertical-align:middle;"></i> Student View
+        </button>
+        <button id="roleAdminBtn" class="role-btn" onclick="switchRole('admin')">
+          <i data-lucide="shield" style="width:14px; height:14px; vertical-align:middle;"></i> EXCO Dashboard
+        </button>
       </div>
 
-      <div id="userStatus" class="user-status">
-        <div id="userAvatarPill" class="user-avatar-pill" style="display:none;">
-          <div class="avatar-img" id="avatarInitials">ST</div>
-          <span id="userStatusText" style="font-size:0.85rem; font-weight:600;">Student User</span>
+      <div id="userStatus" class="user-status" style="display:flex; align-items:center; gap:0.75rem;">
+        <div id="userAvatarPill" class="user-avatar-pill" style="display:none; align-items:center; gap:8px; background:var(--paper); padding:4px 12px; border-radius:9999px; border:1px solid var(--border-subtle);">
+          <div class="avatar-img" id="avatarInitials" style="font-weight:700; color:var(--ink-navy); font-size:0.8rem;">ST</div>
+          <span id="userStatusText" style="font-size:0.85rem; font-weight:600; color:var(--ink-navy);">Student User</span>
         </div>
         <button id="loginNavBtn" class="btn btn-primary btn-sm" onclick="openLoginModal(false)">Log In / 2FA</button>
-        <button id="myCcasBtn" class="btn btn-outline btn-sm" style="display:none;" onclick="showMyCcasSection()">⭐ My CCAs</button>
-        <button id="logoutBtn" class="btn btn-outline btn-sm" style="display:none; border-color:rgba(239, 68, 68, 0.4); color:#f87171;" onclick="logoutUser()">🚪 Log Out</button>
+        <button id="myCcasBtn" class="btn btn-outline btn-sm" style="display:none;" onclick="showMyCcasSection()">My CCAs</button>
+        <button id="logoutBtn" class="btn btn-outline btn-sm" style="display:none; border-color:var(--stamp-red); color:var(--stamp-red);" onclick="logoutUser()">Log Out</button>
       </div>
     </div>
   </header>
@@ -43,35 +51,35 @@
 
     <!-- Hero Banner Section -->
     <section class="bento-section" style="margin-bottom: 2rem;">
-      <div class="bento-card bento-hero-main reveal-on-scroll stagger-1" style="grid-column: 1 / -1;">
+      <div class="bento-card bento-hero-main reveal-on-scroll">
         <div>
-          <div class="bento-tag">✨ Analytics Engine</div>
-          <h2 class="bento-title">Unlock Your Ultimate Campus Life Potential 🚀</h2>
+          <div class="bento-tag">Personalized Discovery</div>
+          <h2 class="bento-title">Find CCAs That Fit You</h2>
           <p class="bento-desc">Personalized CCA recommendations powered by multi-factor weighted matching analytics — aligning your interests, commitment level, and teamwork preferences across 81 Ngee Ann Polytechnic CCAs.</p>
         </div>
         
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; margin-top:1.4rem;">
-          <button class="btn btn-primary" onclick="openSurveyModal()">Take Match Survey ✨</button>
-          <div class="bento-widget-match">
-            <div style="text-align:right;">
-              <div style="font-weight:700; font-size:0.9rem; color:#fff;">Personalized Match Engine</div>
-              <div style="font-size:0.75rem; color:#c4b5fd;">Take survey to compute your scores</div>
-            </div>
+          <button class="btn btn-primary" onclick="openSurveyModal()">
+            <i data-lucide="sparkles" style="width:16px; height:16px;"></i> Take Match Survey
+          </button>
+          <div style="text-align:right;">
+            <div style="font-weight:700; font-size:0.9rem; color:var(--ink-navy);">Personalized Match Engine</div>
+            <div style="font-size:0.775rem; color:var(--text-muted);">Take survey to compute your score</div>
           </div>
         </div>
       </div>
     </section>
 
     <!-- LIVE UPCOMING CAMPUS EVENTS SECTION -->
-    <section id="upcomingEventsSection" class="reveal-on-scroll" style="margin-bottom: 2.8rem; background: rgba(26, 21, 51, 0.75); backdrop-filter: blur(28px) saturate(190%); border: 1px solid rgba(167, 139, 250, 0.3); border-radius: 28px; padding: 2.2rem; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);">
-      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; margin-bottom:1.6rem; border-bottom:1px solid var(--border-subtle); padding-bottom:1.2rem;">
+    <section id="upcomingEventsSection" class="reveal-on-scroll" style="margin-bottom: 2.8rem; background: var(--paper-card); border: 1px solid var(--border-subtle); border-left: 4px solid var(--moss); border-radius: var(--radius-md); padding: 1.8rem; box-shadow: var(--shadow-notice);">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; margin-bottom:1.4rem; border-bottom:1px solid var(--border-subtle); padding-bottom:1rem;">
         <div>
-          <div class="bento-tag" style="margin-bottom:0.4rem; background:rgba(236, 72, 153, 0.2); color:#f472b6; border-color:rgba(236,72,153,0.35);">📅 Live Campus Life</div>
+          <div class="bento-tag" style="margin-bottom:0.4rem;">Campus Calendar</div>
           <h2 class="section-title" style="margin-bottom:0.2rem;">Upcoming Campus Events</h2>
-          <p class="meta-info" style="color:#c4b5fd;">Official workshops, trials, orientations, and bootcamps published live by EXCO leads.</p>
+          <p class="meta-info">Official workshops, trials, orientations, and bootcamps published live by EXCO leads.</p>
         </div>
-        <span style="font-size:0.8rem; color:#6ee7b7; background:rgba(16,185,129,0.15); padding:6px 14px; border-radius:20px; border:1px solid rgba(16,185,129,0.3); font-weight:600;">
-          ⚡ Updated Real-Time from EXCO Leads
+        <span style="font-size:0.8rem; color:var(--moss); background:rgba(138, 154, 91, 0.12); padding:6px 14px; border-radius:20px; border:1px solid rgba(138, 154, 91, 0.3); font-weight:600;">
+          Updated Real-Time
         </span>
       </div>
 
@@ -84,17 +92,17 @@
     <div id="studentView">
       
       <!-- MY CCAs DEDICATED SECTION -->
-      <section id="myCcasSection" class="reveal-on-scroll" style="display:none; margin-bottom: 2.8rem; background: rgba(26, 21, 51, 0.75); backdrop-filter: blur(28px) saturate(190%); border: 1px solid rgba(167, 139, 250, 0.3); border-top: 1px solid rgba(255, 255, 255, 0.25); border-radius: 28px; padding: 2.2rem; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);">
-        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; margin-bottom:1.8rem; border-bottom:1px solid var(--border-subtle); padding-bottom:1.2rem;">
+      <section id="myCcasSection" class="reveal-on-scroll" style="display:none; margin-bottom: 2.8rem; background: var(--paper-card); border: 1px solid var(--border-subtle); border-left: 4px solid var(--ink-navy); border-radius: var(--radius-md); padding: 1.8rem; box-shadow: var(--shadow-notice);">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; margin-bottom:1.6rem; border-bottom:1px solid var(--border-subtle); padding-bottom:1rem;">
           <div>
-            <div class="bento-tag" style="margin-bottom:0.4rem;">⭐ Student Portal</div>
+            <div class="bento-tag" style="margin-bottom:0.4rem;">Student Schedule</div>
             <h2 class="section-title" style="margin-bottom:0.2rem;">My CCAs & Saved Activities</h2>
-            <p class="meta-info" style="color:#c4b5fd;">Your official memberships, saved bookmarks, and registered event schedule.</p>
+            <p class="meta-info">Your official memberships, saved bookmarks, and registered event schedule.</p>
           </div>
           <button class="btn btn-outline btn-sm" onclick="showAllCcasSection()">← Back to Explore All CCAs</button>
         </div>
 
-        <div id="myCcasFeed" class="cca-grid">
+        <div id="myCcasFeed">
           <!-- Rendered dynamically by app.js with Joined CCAs, Bookmarks & Events -->
         </div>
       </section>
@@ -104,13 +112,13 @@
         <div class="section-header reveal-on-scroll">
           <div>
             <h2 class="section-title">Explore CCAs & Events</h2>
-            <p id="surveyBanner" class="meta-info" style="margin-top: 4px; color:#c4b5fd;">
-              Showing all CCAs. Take the <a href="#" onclick="openSurveyModal()" style="color:#fff; font-weight:700; text-decoration:underline;">Matching Survey</a> to get weighted match scores.
+            <p id="surveyBanner" class="meta-info" style="margin-top: 4px;">
+              Showing all 81 CCAs. Take the <a href="#" onclick="openSurveyModal()" style="color:var(--ink-navy); font-weight:700; text-decoration:underline;">Matching Survey</a> to see your personalized matches.
             </p>
           </div>
 
           <div class="filter-group">
-            <input type="text" id="searchInput" class="search-input" placeholder="🔍 Search CCAs or tags..." oninput="handleFilterChange()">
+            <input type="text" id="searchInput" class="search-input" placeholder="Search CCAs or tags..." oninput="handleFilterChange()">
             <button class="category-chip active" onclick="setCategoryFilter('All', this)">All</button>
             <button class="category-chip" onclick="setCategoryFilter('Arts', this)">Arts & Culture</button>
             <button class="category-chip" onclick="setCategoryFilter('Sports', this)">Sports</button>
@@ -130,13 +138,13 @@
     <div id="adminView" style="display:none;">
       <div class="section-header">
         <div>
-          <h2 class="section-title">🔑 CCA EXCO Lead Dashboard</h2>
-          <p class="meta-info" style="color:#c4b5fd;">Manage events and student rosters for your assigned CCA.</p>
+          <h2 class="section-title">CCA EXCO Lead Dashboard</h2>
+          <p class="meta-info">Manage events and student rosters for your assigned CCA.</p>
         </div>
 
         <div style="display:flex; align-items:center; gap:1rem;">
           <div style="display:flex; align-items:center; gap:8px;">
-            <label style="font-size:0.85rem; color:#c4b5fd; font-weight:600;">Managing CCA:</label>
+            <label style="font-size:0.85rem; color:var(--text-muted); font-weight:600;">Managing CCA:</label>
             <select id="adminCcaSelect" class="form-control" style="width:auto; padding:6px 12px;" onchange="handleAdminCcaChange()">
               <!-- Filled dynamically with EXCO's managed CCAs -->
             </select>
@@ -147,20 +155,20 @@
 
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.6rem;">
         <!-- Published Events Card -->
-        <div style="background:var(--bg-surface); border:1px solid var(--border-subtle); border-radius:var(--radius-lg); padding:1.6rem;">
-          <h3 style="font-family:var(--font-heading); font-size:1.15rem; color:#fff; margin-bottom:1.2rem;">📅 Published CCA Events</h3>
+        <div style="background:var(--paper-elevated); border:1px solid var(--border-subtle); border-radius:var(--radius-md); padding:1.6rem;">
+          <h3 style="font-family:var(--font-heading); font-size:1.15rem; color:var(--ink-navy); margin-bottom:1.2rem;">Published CCA Events</h3>
           <div id="adminEventsList">
             <!-- Rendered dynamically -->
           </div>
         </div>
 
-        <!-- Student Signups & Roster Card (PDPA Protected) -->
-        <div style="background:var(--bg-surface); border:1px solid var(--border-subtle); border-radius:var(--radius-lg); padding:1.6rem;">
+        <!-- Student Signups & Roster Card -->
+        <div style="background:var(--paper-elevated); border:1px solid var(--border-subtle); border-radius:var(--radius-md); padding:1.6rem;">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.2rem;">
-            <h3 style="font-family:var(--font-heading); font-size:1.15rem; color:#fff;">👥 Signed-up Student Roster</h3>
-            <span style="font-size:0.75rem; color:#6ee7b7; background:rgba(16,185,129,0.15); padding:4px 8px; border-radius:8px;">🛡️ PDPA Shield</span>
+            <h3 style="font-family:var(--font-heading); font-size:1.15rem; color:var(--ink-navy);">Signed-up Student Roster</h3>
+            <span style="font-size:0.75rem; color:var(--moss); background:rgba(138, 154, 91, 0.12); padding:4px 8px; border-radius:6px; font-weight:600;">Logistics Privacy Shield</span>
           </div>
-          <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1rem;">Student names and IDs are displayed for event logistics only. Survey preferences remain private.</p>
+          <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1rem;">Only student name and ID are shown to CCA leads for event logistics.</p>
           
           <div id="adminRosterList">
             <!-- Rendered dynamically -->
@@ -176,25 +184,13 @@
     <div class="modal-card">
       <div id="loginStep1">
         <h3 class="modal-title">NP LEAD LaunchPad Sign In</h3>
-        <p style="color:#c4b5fd; font-size:0.875rem; margin-bottom:1.6rem;">Sign in with your official Ngee Ann Polytechnic student identity.</p>
+        <p style="color:var(--text-muted); font-size:0.875rem; margin-bottom:1.4rem;">Secured with 2-step verification.</p>
 
         <!-- Hidden Microsoft 365 SSO (preserved in codebase) -->
         <div style="margin-bottom:1.4rem; display:none;">
-          <button class="btn btn-outline" style="width:100%; font-size:0.9rem; padding:12px; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.04); border-color:rgba(255,255,255,0.15); color:#fff;" onclick="loginWithMicrosoft()">
-            <svg width="18" height="18" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right:10px;">
-              <path d="M10 0H0V10H10V0Z" fill="#F25022"/>
-              <path d="M21 0H11V10H21V0Z" fill="#7FBA00"/>
-              <path d="M10 11H0V21H10V11Z" fill="#00A4EF"/>
-              <path d="M21 11H11V21H21V11Z" fill="#FFB900"/>
-            </svg>
+          <button class="btn btn-outline" style="width:100%; font-size:0.9rem; padding:12px;" onclick="loginWithMicrosoft()">
             Sign in with Microsoft 365 (NP Connect)
           </button>
-
-          <div style="display:flex; align-items:center; margin-bottom:1.2rem; margin-top:1.2rem; text-align:center;">
-            <div style="flex:1; height:1px; background:var(--border-subtle);"></div>
-            <span style="padding:0 10px; font-size:0.725rem; color:var(--text-muted); font-weight:700; letter-spacing:1px;">OR NP STUDENT ID</span>
-            <div style="flex:1; height:1px; background:var(--border-subtle);"></div>
-          </div>
         </div>
 
         <div class="form-group">
@@ -205,18 +201,30 @@
           <label class="form-label">Password</label>
           <input type="password" id="loginPassword" class="form-control" placeholder="••••••••">
         </div>
-        <button class="btn btn-primary" style="width:100%; margin-top:0.5rem;" onclick="submitLogin()">Send 2FA Code to Outlook Email</button>
+        <button class="btn btn-primary" style="width:100%; margin-top:0.5rem;" onclick="submitLogin()">Send Verification Code</button>
       </div>
 
       <div id="loginStep2" style="display:none;">
-        <h3 class="modal-title">Verify 2FA Security Code</h3>
-        <p style="color:#c4b5fd; font-size:0.875rem; margin-bottom:1.4rem;">A 6-digit verification code has been sent to your Outlook inbox (<strong id="outlookEmailSpan" style="color:#fff;">s99999999@connect.np.edu.sg</strong>).</p>
+        <h3 class="modal-title">Verify Security Code</h3>
+        <p style="color:var(--text-muted); font-size:0.875rem; margin-bottom:1.4rem;">A 6-digit verification code has been sent to your Outlook inbox (<strong id="outlookEmailSpan" style="color:var(--ink-navy);">s99999999@connect.np.edu.sg</strong>).</p>
 
         <div class="form-group">
           <label class="form-label">Enter 6-Digit Verification Code</label>
           <input type="text" id="otpInput" class="form-control" placeholder="______" maxlength="6" style="text-align:center; font-size:1.3rem; letter-spacing:5px;">
         </div>
-        <button class="btn btn-primary" style="width:100%;" onclick="submit2FA()">Verify 2FA & Access LaunchPad</button>
+
+        <!-- Optional Demo Mode toggle (off by default) -->
+        <div style="margin-bottom:1rem; text-align:right;">
+          <label style="font-size:0.75rem; color:var(--text-muted); cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
+            <input type="checkbox" id="demoModeToggle" onchange="toggleDemoCodeDisplay(this)"> Demo Mode (Show Auto-fill Code)
+          </label>
+          <div id="demoCodeBox" style="display:none; font-size:0.8rem; color:var(--moss); font-family:monospace; margin-top:4px; text-align:center;">
+            Master Code: <strong id="demoCodeSpan">123456</strong>
+            <button class="btn btn-outline btn-sm" style="margin-left:8px; padding:2px 8px; font-size:0.7rem;" onclick="autofillDemoCode()">Auto-fill</button>
+          </div>
+        </div>
+
+        <button class="btn btn-primary" style="width:100%;" onclick="submit2FA()">Verify & Sign In</button>
       </div>
     </div>
   </div>
@@ -228,7 +236,7 @@
         <h3 class="modal-title">CCA Matching Survey</h3>
         <button class="btn btn-outline btn-sm" onclick="skipSurvey()">Skip Survey</button>
       </div>
-      <p style="color:#c4b5fd; font-size:0.875rem; margin-bottom:1.4rem;">Answer 4 quick questions to calculate your weighted match score across all 81 NP CCAs.</p>
+      <p style="color:var(--text-muted); font-size:0.875rem; margin-bottom:1.4rem;">Answer quick questions to calculate your personalized match scores across all 81 NP CCAs.</p>
 
       <div class="form-group">
         <label class="form-label">1. Select Your Interest Tags (Choose 2+)</label>
@@ -250,30 +258,33 @@
         <label class="form-label">3. Team vs Solo Preference</label>
         <select id="surveyStyle" class="form-control">
           <option value="team" selected>Team (Group projects, team sports, collaborative)</option>
-          <option value="solo">Solo (Independent projects, individual practice)</option>
+          <option value="solo">Solo (Independent practice, individual activities)</option>
           <option value="mixed">Mixed (Flexible team and solo balance)</option>
         </select>
       </div>
 
       <div class="form-group">
-        <label class="form-label">4. Weekly Availability (Powers Schedule Clash Check)</label>
+        <label class="form-label">4. Weekly Availability (Powers Schedule Clash Warning)</label>
         <div id="surveyAvailabilityContainer" style="display:flex; flex-wrap:wrap; gap:8px; margin-top:8px;">
-          <label style="background:rgba(255,255,255,0.06); padding:6px 12px; border-radius:9999px; font-size:0.8rem; cursor:pointer; color:#fff; border:1px solid rgba(255,255,255,0.15);">
+          <label style="background:var(--paper); padding:6px 12px; border-radius:9999px; font-size:0.8rem; cursor:pointer; color:var(--ink-navy); border:1px solid var(--border-subtle);">
+            <input type="checkbox" value="weekday_mornings" style="margin-right:6px;"> Weekday Mornings
+          </label>
+          <label style="background:var(--paper); padding:6px 12px; border-radius:9999px; font-size:0.8rem; cursor:pointer; color:var(--ink-navy); border:1px solid var(--border-subtle);">
             <input type="checkbox" value="weekday_afternoons" checked style="margin-right:6px;"> Weekday Afternoons
           </label>
-          <label style="background:rgba(255,255,255,0.06); padding:6px 12px; border-radius:9999px; font-size:0.8rem; cursor:pointer; color:#fff; border:1px solid rgba(255,255,255,0.15);">
+          <label style="background:var(--paper); padding:6px 12px; border-radius:9999px; font-size:0.8rem; cursor:pointer; color:var(--ink-navy); border:1px solid var(--border-subtle);">
             <input type="checkbox" value="weekday_evenings" checked style="margin-right:6px;"> Weekday Evenings
           </label>
-          <label style="background:rgba(255,255,255,0.06); padding:6px 12px; border-radius:9999px; font-size:0.8rem; cursor:pointer; color:#fff; border:1px solid rgba(255,255,255,0.15);">
+          <label style="background:var(--paper); padding:6px 12px; border-radius:9999px; font-size:0.8rem; cursor:pointer; color:var(--ink-navy); border:1px solid var(--border-subtle);">
             <input type="checkbox" value="saturday" style="margin-right:6px;"> Saturdays
           </label>
-          <label style="background:rgba(255,255,255,0.06); padding:6px 12px; border-radius:9999px; font-size:0.8rem; cursor:pointer; color:#fff; border:1px solid rgba(255,255,255,0.15);">
+          <label style="background:var(--paper); padding:6px 12px; border-radius:9999px; font-size:0.8rem; cursor:pointer; color:var(--ink-navy); border:1px solid var(--border-subtle);">
             <input type="checkbox" value="sunday" style="margin-right:6px;"> Sundays
           </label>
         </div>
       </div>
 
-      <button class="btn btn-primary" style="width:100%; margin-top:1.2rem;" onclick="submitSurvey()">Calculate My Match Scores ✨</button>
+      <button class="btn btn-primary" style="width:100%; margin-top:1.2rem;" onclick="submitSurvey()">Calculate My Match Scores</button>
     </div>
   </div>
 
@@ -282,7 +293,7 @@
     <div class="modal-card" style="max-width:680px; max-height:90vh; overflow-y:auto;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; border-bottom:1px solid var(--border-subtle); padding-bottom:0.8rem;">
         <div>
-          <h3 class="modal-title">Create & Publish CCA Event 📅</h3>
+          <h3 class="modal-title">Create & Publish CCA Event</h3>
           <span id="createEvtCcaBadge" style="font-size:0.75rem; color:var(--text-secondary); font-weight:600;">CCA: Loading...</span>
         </div>
         <button class="btn btn-outline btn-sm" onclick="closeModal('createEventModal')">✕ Close</button>
@@ -291,7 +302,7 @@
       <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
         <div class="form-group" style="grid-column: span 2;">
           <label class="form-label">Event Title *</label>
-          <input type="text" id="evtTitle" class="form-control" placeholder="e.g. Annual LegalTech AI Workshop & Networking 2026">
+          <input type="text" id="evtTitle" class="form-control" placeholder="e.g. Annual NP Ambassadors Orientation Workshop 2026">
         </div>
 
         <div class="form-group">
@@ -316,8 +327,13 @@
         </div>
 
         <div class="form-group">
+          <label class="form-label">Registration Deadline *</label>
+          <input type="datetime-local" id="evtRegDeadline" class="form-control">
+        </div>
+
+        <div class="form-group" style="grid-column: span 2;">
           <label class="form-label">Venue / Location *</label>
-          <input type="text" id="evtLocation" class="form-control" placeholder="e.g. Blk 31 (ICT) Room 402 or Zoom Link">
+          <input type="text" id="evtLocation" class="form-control" placeholder="e.g. Blk 31 (ICT) Room 402 or Campus Atrium">
         </div>
 
         <div class="form-group" style="grid-column: span 2;">
@@ -327,7 +343,7 @@
 
         <div class="form-group">
           <label class="form-label">Special Remarks / What to Bring</label>
-          <input type="text" id="evtRemarks" class="form-control" placeholder="e.g. Bring laptop with VS Code & Student ID">
+          <input type="text" id="evtRemarks" class="form-control" placeholder="e.g. Bring laptop & Student ID">
         </div>
 
         <div class="form-group">
@@ -346,7 +362,7 @@
 
       <div style="display:flex; justify-content:flex-end; gap:12px; margin-top:1.4rem; padding-top:1rem; border-top:1px solid var(--border-subtle);">
         <button class="btn btn-outline" onclick="closeModal('createEventModal')">Cancel</button>
-        <button class="btn btn-primary" onclick="submitCreateEvent()">🚀 Publish Event to Campus</button>
+        <button class="btn btn-primary" onclick="submitCreateEvent()">Publish Event</button>
       </div>
     </div>
   </div>
@@ -360,32 +376,37 @@
     </div>
   </div>
 
-  <!-- TDD Suite Console Drawer Modal -->
-  <div id="tddModal" class="modal-overlay">
-    <div class="modal-card" style="max-width:620px;">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
-        <h3 class="modal-title">🧪 TDD RED Test Runner</h3>
-        <button class="btn btn-outline btn-sm" onclick="closeModal('tddModal')">Close</button>
+  <!-- Telegram Bot Preview Drawer Simulator -->
+  <div id="telegramDrawer" class="telegram-drawer">
+    <div class="tg-header">
+      <div style="display:flex; align-items:center; gap:10px;">
+        <i data-lucide="bot" style="width:20px; height:20px;"></i>
+        <div>
+          <h4 style="font-size:0.95rem; font-weight:700;">NP CCA Match Bot</h4>
+          <span style="font-size:0.7rem; color:#A0AEC0;">Bot Preview (Interactive Simulator)</span>
+        </div>
       </div>
-      <p style="color:#c4b5fd; font-size:0.875rem; margin-bottom:1.1rem;">
-        Verifying Event Signup Boundary Conditions (Software Engineering Pillar).
-      </p>
-      <div id="tddConsole" style="background:#0b0914; border:1px solid rgba(167,139,250,0.25); border-radius:14px; padding:14px; font-family:monospace; font-size:0.825rem; height:260px; overflow-y:auto;">
-        <!-- Test logs rendered here -->
+      <button style="background:none; border:none; color:#fff; font-size:1.2rem; cursor:pointer;" onclick="toggleTelegramDrawer()">✕</button>
+    </div>
+
+    <div id="tgBody" class="tg-body">
+      <div class="tg-message bot">
+        <strong>👋 Welcome to NP CCA Match Bot!</strong><br>
+        Find your ideal CCA, browse open campus events, and manage your schedule.<br><br>
+        Tap a quick action below to start:
+        <div class="tg-actions">
+          <button class="tg-action-btn" onclick="sendTgCommand('/start')">🎯 Start Quiz</button>
+          <button class="tg-action-btn" onclick="sendTgCommand('/browse')">📋 Browse CCAs</button>
+          <button class="tg-action-btn" onclick="sendTgCommand('/events')">🙌 Open Events</button>
+          <button class="tg-action-btn" onclick="sendTgCommand('/myccas')">⭐ My CCAs</button>
+          <button class="tg-action-btn" onclick="sendTgCommand('/surprise')">🎲 Surprise Me</button>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- Pillars Info Modals -->
-  <div id="infoModal" class="modal-overlay">
-    <div class="modal-card">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
-        <h3 id="infoModalTitle" class="modal-title">Pillar Information</h3>
-        <button class="btn btn-outline btn-sm" onclick="closeModal('infoModal')">Close</button>
-      </div>
-      <div id="infoModalBody" style="color:#c4b5fd; font-size:0.925rem; line-height:1.65;">
-        <!-- Filled dynamically -->
-      </div>
+    <div class="tg-footer">
+      <input type="text" id="tgInput" class="form-control" placeholder="Type /start, /search dance, etc..." onkeypress="if(event.key==='Enter') submitTgInput()">
+      <button class="btn btn-primary btn-sm" onclick="submitTgInput()">Send</button>
     </div>
   </div>
 
@@ -393,5 +414,10 @@
   <div id="toastContainer" class="toast-container"></div>
 
   <script src="app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.lucide) lucide.createIcons();
+    });
+  </script>
 </body>
 </html>
