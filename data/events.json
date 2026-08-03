@@ -1,39 +1,28 @@
 [
   {
-    "id": "evt_lt_1",
-    "cca_id": "legaltech_sig",
-    "title": "Build Your First Legal Tech AI Bot Workshop",
+    "id": "evt_amb_1",
+    "cca_id": "np_ambassadors",
+    "title": "NP Open House Ambassador Orientation & Training",
     "datetime": "2026-08-10T17:00:00",
-    "location": "Blk 31 (ICT) Lvl 4 Room 402",
-    "capacity": 30,
+    "location": "Blk 1 Corporate Communications Hall",
+    "capacity": 50,
     "signup_count": 12,
     "signups": [
       { "student_id": "s10234567", "name": "Thurai Ganesh" },
       { "student_id": "s10234890", "name": "Rachel Tan" }
     ],
-    "description": "Hands-on session building custom AI assistants for legal document automation and campus navigation."
+    "description": "Training session for student ambassadors on campus tour routing, public speaking, and event hosting."
   },
   {
-    "id": "evt_lt_2",
-    "cca_id": "legaltech_sig",
-    "title": "LegalTech Hackathon 2026 Info Session",
+    "id": "evt_sc_1",
+    "cca_id": "np_student_council",
+    "title": "Freshman Thrive Camp Leadership Briefing",
     "datetime": "2026-08-18T16:00:00",
     "location": "Convention Centre LT 68A",
-    "capacity": 50,
+    "capacity": 60,
     "signup_count": 48,
     "signups": [],
-    "description": "Learn about problem statements, team formation, and prize categories for the upcoming campus hackathon."
-  },
-  {
-    "id": "evt_dev_1",
-    "cca_id": "np_developers",
-    "title": "Web Architecture & API Integration Bootcamp",
-    "datetime": "2026-08-12T15:30:00",
-    "location": "Blk 31 Lvl 3 Makerspace",
-    "capacity": 25,
-    "signup_count": 25,
-    "signups": [],
-    "description": "Deep dive into REST API design, Node.js express endpoints, and responsive frontend state management."
+    "description": "Planning and facilitator briefing for the annual campus-wide freshman orientation camp."
   },
   {
     "id": "evt_bad_1",
@@ -48,7 +37,7 @@
   },
   {
     "id": "evt_photo_1",
-    "cca_id": "photography_club",
+    "cca_id": "photography",
     "title": "Sunset & Night Cityscape Photowalk",
     "datetime": "2026-08-15T17:30:00",
     "location": "Marina Bay Sands Waterfront Promenade",
@@ -59,13 +48,13 @@
   },
   {
     "id": "evt_past_1",
-    "cca_id": "legaltech_sig",
-    "title": "LegalTech Orientation & Icebreaker",
+    "cca_id": "np_ambassadors",
+    "title": "PolyXperience Outreach Showcase 2026",
     "datetime": "2026-06-01T14:00:00",
-    "location": "Blk 31 Room 402",
+    "location": "Blk 1 Main Foyer",
     "capacity": 40,
     "signup_count": 35,
     "signups": [],
-    "description": "Past orientation event for TDD validation of past event timestamps."
+    "description": "Past ambassador outreach event for TDD validation of past event timestamps."
   }
 ]
