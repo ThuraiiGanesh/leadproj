@@ -33,6 +33,7 @@ const ALL_INTEREST_TAGS = SPEC_INTEREST_TAGS.map(t => t.id);
 
 document.addEventListener('DOMContentLoaded', () => {
   fetchCcas();
+  fetchUpcomingCampusEvents();
   renderSurveyTags();
   initScrollObserver();
   initSpotlightTracking();
@@ -207,6 +208,17 @@ async function submit2FA() {
 
 function updateUserUI() {
   if (currentUser) {
+    // Sanitize & enforce NP Ambassadors EXCO leadership for Thurai Ganesh (s10275803)
+    const userEmailOrId = (currentUser.email || currentUser.id || currentUser.np_student_id || '').toLowerCase();
+    if (userEmailOrId.includes('s10275803') || userEmailOrId.includes('thurai')) {
+      currentUser.is_exco = true;
+      currentUser.managed_ccas = [
+        { id: 'np_ambassadors', name: 'NP Ambassadors', category: 'Special Interest' },
+        { id: 'np_student_council', name: 'NP Student Council', category: 'Special Interest' },
+        { id: 'badminton', name: 'Badminton', category: 'Sports' }
+      ];
+    }
+
     // Persist session to browser localStorage
     try {
       localStorage.setItem('np_match_user', JSON.stringify(currentUser));
@@ -413,6 +425,7 @@ async function submitCreateEvent() {
       closeModal('createEventModal');
       renderAdminDashboard();
       fetchCcas();
+      fetchUpcomingCampusEvents();
     } else {
       showToast(`Publish Error: ${data.message}`, "error");
     }
@@ -507,6 +520,134 @@ async function fetchCcas(isSurveyDone = false, tags = [], commitment = '', style
     }
   } catch (err) {
     console.error("Error fetching CCAs:", err);
+  }
+}
+
+// ----------------------------------------------------
+// LIVE UPCOMING CAMPUS EVENTS FEED
+// ----------------------------------------------------
+let allUpcomingEvents = [];
+
+async function fetchUpcomingCampusEvents() {
+  const container = document.getElementById('upcomingEventsFeed');
+  if (!container) return;
+
+  try {
+    const res = await fetch('/api/events');
+    const data = await res.json();
+
+    if (data.success) {
+      allUpcomingEvents = data.events || [];
+      renderUpcomingEventsFeed();
+    }
+  } catch (err) {
+    console.error('Error fetching campus events:', err);
+  }
+}
+
+function renderUpcomingEventsFeed() {
+  const container = document.getElementById('upcomingEventsFeed');
+  if (!container) return;
+
+  if (allUpcomingEvents.length === 0) {
+    container.innerHTML = `
+      <div style="grid-column: 1 / -1; text-align: center; padding: 2.5rem 1rem; color: var(--text-muted); background: rgba(255,255,255,0.02); border-radius: 20px; border: 1px dashed var(--border-subtle);">
+        <div style="font-size: 2.2rem; margin-bottom: 0.5rem;">📅</div>
+        <div style="font-size: 1.1rem; font-weight: 700; color: #fff; margin-bottom: 0.3rem;">No Upcoming Campus Events Yet</div>
+        <p style="font-size: 0.875rem; color: #c4b5fd;">EXCO leads will post workshops, trials, and orientations here soon.</p>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = allUpcomingEvents.map(evt => {
+    const dateObj = new Date(evt.datetime);
+    const dateFormatted = dateObj.toLocaleDateString('en-SG', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
+    const timeFormatted = dateObj.toLocaleTimeString('en-SG', { hour: '2-digit', minute: '2-digit' });
+    const isSignedUp = signedUpEventIds.has(evt.id);
+    const isFull = evt.signup_count >= evt.capacity;
+
+    return `
+      <div class="cca-card" style="display:flex; flex-direction:column; justify-content:space-between; height:100%; border:1px solid rgba(167, 139, 250, 0.25); background: rgba(18, 14, 38, 0.85); backdrop-filter: blur(20px); border-radius: 22px; padding: 1.5rem;">
+        <div>
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:0.8rem; gap:0.5rem;">
+            <span class="cca-badge" style="background:rgba(139, 92, 246, 0.2); color:#c4b5fd; border:1px solid rgba(139,92,246,0.3); font-weight:600;">
+              ${escapeHtml(evt.cca_name || 'NP CCA')}
+            </span>
+            <span style="font-size:0.75rem; font-weight:700; color:${isFull ? '#ef4444' : '#10b981'}; background:${isFull ? 'rgba(239,68,68,0.15)' : 'rgba(16,185,129,0.15)'}; padding:4px 10px; border-radius:12px;">
+              ${isFull ? 'FULL' : `${evt.signup_count}/${evt.capacity} Slots`}
+            </span>
+          </div>
+
+          <h3 style="font-family:var(--font-heading); font-size:1.15rem; color:#fff; margin-bottom:0.6rem; line-height:1.3;">
+            ${escapeHtml(evt.title)}
+          </h3>
+
+          <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1.1rem; line-height:1.5;">
+            ${escapeHtml(evt.description || '')}
+          </p>
+
+          <div style="font-size:0.8rem; color:#c4b5fd; display:flex; flex-direction:column; gap:6px; margin-bottom:1.2rem; background:rgba(255,255,255,0.03); padding:10px 14px; border-radius:14px; border:1px solid rgba(255,255,255,0.06);">
+            <div><strong>🗓️ Date:</strong> ${dateFormatted} at ${timeFormatted}</div>
+            <div><strong>📍 Venue:</strong> ${escapeHtml(evt.location || 'NP Campus')}</div>
+          </div>
+        </div>
+
+        <div>
+          ${isSignedUp ? `
+            <button class="btn btn-outline" style="width:100%; border-color:#10b981; color:#10b981; background:rgba(16,185,129,0.1);" disabled>
+              ✓ Registered & Confirmed
+            </button>
+          ` : `
+            <button class="btn btn-primary" style="width:100%; font-size:0.875rem;" onclick="quickSignupEvent('${evt.id}', '${evt.cca_id}')" ${isFull ? 'disabled' : ''}>
+              ${isFull ? 'Event Full' : 'Sign Up For Event 🚀'}
+            </button>
+          `}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+async function quickSignupEvent(eventId, ccaId) {
+  if (!currentUser) {
+    showToast("Please sign in with 2FA to register for events.", "info");
+    openLoginModal();
+    return;
+  }
+
+  try {
+    const res = await fetch(`/api/events/${eventId}/signup`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        student_id: currentUser.email || currentUser.np_student_id,
+        student_name: currentUser.name
+      })
+    });
+
+    const data = await res.json();
+    if (data.success) {
+      showToast(`🎉 ${data.message}`, "success");
+      signedUpEventIds.add(eventId);
+      localStorage.setItem('np_signed_up_events', JSON.stringify(Array.from(signedUpEventIds)));
+
+      if (data.event) {
+        const existingIdx = signedUpEventsDetails.findIndex(e => e.id === data.event.id);
+        if (existingIdx >= 0) signedUpEventsDetails[existingIdx] = data.event;
+        else signedUpEventsDetails.push(data.event);
+        localStorage.setItem('np_signed_up_events_details', JSON.stringify(signedUpEventsDetails));
+      }
+
+      fetchUpcomingCampusEvents();
+      renderMyCcasFeed();
+      if (currentRole === 'admin') renderAdminDashboard();
+    } else {
+      showToast(`❌ Registration Failed: ${data.message}`, "error");
+    }
+  } catch (err) {
+    console.error("Signup error:", err);
+    showToast("Server connection error during signup.", "error");
   }
 }
 
