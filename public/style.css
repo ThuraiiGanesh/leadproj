@@ -1,38 +1,37 @@
-/* NP CCA Match — Campus Notice Board Aesthetic Design System */
+/* NP CCA Match — Dark Purple Theme (Flat, Clean, Non-Generic AI Design) */
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
-  /* Updated Palette: Sophisticated Lavender, Deep Purple-Navy & Gold Accent */
-  --ink-deep: #2A1B4D;          /* Headings, primary text — deep purple-navy, not pure black */
-  --paper: #F6F4FA;             /* Background — light lavender-white, not stark white */
-  --primary-purple: #6B3FA0;    /* Main accent — buttons, links, primary CTAs (~10-15% UI footprint) */
-  --stamp-gold: #D9A441;        /* Reserved ONLY for "Recommended match" badges & top match highlights */
-  --muted-violet: #9B8AC4;      /* Category tags & labels only, muted & low-saturation */
+  /* DARK PURPLE THEME PALETTE */
+  --bg-base: #14101F;          /* Main background — near-black with purple tint */
+  --bg-panel: #1E1830;         /* Card/panel background — one step lighter than base */
+  --text-primary: #F1EEF7;     /* Headings, primary text — soft off-white */
+  --text-secondary: #A99FC2;   /* Body/secondary text — muted lavender-grey */
+  --primary-purple: #7C4DDB;   /* Single main accent — buttons, links, active states, CTAs (FLAT solid) */
+  --stamp-gold: #E0A94D;       /* Reserved ONLY for "Recommended match" badges & key highlights */
+  --border-subtle: #2E2645;    /* Card borders/dividers — barely-there, not a bright outline */
 
-  /* Backwards compatibility aliases */
-  --ink-navy: var(--ink-deep);
-  --moss: var(--muted-violet);
+  /* Backwards compatibility aliases for existing HTML / JS component references */
+  --paper: var(--bg-base);
+  --paper-elevated: var(--bg-panel);
+  --paper-card: var(--bg-panel);
+  --ink-deep: var(--text-primary);
+  --ink-navy: var(--text-primary);
+  --muted-violet: var(--text-secondary);
   --stamp-red: var(--stamp-gold);
   --marker-yellow: var(--primary-purple);
-
-  /* Surface & Border Colors */
-  --paper-elevated: #FFFFFF;    /* Pure white card/modal surfaces */
-  --paper-card: #FAF8FD;        /* Soft elevated card background */
-  
-  --border-subtle: #E6E1F0;
-  --border-strong: #2A1B4D;
-
-  --text-primary: #2A1B4D;
-  --text-secondary: #4A3E68;
-  --text-muted: #7A6F96;
+  --moss: var(--text-secondary);
+  --border-strong: #3D335A;
+  --text-muted: var(--text-secondary);
 
   --radius-sm: 8px;
   --radius-md: 14px;
   --radius-lg: 20px;
   --radius-full: 9999px;
 
-  --shadow-notice: 0 4px 12px rgba(42, 27, 77, 0.05), 0 1px 3px rgba(42, 27, 77, 0.03);
-  --shadow-hover: 0 8px 24px rgba(42, 27, 77, 0.09);
+  /* No glow/blur shadows - flat clean surfaces */
+  --shadow-notice: none;
+  --shadow-hover: none;
 
   --font-heading: 'Playfair Display', Georgia, serif;
   --font-body: 'Inter', system-ui, -apple-system, sans-serif;
@@ -45,7 +44,7 @@
 }
 
 body {
-  background-color: var(--paper);
+  background-color: var(--bg-base);
   color: var(--text-primary);
   font-family: var(--font-body);
   line-height: 1.5;
@@ -59,12 +58,11 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: 1.1rem 2.2rem;
-  background: var(--paper-elevated);
-  border-bottom: 2px solid var(--border-strong);
+  background: var(--bg-panel);
+  border-bottom: 1px solid var(--border-subtle);
   position: sticky;
   top: 0;
   z-index: 100;
-  box-shadow: var(--shadow-notice);
 }
 
 .brand {
@@ -90,13 +88,13 @@ body {
   font-family: var(--font-heading);
   font-size: 1.35rem;
   font-weight: 700;
-  color: var(--ink-deep);
+  color: var(--text-primary);
   letter-spacing: -0.01em;
 }
 
 .brand-badge {
   font-size: 0.72rem;
-  color: var(--muted-violet);
+  color: var(--text-secondary);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -108,7 +106,7 @@ body {
   gap: 1rem;
 }
 
-/* Buttons */
+/* Buttons (FLAT solid color, NO glow/blur, NO drop shadows) */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -120,34 +118,32 @@ body {
   font-weight: 600;
   font-size: 0.9rem;
   cursor: pointer;
-  transition: all 0.2s ease;
-  border: 1.5px solid transparent;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  border: 1px solid transparent;
   text-decoration: none;
 }
 
 .btn-primary {
   background-color: var(--primary-purple);
   color: #ffffff;
-  border-color: var(--ink-deep);
-  box-shadow: 2px 2px 0px var(--ink-deep);
+  border-color: var(--primary-purple);
 }
 
 .btn-primary:hover {
-  background-color: #5B338B;
-  transform: translate(-1px, -1px);
-  box-shadow: 4px 4px 0px var(--ink-deep);
+  background-color: #6A3DC9;
+  border-color: #6A3DC9;
 }
 
 .btn-outline {
-  background-color: var(--paper-elevated);
-  color: var(--ink-deep);
+  background-color: transparent;
+  color: var(--text-primary);
   border-color: var(--border-subtle);
 }
 
 .btn-outline:hover {
   border-color: var(--primary-purple);
-  background-color: var(--paper);
-  color: var(--primary-purple);
+  background-color: rgba(124, 77, 219, 0.12);
+  color: var(--text-primary);
 }
 
 .btn-sm {
@@ -158,7 +154,7 @@ body {
 /* Role Switcher Pill */
 .role-switcher {
   display: flex;
-  background: var(--paper);
+  background: var(--bg-base);
   padding: 4px;
   border-radius: var(--radius-sm);
   border: 1px solid var(--border-subtle);
@@ -171,7 +167,7 @@ body {
   font-weight: 600;
   border: none;
   background: transparent;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   cursor: pointer;
   transition: all 0.2s ease;
 }
@@ -188,54 +184,51 @@ body {
   padding: 2.2rem 1.5rem;
 }
 
-/* Hero Notice Board Section */
+/* Hero Notice Board Section (Flat --bg-panel fill + thin border) */
 .bento-section {
   margin-bottom: 2.5rem;
 }
 
 .bento-card {
-  background: var(--paper-elevated);
+  background: var(--bg-panel);
   border: 1px solid var(--border-subtle);
-  border-left: 4px solid var(--muted-violet);
+  border-left: 4px solid var(--border-subtle);
   border-radius: var(--radius-md);
   padding: 1.8rem;
-  box-shadow: var(--shadow-notice);
   position: relative;
   overflow: hidden;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: border-color 0.2s ease;
 }
 
 .bento-card:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-hover);
+  border-color: var(--border-strong);
 }
 
 .bento-hero-main {
-  background: var(--paper-card);
+  background: var(--bg-panel);
   border-left: 5px solid var(--primary-purple);
 }
 
-.bento-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.75rem;
+/* Category Tags/Badges: --text-secondary color, small caps, NOT filled colored pills */
+.bento-tag, .cca-category {
+  font-size: 0.725rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--muted-violet);
-  background: rgba(155, 138, 196, 0.12);
-  padding: 4px 10px;
-  border-radius: var(--radius-sm);
-  margin-bottom: 0.75rem;
-  border: 1px solid rgba(155, 138, 196, 0.25);
+  font-variant: small-caps;
+  letter-spacing: 0.08em;
+  color: var(--text-secondary);
+  background: transparent;
+  padding: 0;
+  margin-bottom: 0.5rem;
+  display: inline-block;
+  border: none;
 }
 
 .bento-title {
   font-family: var(--font-heading);
   font-size: 1.85rem;
   font-weight: 700;
-  color: var(--ink-deep);
+  color: var(--text-primary);
   line-height: 1.25;
   margin-bottom: 0.6rem;
 }
@@ -255,7 +248,7 @@ body {
   margin-bottom: 1.8rem;
   flex-wrap: wrap;
   gap: 1.2rem;
-  border-bottom: 2px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
   padding-bottom: 1.2rem;
 }
 
@@ -263,12 +256,12 @@ body {
   font-family: var(--font-heading);
   font-size: 1.6rem;
   font-weight: 700;
-  color: var(--ink-deep);
+  color: var(--text-primary);
 }
 
 .meta-info {
   font-size: 0.875rem;
-  color: var(--text-muted);
+  color: var(--text-secondary);
 }
 
 .filter-group {
@@ -279,7 +272,7 @@ body {
 }
 
 .search-input {
-  background: var(--paper-elevated);
+  background: var(--bg-base);
   border: 1px solid var(--border-subtle);
   color: var(--text-primary);
   padding: 0.55rem 1rem;
@@ -295,7 +288,7 @@ body {
 }
 
 .category-chip {
-  background: var(--paper-elevated);
+  background: var(--bg-panel);
   border: 1px solid var(--border-subtle);
   color: var(--text-secondary);
   padding: 0.5rem 0.95rem;
@@ -320,27 +313,25 @@ body {
 }
 
 .cca-card {
-  background: var(--paper-elevated);
+  background: var(--bg-panel);
   border: 1px solid var(--border-subtle);
-  border-left: 4px solid var(--muted-violet);
+  border-left: 4px solid var(--border-subtle);
   border-radius: var(--radius-md);
   padding: 1.5rem;
-  box-shadow: var(--shadow-notice);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: border-color 0.2s ease;
   position: relative;
 }
 
 .cca-card.top-match-card {
   border-left: 5px solid var(--stamp-gold);
-  background: var(--paper-card);
+  background: var(--bg-panel);
 }
 
 .cca-card:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-hover);
+  border-color: var(--border-strong);
 }
 
 .cca-header {
@@ -351,24 +342,16 @@ body {
   margin-bottom: 0.75rem;
 }
 
-.cca-category {
-  font-size: 0.725rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--muted-violet);
-}
-
 .cca-name {
   font-family: var(--font-heading);
   font-size: 1.25rem;
   font-weight: 700;
-  color: var(--ink-deep);
+  color: var(--text-primary);
   line-height: 1.3;
   margin-top: 2px;
 }
 
-/* Rotated TOP MATCH Stamp Badge — RESERVED ONLY FOR RECOMMENDED MATCHES */
+/* Rotated TOP MATCH Stamp Badge — RESERVED ONLY FOR RECOMMENDED MATCHES (OUTLINE ONLY, NO FILL) */
 .top-match-stamp {
   transform: rotate(-6deg);
   border: 2px solid var(--stamp-gold);
@@ -379,7 +362,7 @@ body {
   padding: 4px 8px;
   border-radius: 6px;
   text-transform: uppercase;
-  background: rgba(217, 164, 65, 0.08);
+  background: transparent; /* OUTLINE ONLY, NO FILL, NO GLOW */
   flex-shrink: 0;
 }
 
@@ -401,15 +384,15 @@ body {
   font-size: 0.75rem;
   padding: 3px 8px;
   border-radius: 6px;
-  background: var(--paper);
-  color: var(--text-muted);
+  background: var(--bg-base);
+  color: var(--text-secondary);
   border: 1px solid var(--border-subtle);
   font-weight: 500;
 }
 
 .tag-pill.matched {
-  background: rgba(217, 164, 65, 0.14);
-  color: var(--ink-deep);
+  background: transparent;
+  color: var(--stamp-gold);
   border-color: var(--stamp-gold);
   font-weight: 700;
 }
@@ -423,22 +406,21 @@ body {
   margin-top: auto;
 }
 
-/* Modals Overlay */
+/* Modals Overlay (Solid Dark Mask, No Backdrop-Filter Glow Blur) */
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(42, 27, 77, 0.55);
-  backdrop-filter: blur(4px);
+  background: rgba(20, 16, 31, 0.88);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.25s ease;
+  transition: opacity 0.2s ease;
   padding: 1rem;
 }
 
@@ -448,13 +430,12 @@ body {
 }
 
 .modal-card {
-  background: var(--paper-elevated);
-  border: 2px solid var(--ink-deep);
+  background: var(--bg-panel);
+  border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
   padding: 2rem;
   width: 100%;
   max-width: 520px;
-  box-shadow: 0 20px 40px rgba(42, 27, 77, 0.15);
   max-height: 90vh;
   overflow-y: auto;
 }
@@ -463,7 +444,7 @@ body {
   font-family: var(--font-heading);
   font-size: 1.45rem;
   font-weight: 700;
-  color: var(--ink-deep);
+  color: var(--text-primary);
   margin-bottom: 0.4rem;
 }
 
@@ -475,15 +456,15 @@ body {
   display: block;
   font-size: 0.85rem;
   font-weight: 600;
-  color: var(--ink-deep);
+  color: var(--text-primary);
   margin-bottom: 0.4rem;
 }
 
 .form-control {
   width: 100%;
-  background: var(--paper);
+  background: var(--bg-base);
   border: 1px solid var(--border-subtle);
-  color: var(--ink-deep);
+  color: var(--text-primary);
   padding: 0.65rem 0.9rem;
   border-radius: var(--radius-sm);
   font-size: 0.9rem;
@@ -502,9 +483,8 @@ body {
   top: 0;
   bottom: 0;
   width: 400px;
-  background: #ffffff;
-  border-left: 2px solid var(--ink-deep);
-  box-shadow: -10px 0 30px rgba(42, 27, 77, 0.15);
+  background: var(--bg-panel);
+  border-left: 1px solid var(--border-subtle);
   z-index: 900;
   transition: right 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
@@ -516,19 +496,20 @@ body {
 }
 
 .tg-header {
-  background: var(--ink-deep);
-  color: #ffffff;
+  background: var(--bg-base);
+  color: var(--text-primary);
   padding: 1.1rem 1.4rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  border-bottom: 1px solid var(--border-subtle);
 }
 
 .tg-body {
   flex: 1;
   padding: 1.2rem;
   overflow-y: auto;
-  background: #F4F1FA;
+  background: var(--bg-base);
   display: flex;
   flex-direction: column;
   gap: 0.85rem;
@@ -543,10 +524,10 @@ body {
 }
 
 .tg-message.bot {
-  background: #ffffff;
-  color: var(--ink-deep);
+  background: var(--bg-panel);
+  color: var(--text-primary);
   align-self: flex-start;
-  border: 1px solid #E6E1F0;
+  border: 1px solid var(--border-subtle);
   border-bottom-left-radius: 2px;
 }
 
@@ -566,9 +547,9 @@ body {
 }
 
 .tg-action-btn {
-  background: #E6E1F0;
-  color: var(--ink-deep);
-  border: none;
+  background: var(--bg-panel);
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
   padding: 6px 12px;
   border-radius: 8px;
   font-size: 0.775rem;
@@ -579,12 +560,13 @@ body {
 .tg-action-btn:hover {
   background: var(--primary-purple);
   color: #ffffff;
+  border-color: var(--primary-purple);
 }
 
 .tg-footer {
   padding: 0.9rem 1.1rem;
-  background: #ffffff;
-  border-top: 1px solid #E6E1F0;
+  background: var(--bg-panel);
+  border-top: 1px solid var(--border-subtle);
   display: flex;
   gap: 8px;
 }
@@ -601,12 +583,12 @@ body {
 }
 
 .toast {
-  background: var(--ink-deep);
-  color: #ffffff;
+  background: var(--bg-panel);
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
   padding: 0.85rem 1.3rem;
   border-radius: var(--radius-sm);
   font-size: 0.875rem;
-  box-shadow: 0 8px 20px rgba(42, 27, 77, 0.2);
   display: flex;
   align-items: center;
   gap: 10px;
