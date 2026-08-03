@@ -1,22 +1,1898 @@
 [
   {
+    "id": "bboys_mighty_nomads",
+    "name": "B-Boys (Mighty Nomads)",
+    "category": "Arts & Culture",
+    "school": "Campus Life / Arts",
+    "description": "Hip-hop/break-dancing club focused on battles, street performances, and footwork technique.",
+    "location": "Convention Centre Studio 1",
+    "commitment_level": "medium",
+    "style": "team",
+    "training_frequency": "Weekly, separate freshie/senior sessions",
+    "tags": [
+      "dance",
+      "hiphop",
+      "breakdance",
+      "performance",
+      "arts"
+    ],
+    "exco": [
+      {
+        "name": "Jayden Tan",
+        "role": "President",
+        "email": "s10251122@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_bboys@connect.np.edu.sg",
+      "instagram": "@npmightynomads",
+      "telegram": "t.me/NPBboys"
+    }
+  },
+  {
+    "id": "chinese_calligraphy",
+    "name": "Chinese Calligraphy",
+    "category": "Arts & Culture",
+    "school": "Campus Life / Arts",
+    "description": "Traditional Chinese script art, brushwork technique, and seasonal cultural exhibition showcases.",
+    "location": "Block 52 Visual Arts Studio",
+    "commitment_level": "medium",
+    "style": "individual",
+    "training_frequency": "2x/week + event sessions",
+    "tags": [
+      "art",
+      "calligraphy",
+      "culture",
+      "chinese",
+      "traditional"
+    ],
+    "exco": [
+      {
+        "name": "Mei Ling Lin",
+        "role": "President",
+        "email": "s10243388@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_calligraphy@connect.np.edu.sg",
+      "instagram": "@np.calligraphy",
+      "telegram": "t.me/NPCalligraphy"
+    }
+  },
+  {
+    "id": "chinese_dance_npcd",
+    "name": "Chinese Dance (NPCD)",
+    "category": "Arts & Culture",
+    "school": "Campus Life / Arts",
+    "description": "Contemporary and classical Chinese dance, est. 1979. Annual major theatrical showcases.",
+    "location": "Convention Centre Studio 2",
+    "commitment_level": "high",
+    "style": "team",
+    "training_frequency": "Weekly + Saturdays near shows",
+    "tags": [
+      "dance",
+      "chinese",
+      "culture",
+      "performance",
+      "arts"
+    ],
+    "exco": [
+      {
+        "name": "Chloe Wong",
+        "role": "President",
+        "email": "s10249911@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_cdance@connect.np.edu.sg",
+      "instagram": "@npchinesedance",
+      "telegram": "t.me/NPChineseDance"
+    }
+  },
+  {
+    "id": "chinese_drama",
+    "name": "Chinese Drama (Stage Art Group)",
+    "category": "Arts & Culture",
+    "school": "Campus Life / Arts",
+    "description": "Radio drama, mini musicals, stage production, scriptwriting, and voice acting workshops.",
+    "location": "Block 26 Black Box Theatre",
+    "commitment_level": "high",
+    "style": "team",
+    "training_frequency": "2x/week + rehearsal sessions",
+    "tags": [
+      "drama",
+      "theatre",
+      "chinese",
+      "acting",
+      "production"
+    ],
+    "exco": [
+      {
+        "name": "Darren Teo",
+        "role": "President",
+        "email": "s10245599@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_cdrama@connect.np.edu.sg",
+      "instagram": "@npcdrama",
+      "telegram": "t.me/NPChineseDrama"
+    }
+  },
+  {
+    "id": "chinese_orchestra",
+    "name": "Chinese Orchestra",
+    "category": "Arts & Culture",
+    "school": "Campus Life / Arts",
+    "description": "Traditional Chinese instruments ensemble performing orchestral classics and modern pop covers.",
+    "location": "Music Room Block 73",
+    "commitment_level": "high",
+    "style": "team",
+    "training_frequency": "2x/week + ad-hoc",
+    "tags": [
+      "music",
+      "orchestra",
+      "chinese",
+      "instruments",
+      "arts"
+    ],
+    "exco": [
+      {
+        "name": "Wei Jie Tan",
+        "role": "President",
+        "email": "s10241188@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_corchestra@connect.np.edu.sg",
+      "instagram": "@npco",
+      "telegram": "t.me/NPChineseOrchestra"
+    }
+  },
+  {
+    "id": "concert_band",
+    "name": "Concert Band",
+    "category": "Arts & Culture",
+    "school": "Campus Life / Arts",
+    "description": "Wind and brass concert band, annual flagship 'Rondeau' concert at Esplanade/poly theatre.",
+    "location": "Band Room Block 73",
+    "commitment_level": "high",
+    "style": "team",
+    "training_frequency": "2x/week + sectionals",
+    "tags": [
+      "music",
+      "band",
+      "wind",
+      "concert",
+      "performance"
+    ],
+    "exco": [
+      {
+        "name": "Lucas Koh",
+        "role": "President",
+        "email": "s10248811@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_concert@connect.np.edu.sg",
+      "instagram": "@npconcertband",
+      "telegram": "t.me/NPConcertBand"
+    }
+  },
+  {
+    "id": "contemporary_dance_d3",
+    "name": "Contemporary Dance (D3)",
+    "category": "Arts & Culture",
+    "school": "Campus Life / Arts",
+    "description": "Founded 2009, fluid contemporary dance expressions, choreography jams, and annual recitals.",
+    "location": "Convention Centre Studio 3",
+    "commitment_level": "medium",
+    "style": "team",
+    "training_frequency": "2x/week (new), 1x/week (experienced)",
+    "tags": [
+      "dance",
+      "contemporary",
+      "performance",
+      "d3",
+      "arts"
+    ],
+    "exco": [
+      {
+        "name": "Hannah Lee",
+        "role": "President",
+        "email": "s10247733@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_contemdance@connect.np.edu.sg",
+      "instagram": "@d3contemporarydance",
+      "telegram": "t.me/NPD3Dance"
+    }
+  },
+  {
+    "id": "dancesport",
+    "name": "DanceSport",
+    "category": "Arts & Culture",
+    "school": "Campus Life / Arts",
+    "description": "Latin dances: Chacha, Rumba, Jive, Samba, and Paso Doble competitive training and ballrooms.",
+    "location": "Convention Centre Mirror Studio",
+    "commitment_level": "high",
+    "style": "team",
+    "training_frequency": "2x/week + competition prep",
+    "tags": [
+      "dance",
+      "latin",
+      "dancesport",
+      "ballroom",
+      "competition"
+    ],
+    "exco": [
+      {
+        "name": "Gabriel Lim",
+        "role": "President",
+        "email": "s10246644@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_dancesport@connect.np.edu.sg",
+      "instagram": "@npdancesport",
+      "telegram": "t.me/NPDanceSport"
+    }
+  },
+  {
+    "id": "dragon_lion_dance",
+    "name": "Dragon and Lion Dance",
+    "category": "Arts & Culture",
+    "school": "Campus Life / Arts",
+    "description": "Traditional lion and dragon dance, drum rhythms, CNY performances, and national championships.",
+    "location": "Sports Complex Pavilion",
+    "commitment_level": "medium",
+    "style": "team",
+    "training_frequency": "Weekly, up to 3x/week near events",
+    "tags": [
+      "culture",
+      "traditional",
+      "liondance",
+      "dragon",
+      "performance"
+    ],
+    "exco": [
+      {
+        "name": "Marcus Ho",
+        "role": "President",
+        "email": "s10242277@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_lion@connect.np.edu.sg",
+      "instagram": "@npliondance",
+      "telegram": "t.me/NPLionDance"
+    }
+  },
+  {
+    "id": "english_drama_poly_stage_factor",
+    "name": "English Drama (Poly Stage F'Actor)",
+    "category": "Arts & Culture",
+    "school": "Campus Life / Arts",
+    "description": "Theatre and stagecraft, est. late 1980s. Producing original plays and classical adaptations.",
+    "location": "Block 26 Black Box Theatre",
+    "commitment_level": "high",
+    "style": "team",
+    "training_frequency": "2x/week + Saturday during productions",
+    "tags": [
+      "drama",
+      "theatre",
+      "acting",
+      "english",
+      "stage"
+    ],
+    "exco": [
+      {
+        "name": "Samantha Tay",
+        "role": "President",
+        "email": "s10241199@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_edrama@connect.np.edu.sg",
+      "instagram": "@polystagefactor",
+      "telegram": "t.me/NPPolyStageFactor"
+    }
+  },
+  {
+    "id": "hip_hop_nra",
+    "name": "Hip Hop (New Revolving Age)",
+    "category": "Arts & Culture",
+    "school": "Campus Life / Arts",
+    "description": "Old/New School Hip Hop, Jazz Funk, Popping, Locking. Flagship dance powerhouse of NP.",
+    "location": "Convention Centre Main Studio",
+    "commitment_level": "high",
+    "style": "team",
+    "training_frequency": "Weekly + ad-hoc",
+    "tags": [
+      "dance",
+      "hiphop",
+      "popping",
+      "nra",
+      "performance"
+    ],
+    "exco": [
+      {
+        "name": "Ryan Gomez",
+        "role": "President",
+        "email": "s10243311@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_hiphop@connect.np.edu.sg",
+      "instagram": "@thenraofficial",
+      "telegram": "t.me/NPNRAHipHop"
+    }
+  },
+  {
+    "id": "indian_cultural_society",
+    "name": "Indian Cultural Society",
+    "category": "Arts & Culture",
+    "school": "Campus Life / Arts",
+    "description": "Indian performing arts, traditional & fusion dance, musical drama, and community outreach.",
+    "location": "Block 73 Studio B",
+    "commitment_level": "medium",
+    "style": "team",
+    "training_frequency": "Weekly + pre-performance",
+    "tags": [
+      "culture",
+      "indian",
+      "arts",
+      "dance",
+      "community"
+    ],
+    "exco": [
+      {
+        "name": "Priya Nair",
+        "role": "President",
+        "email": "s10245522@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_indian@connect.np.edu.sg",
+      "instagram": "@npindiancultural",
+      "telegram": "t.me/NPIndianCultural"
+    }
+  },
+  {
+    "id": "japanese_cultural",
+    "name": "Japanese Cultural",
+    "category": "Arts & Culture",
+    "school": "Campus Life / Arts",
+    "description": "4 divisions: Jinsei (Lifestyle), Comink (Art), Cosplay/J-Fashion, and Taiko (Traditional Drumming).",
+    "location": "Block 52 Activity Room",
+    "commitment_level": "medium",
+    "style": "mixed",
+    "training_frequency": "Weekly (Taiko: multiple/week)",
+    "tags": [
+      "culture",
+      "japanese",
+      "anime",
+      "taiko",
+      "cosplay"
+    ],
+    "exco": [
+      {
+        "name": "Kenji Sato",
+        "role": "President",
+        "email": "s10248833@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_japanese@connect.np.edu.sg",
+      "instagram": "@npjapaneseclub",
+      "telegram": "t.me/NPJapaneseClub"
+    }
+  },
+  {
+    "id": "korean_cultural",
+    "name": "Korean Cultural",
+    "category": "Arts & Culture",
+    "school": "Campus Life / Arts",
+    "description": "K-Pop dance covers, language exchanges, and cultural workshops supported by the Korean Embassy.",
+    "location": "Block 52 Activity Room",
+    "commitment_level": "low",
+    "style": "mixed",
+    "training_frequency": "Ad-hoc, event-driven",
+    "tags": [
+      "culture",
+      "korean",
+      "kpop",
+      "dance",
+      "language"
+    ],
+    "exco": [
+      {
+        "name": "Jessica Park",
+        "role": "President",
+        "email": "s10249944@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_korean@connect.np.edu.sg",
+      "instagram": "@npkoreancultural",
+      "telegram": "t.me/NPKoreanClub"
+    }
+  },
+  {
+    "id": "malay_cultural",
+    "name": "Malay Cultural",
+    "category": "Arts & Culture",
+    "school": "Campus Life / Arts",
+    "description": "5 departments: Dikir Barat (Male/Female), Traditional Dance, Drama, and Malay Debate.",
+    "location": "Block 73 Studio C",
+    "commitment_level": "medium",
+    "style": "team",
+    "training_frequency": "Varies by department (1-2x/week)",
+    "tags": [
+      "culture",
+      "malay",
+      "dikir",
+      "drama",
+      "arts"
+    ],
+    "exco": [
+      {
+        "name": "Ahmad Daniyal",
+        "role": "President",
+        "email": "s10247755@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_malay@connect.np.edu.sg",
+      "instagram": "@npmalaycultural",
+      "telegram": "t.me/NPMalayCultural"
+    }
+  },
+  {
+    "id": "percussion_baracuda_batucada",
+    "name": "Percussion (Baracuda Batucada)",
+    "category": "Arts & Culture",
+    "school": "Campus Life / Arts",
+    "description": "High-energy Brazilian samba percussion band with 150+ vibrant members performing island-wide.",
+    "location": "Sports Complex Amphitheatre",
+    "commitment_level": "high",
+    "style": "team",
+    "training_frequency": "2x/week + event prep",
+    "tags": [
+      "music",
+      "percussion",
+      "samba",
+      "baracuda",
+      "drums"
+    ],
+    "exco": [
+      {
+        "name": "Daniel Fernandez",
+        "role": "President",
+        "email": "s10246666@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_percussion@connect.np.edu.sg",
+      "instagram": "@baracudabatucada",
+      "telegram": "t.me/BaracudaBatucada"
+    }
+  },
+  {
+    "id": "photography_club",
+    "name": "Photography",
+    "category": "Arts & Culture",
+    "school": "Campus Life / Arts",
+    "description": "Digital photography, studio lighting techniques, videography, and official campus event coverage.",
+    "location": "Block 52 Visual Arts Studio",
+    "commitment_level": "medium",
+    "style": "individual",
+    "training_frequency": "Weekly + ad-hoc event assistance",
+    "tags": [
+      "arts",
+      "photography",
+      "media",
+      "camera",
+      "design"
+    ],
+    "exco": [
+      {
+        "name": "Ethan Lim",
+        "role": "President",
+        "email": "s10241177@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_photography@connect.np.edu.sg",
+      "instagram": "@npphotography",
+      "telegram": "t.me/NPPhotography"
+    }
+  },
+  {
+    "id": "piano_klavierensemble",
+    "name": "Piano (Klavierensemble)",
+    "category": "Arts & Culture",
+    "school": "Campus Life / Arts",
+    "description": "Piano ensemble, classical & contemporary duets, skill groups ranging from Debussy to Mozart.",
+    "location": "Music Room Block 73",
+    "commitment_level": "medium",
+    "style": "individual",
+    "training_frequency": "Weekly",
+    "tags": [
+      "music",
+      "piano",
+      "classical",
+      "ensemble",
+      "arts"
+    ],
+    "exco": [
+      {
+        "name": "Valerie Ong",
+        "role": "President",
+        "email": "s10242288@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_piano@connect.np.edu.sg",
+      "instagram": "@npklavierensemble",
+      "telegram": "t.me/NPKlavierensemble"
+    }
+  },
+  {
+    "id": "song_composing_amplify",
+    "name": "Song Composing (NP Amplify)",
+    "category": "Arts & Culture",
+    "school": "Campus Life / Arts",
+    "description": "Original songwriting, music arrangement, vocal technique, digital audio production, and live gigs.",
+    "location": "Block 73 Jamming Studio",
+    "commitment_level": "medium",
+    "style": "mixed",
+    "training_frequency": "Self-scheduled bands + monthly workshops",
+    "tags": [
+      "music",
+      "songwriting",
+      "composition",
+      "singing",
+      "production"
+    ],
+    "exco": [
+      {
+        "name": "Bryan Heng",
+        "role": "President",
+        "email": "s10243399@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_song@connect.np.edu.sg",
+      "instagram": "@npamplify",
+      "telegram": "t.me/NPAmplify"
+    }
+  },
+  {
+    "id": "stage_production",
+    "name": "Stage Production",
+    "category": "Arts & Culture",
+    "school": "Campus Life / Arts",
+    "description": "Backstage management, audio engineering, theatrical lighting, and technical support for campus shows.",
+    "location": "Convention Centre Tech Booth",
+    "commitment_level": "medium",
+    "style": "team",
+    "training_frequency": "Ad-hoc, monthly",
+    "tags": [
+      "tech",
+      "stage",
+      "lighting",
+      "sound",
+      "production"
+    ],
+    "exco": [
+      {
+        "name": "Jeremy Ng",
+        "role": "President",
+        "email": "s10244411@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_stage@connect.np.edu.sg",
+      "instagram": "@polystageproduction",
+      "telegram": "t.me/NPStageProduction"
+    }
+  },
+  {
+    "id": "strings_ensemble",
+    "name": "Strings",
+    "category": "Arts & Culture",
+    "school": "Campus Life / Arts",
+    "description": "Strings and guitar ensembles est. 1992. Performing classical masterworks and chamber music.",
+    "location": "Music Room Block 73",
+    "commitment_level": "high",
+    "style": "team",
+    "training_frequency": "2x/week (main), 1x/week (junior)",
+    "tags": [
+      "music",
+      "strings",
+      "violin",
+      "guitar",
+      "classical"
+    ],
+    "exco": [
+      {
+        "name": "Charlotte Chua",
+        "role": "President",
+        "email": "s10245533@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_strings@connect.np.edu.sg",
+      "instagram": "@npstrings",
+      "telegram": "t.me/NPStrings"
+    }
+  },
+  {
+    "id": "voices_acappella",
+    "name": "Voices",
+    "category": "Arts & Culture",
+    "school": "Campus Life / Arts",
+    "description": "A Cappella vocal harmony ensemble and Show Choir performing vocal arrangements across genres.",
+    "location": "Block 73 Studio A",
+    "commitment_level": "high",
+    "style": "team",
+    "training_frequency": "2x/week + ad-hoc",
+    "tags": [
+      "music",
+      "acappella",
+      "choir",
+      "singing",
+      "performance"
+    ],
+    "exco": [
+      {
+        "name": "Benjamin Tan",
+        "role": "President",
+        "email": "s10246655@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_voices@connect.np.edu.sg",
+      "instagram": "@npvoices",
+      "telegram": "t.me/NPVoices"
+    }
+  },
+  {
+    "id": "archery",
+    "name": "Archery",
+    "category": "Sports",
+    "school": "Sports & Wellness",
+    "description": "Competitive precision archery, national-team pedigree coaches, target shooting technique.",
+    "location": "NP Archery Range Block 22",
+    "commitment_level": "high",
+    "style": "individual",
+    "training_frequency": "Twice a week",
+    "tags": [
+      "sports",
+      "archery",
+      "focus",
+      "precision",
+      "competition"
+    ],
+    "exco": [
+      {
+        "name": "Keith Sim",
+        "role": "Captain",
+        "email": "s10247766@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_archery@connect.np.edu.sg",
+      "instagram": "@nparchery",
+      "telegram": "t.me/NPArchery"
+    }
+  },
+  {
+    "id": "badminton",
+    "name": "Badminton",
+    "category": "Sports",
+    "school": "Sports & Wellness",
+    "description": "Recreational and competitive badminton play, court agility, and IVP tournament management.",
+    "location": "Sports Complex Court 1-4",
+    "commitment_level": "high",
+    "style": "mixed",
+    "training_frequency": "2x/week (competitive), 1x/week (recreational)",
+    "tags": [
+      "sports",
+      "badminton",
+      "racket",
+      "fitness",
+      "competition"
+    ],
+    "exco": [
+      {
+        "name": "Kevin Lau",
+        "role": "Captain",
+        "email": "s10248877@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_badminton@connect.np.edu.sg",
+      "instagram": "@npbadmintonclub",
+      "telegram": "t.me/NPBadminton"
+    }
+  },
+  {
+    "id": "basketball",
+    "name": "Basketball",
+    "category": "Sports",
+    "school": "Sports & Wellness",
+    "description": "Team bonding, tactical drills, skill tryouts, and POL-ITE championship campaign.",
+    "location": "Indoor Sports Hall Level 2",
+    "commitment_level": "high",
+    "style": "team",
+    "training_frequency": "2x/week + pre-competition sessions",
+    "tags": [
+      "sports",
+      "basketball",
+      "ball",
+      "fitness",
+      "team"
+    ],
+    "exco": [
+      {
+        "name": "Jason Yeo",
+        "role": "Captain",
+        "email": "s10249988@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_basketball@connect.np.edu.sg",
+      "instagram": "@npbasketball",
+      "telegram": "t.me/NPBasketball"
+    }
+  },
+  {
+    "id": "bowling",
+    "name": "Bowling",
+    "category": "Sports",
+    "school": "Sports & Wellness",
+    "description": "Lane-reading techniques, hook shot mechanics, and strategy-focused competitive bowling.",
+    "location": "Orchid Bowl / Westwood Bowl",
+    "commitment_level": "medium",
+    "style": "individual",
+    "training_frequency": "1x/week + 2x/week before competitions",
+    "tags": [
+      "sports",
+      "bowling",
+      "focus",
+      "precision",
+      "competition"
+    ],
+    "exco": [
+      {
+        "name": "Nicole Lim",
+        "role": "Captain",
+        "email": "s10241100@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_bowling@connect.np.edu.sg",
+      "instagram": "@ngeeannbowling",
+      "telegram": "t.me/NPBowling"
+    }
+  },
+  {
+    "id": "canoeing",
+    "name": "Canoeing",
+    "category": "Sports",
+    "school": "Sports & Wellness",
+    "description": "Canoe sprinting, long-distance marathons, core endurance, and watercraft mastery.",
+    "location": "Pandan Reservoir Water Sports Centre",
+    "commitment_level": "high",
+    "style": "team",
+    "training_frequency": "Land 1x/week, water 2x/week",
+    "tags": [
+      "sports",
+      "canoeing",
+      "water",
+      "endurance",
+      "fitness"
+    ],
+    "exco": [
+      {
+        "name": "Alex Pang",
+        "role": "Captain",
+        "email": "s10242211@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_canoeing@connect.np.edu.sg",
+      "instagram": "@npcanoeing",
+      "telegram": "t.me/NPCanoeing"
+    }
+  },
+  {
+    "id": "climbing_club",
+    "name": "Climbing Club",
+    "category": "Sports",
+    "school": "Sports & Wellness",
+    "description": "Bouldering techniques, lead climbing, high wall bouldering, and national bouldering carnivals.",
+    "location": "NP Bouldering Wall Block 22",
+    "commitment_level": "high",
+    "style": "individual",
+    "training_frequency": "2x/week + extra during competition season",
+    "tags": [
+      "sports",
+      "climbing",
+      "bouldering",
+      "fitness",
+      "strength"
+    ],
+    "exco": [
+      {
+        "name": "Ian Wong",
+        "role": "Captain",
+        "email": "s10243322@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_climbing@connect.np.edu.sg",
+      "instagram": "@npclimbing",
+      "telegram": "t.me/NPClimbing"
+    }
+  },
+  {
+    "id": "dragon_boat",
+    "name": "Dragon Boat",
+    "category": "Sports",
+    "school": "Sports & Wellness",
+    "description": "Synchronized team rowing, endurance conditioning, and POL-ITE Regatta championships.",
+    "location": "Kallang Basin Water Sports Centre",
+    "commitment_level": "high",
+    "style": "team",
+    "training_frequency": "Land 1x/week, water 2x/week",
+    "tags": [
+      "sports",
+      "dragonboat",
+      "rowing",
+      "water",
+      "team"
+    ],
+    "exco": [
+      {
+        "name": "Timothy Tan",
+        "role": "Captain",
+        "email": "s10244433@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_dragonboat@connect.np.edu.sg",
+      "instagram": "@npdragonboat",
+      "telegram": "t.me/NPDragonBoat"
+    }
+  },
+  {
+    "id": "fencing",
+    "name": "Fencing",
+    "category": "Sports",
+    "school": "Sports & Wellness",
+    "description": "Epee, Foil, and Sabre weapon groups. Agility, tactical footwork, and blade precision.",
+    "location": "Sports Complex Studio 2",
+    "commitment_level": "medium",
+    "style": "individual",
+    "training_frequency": "1x/week + optional Saturdays",
+    "tags": [
+      "sports",
+      "fencing",
+      "martialarts",
+      "precision",
+      "agility"
+    ],
+    "exco": [
+      {
+        "name": "Fiona Chen",
+        "role": "Captain",
+        "email": "s10245544@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_fencing@connect.np.edu.sg",
+      "instagram": "@npfencing",
+      "telegram": "t.me/NPFencing"
+    }
+  },
+  {
+    "id": "floorball",
+    "name": "Floorball",
+    "category": "Sports",
+    "school": "Sports & Wellness",
+    "description": "Fast-paced indoor stick-and-ball team sport competing in POL-ITE and IVP tournaments.",
+    "location": "Sports Complex Multi-Purpose Hall",
+    "commitment_level": "high",
+    "style": "team",
+    "training_frequency": "2x/week + weekend matches",
+    "tags": [
+      "sports",
+      "floorball",
+      "stick",
+      "fitness",
+      "team"
+    ],
+    "exco": [
+      {
+        "name": "Darren Ong",
+        "role": "Captain",
+        "email": "s10246655@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_floorball@connect.np.edu.sg",
+      "instagram": "@npfloorball",
+      "telegram": "t.me/NPFloorball"
+    }
+  },
+  {
+    "id": "football",
+    "name": "Football",
+    "category": "Sports",
+    "school": "Sports & Wellness",
+    "description": "11-a-side competitive and friendly football matches, tactical drills, and fitness conditioning.",
+    "location": "NP Sports Field",
+    "commitment_level": "high",
+    "style": "team",
+    "training_frequency": "2x/week + extra in competition season",
+    "tags": [
+      "sports",
+      "football",
+      "soccer",
+      "fitness",
+      "team"
+    ],
+    "exco": [
+      {
+        "name": "Farhan Rosli",
+        "role": "Captain",
+        "email": "s10247766@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_football@connect.np.edu.sg",
+      "instagram": "@npfootball_",
+      "telegram": "t.me/NPFootball"
+    }
+  },
+  {
+    "id": "handball",
+    "name": "Handball",
+    "category": "Sports",
+    "school": "Sports & Wellness",
+    "description": "Olympic team sport emphasizing speed, passing accuracy, jump shots, and defensive strength.",
+    "location": "Sports Complex Court 3",
+    "commitment_level": "high",
+    "style": "team",
+    "training_frequency": "2x/week (+alternate Sat for girls, weekly near comps)",
+    "tags": [
+      "sports",
+      "handball",
+      "fitness",
+      "team",
+      "ball"
+    ],
+    "exco": [
+      {
+        "name": "Rachel Koh",
+        "role": "Captain",
+        "email": "s10248877@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_handball@connect.np.edu.sg",
+      "instagram": "@nphandball",
+      "telegram": "t.me/NPHandball"
+    }
+  },
+  {
+    "id": "hockey",
+    "name": "Hockey",
+    "category": "Sports",
+    "school": "Sports & Wellness",
+    "description": "Field hockey, stickwork handling, tactical positioning, and friendly polytechnic matches.",
+    "location": "NP Sports Field / CCAB Turf",
+    "commitment_level": "medium",
+    "style": "team",
+    "training_frequency": "2x/week",
+    "tags": [
+      "sports",
+      "hockey",
+      "fieldhockey",
+      "team",
+      "fitness"
+    ],
+    "exco": [
+      {
+        "name": "Matthew Teo",
+        "role": "Captain",
+        "email": "s10249988@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_hockey@connect.np.edu.sg",
+      "instagram": "@nphockey",
+      "telegram": "t.me/NPHockey"
+    }
+  },
+  {
+    "id": "inline_skating",
+    "name": "Inline Skating",
+    "category": "Sports",
+    "school": "Sports & Wellness",
+    "description": "Freestyle slide & slalom roller skating disciplines, trick execution, and balance mastery.",
+    "location": "Sports Complex Concourse",
+    "commitment_level": "medium",
+    "style": "individual",
+    "training_frequency": "2x/week (3x during competition season)",
+    "tags": [
+      "sports",
+      "skating",
+      "inline",
+      "freestyle",
+      "slalom"
+    ],
+    "exco": [
+      {
+        "name": "Bryan Lee",
+        "role": "Captain",
+        "email": "s10241199@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_inline@connect.np.edu.sg",
+      "instagram": "@npinlineskating",
+      "telegram": "t.me/NPInline"
+    }
+  },
+  {
+    "id": "judo",
+    "name": "Judo",
+    "category": "Sports",
+    "school": "Sports & Wellness",
+    "description": "'Gentle way' Japanese martial art focusing on grappling throws, joint locks, and self-discipline.",
+    "location": "Combat Martial Arts Studio Block 22",
+    "commitment_level": "medium",
+    "style": "individual",
+    "training_frequency": "2x/week",
+    "tags": [
+      "sports",
+      "judo",
+      "martialarts",
+      "grappling",
+      "discipline"
+    ],
+    "exco": [
+      {
+        "name": "Cyrus Tan",
+        "role": "Captain",
+        "email": "s10242200@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_judo@connect.np.edu.sg",
+      "instagram": "@npjudo",
+      "telegram": "t.me/NPJudo"
+    }
+  },
+  {
+    "id": "lifesaving",
+    "name": "Lifesaving",
+    "category": "Sports",
+    "school": "Sports & Wellness",
+    "description": "Water safety, rescue swimming techniques, CPR, and internationally recognised Bronze Medallion awards.",
+    "location": "NP Swimming Pool",
+    "commitment_level": "medium",
+    "style": "team",
+    "training_frequency": "2x/week",
+    "tags": [
+      "sports",
+      "lifesaving",
+      "swimming",
+      "firstaid",
+      "water"
+    ],
+    "exco": [
+      {
+        "name": "Grace Sim",
+        "role": "Captain",
+        "email": "s10243311@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_lifesaving@connect.np.edu.sg",
+      "instagram": "@ngeeannlifesaving",
+      "telegram": "t.me/NPLifesaving"
+    }
+  },
+  {
+    "id": "netball",
+    "name": "Netball",
+    "category": "Sports",
+    "school": "Sports & Wellness",
+    "description": "Competitive & recreational netball squads, court tactics, shooting accuracy, and POL-ITE games.",
+    "location": "Outdoor Netball Courts",
+    "commitment_level": "high",
+    "style": "team",
+    "training_frequency": "2x/week + extra for competitive team",
+    "tags": [
+      "sports",
+      "netball",
+      "fitness",
+      "team",
+      "ball"
+    ],
+    "exco": [
+      {
+        "name": "Tanya Raj",
+        "role": "Captain",
+        "email": "s10244422@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_netball@connect.np.edu.sg",
+      "instagram": "@npnetball",
+      "telegram": "t.me/NPNetball"
+    }
+  },
+  {
+    "id": "pickleball",
+    "name": "Pickleball",
+    "category": "Sports",
+    "school": "Sports & Wellness",
+    "description": "Newest CCA (2026) \u2014 fast-growing tennis/badminton/table-tennis hybrid paddle sport.",
+    "location": "Sports Complex Court 5",
+    "commitment_level": "medium",
+    "style": "mixed",
+    "training_frequency": "Thu 5.30-9pm, Sat 9am-12pm",
+    "tags": [
+      "sports",
+      "pickleball",
+      "paddle",
+      "racket",
+      "fitness"
+    ],
+    "exco": [
+      {
+        "name": "Sean Wong",
+        "role": "Captain",
+        "email": "s10245533@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_pickleball@connect.np.edu.sg",
+      "instagram": "@nppickleball",
+      "telegram": "t.me/NPPickleball"
+    }
+  },
+  {
+    "id": "rugby_rhinos",
+    "name": "Rugby (\"Rhinos\")",
+    "category": "Sports",
+    "school": "Sports & Wellness",
+    "description": "Competitive 15s and 7s rugby, high athletic standards, physical conditioning on and off the pitch.",
+    "location": "NP Sports Field",
+    "commitment_level": "high",
+    "style": "team",
+    "training_frequency": "2x/week (off-season), 3x/week (peak season)",
+    "tags": [
+      "sports",
+      "rugby",
+      "rhinos",
+      "tackle",
+      "team"
+    ],
+    "exco": [
+      {
+        "name": "Tariq Ibrahim",
+        "role": "Captain",
+        "email": "s10246644@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_rugby@connect.np.edu.sg",
+      "instagram": "@nprugby",
+      "telegram": "t.me/NPRugby"
+    }
+  },
+  {
+    "id": "silat",
+    "name": "Silat",
+    "category": "Sports",
+    "school": "Sports & Wellness",
+    "description": "Pencak Silat: Tanding (sparring) and Seni (artistic routine) Malay martial arts discipline.",
+    "location": "Combat Studio Block 22",
+    "commitment_level": "high",
+    "style": "individual",
+    "training_frequency": "3x/week",
+    "tags": [
+      "sports",
+      "silat",
+      "martialarts",
+      "tanding",
+      "seni"
+    ],
+    "exco": [
+      {
+        "name": "Nurul Aini",
+        "role": "Captain",
+        "email": "s10247755@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_silat@connect.np.edu.sg",
+      "instagram": "@npsilat",
+      "telegram": "t.me/NPSilat"
+    }
+  },
+  {
+    "id": "shooting",
+    "name": "Shooting",
+    "category": "Sports",
+    "school": "Sports & Wellness",
+    "description": "10m Air Rifle & Air Pistol precision shooting, 1 of only 2 poly shooting clubs in Singapore.",
+    "location": "NP Indoor Shooting Range Block 22",
+    "commitment_level": "high",
+    "style": "individual",
+    "training_frequency": "2x/week range + 1x/week physical training",
+    "tags": [
+      "sports",
+      "shooting",
+      "airrifle",
+      "precision",
+      "focus"
+    ],
+    "exco": [
+      {
+        "name": "Marcus Chong",
+        "role": "Captain",
+        "email": "s10248866@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_shooting@connect.np.edu.sg",
+      "instagram": "@npshooting",
+      "telegram": "t.me/NPShooting"
+    }
+  },
+  {
+    "id": "softball",
+    "name": "Softball",
+    "category": "Sports",
+    "school": "Sports & Wellness",
+    "description": "Batting, pitching, fielding coordination, teamwork, and semester polytechnic tournaments.",
+    "location": "NP Softball Diamond Field",
+    "commitment_level": "medium",
+    "style": "team",
+    "training_frequency": "2x/week + 1-2 competitions/semester",
+    "tags": [
+      "sports",
+      "softball",
+      "baseball",
+      "batting",
+      "team"
+    ],
+    "exco": [
+      {
+        "name": "Chloe Lim",
+        "role": "Captain",
+        "email": "s10249977@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_softball@connect.np.edu.sg",
+      "instagram": "@npsoftball",
+      "telegram": "t.me/NPSoftball"
+    }
+  },
+  {
+    "id": "squash",
+    "name": "Squash",
+    "category": "Sports",
+    "school": "Sports & Wellness",
+    "description": "All-levels squash court training, stamina building, racket control, and friendly ladder matches.",
+    "location": "Sports Complex Squash Courts",
+    "commitment_level": "medium",
+    "style": "individual",
+    "training_frequency": "2x/week",
+    "tags": [
+      "sports",
+      "squash",
+      "racket",
+      "fitness",
+      "agility"
+    ],
+    "exco": [
+      {
+        "name": "David Ho",
+        "role": "Captain",
+        "email": "s10241188@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_squash@connect.np.edu.sg",
+      "instagram": "@np_squash",
+      "telegram": "t.me/NPSquash"
+    }
+  },
+  {
+    "id": "swimming",
+    "name": "Swimming",
+    "category": "Sports",
+    "school": "Sports & Wellness",
+    "description": "Competitive stroke refinement, endurance swimming sets, and IVP swimming championships.",
+    "location": "NP Swimming Complex",
+    "commitment_level": "high",
+    "style": "individual",
+    "training_frequency": "3x/week",
+    "tags": [
+      "sports",
+      "swimming",
+      "water",
+      "endurance",
+      "fitness"
+    ],
+    "exco": [
+      {
+        "name": "Nicholas Tan",
+        "role": "Captain",
+        "email": "s10242299@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_swimming@connect.np.edu.sg",
+      "instagram": "@npswimming",
+      "telegram": "t.me/NPSwimming"
+    }
+  },
+  {
+    "id": "table_tennis",
+    "name": "Table Tennis",
+    "category": "Sports",
+    "school": "Sports & Wellness",
+    "description": "Spin technique, quick reflexes, multi-ball drills, and POL-ITE competition squads.",
+    "location": "Sports Complex Table Tennis Hall",
+    "commitment_level": "high",
+    "style": "mixed",
+    "training_frequency": "2x/week + extra for competition team",
+    "tags": [
+      "sports",
+      "tabletennis",
+      "pingpong",
+      "racket",
+      "speed"
+    ],
+    "exco": [
+      {
+        "name": "Zhi Wei Lin",
+        "role": "Captain",
+        "email": "s10243300@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_tabletennis@connect.np.edu.sg",
+      "instagram": "@np_tabletennis",
+      "telegram": "t.me/NPTableTennis"
+    }
+  },
+  {
+    "id": "taekwondo",
+    "name": "Taekwondo",
+    "category": "Sports",
+    "school": "Sports & Wellness",
+    "description": "Korean martial art: Kyorugi (sparring) & Poomsae (forms), belt grading every 3 months.",
+    "location": "Combat Studio Block 22",
+    "commitment_level": "high",
+    "style": "individual",
+    "training_frequency": "2x/week + extra near competitions",
+    "tags": [
+      "sports",
+      "taekwondo",
+      "tkd",
+      "martialarts",
+      "kicking"
+    ],
+    "exco": [
+      {
+        "name": "Justin Kwek",
+        "role": "Captain",
+        "email": "s10244411@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_tkd@connect.np.edu.sg",
+      "instagram": "@nptkdfighters",
+      "telegram": "t.me/NPTaekwondo"
+    }
+  },
+  {
+    "id": "tchoukball",
+    "name": "Tchoukball",
+    "category": "Sports",
+    "school": "Sports & Wellness",
+    "description": "Fast-paced, non-contact rebound ball throwing sport emphasizing strategy and sportsmanship.",
+    "location": "Outdoor Courts / Sports Hall",
+    "commitment_level": "medium",
+    "style": "team",
+    "training_frequency": "2x/week + optional Saturdays",
+    "tags": [
+      "sports",
+      "tchoukball",
+      "rebound",
+      "ball",
+      "fitness"
+    ],
+    "exco": [
+      {
+        "name": "Darren Yap",
+        "role": "Captain",
+        "email": "s10245522@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_tchouk@connect.np.edu.sg",
+      "instagram": "@nptchoukball",
+      "telegram": "t.me/NPTchoukball"
+    }
+  },
+  {
+    "id": "tennis",
+    "name": "Tennis",
+    "category": "Sports",
+    "school": "Sports & Wellness",
+    "description": "Serve mechanics, baseline rally drills, match play open to all skill levels from beginner to IVP.",
+    "location": "NP Outdoor Tennis Courts",
+    "commitment_level": "medium",
+    "style": "mixed",
+    "training_frequency": "2x/week + extra in competition season",
+    "tags": [
+      "sports",
+      "tennis",
+      "racket",
+      "court",
+      "fitness"
+    ],
+    "exco": [
+      {
+        "name": "Vanessa Goh",
+        "role": "Captain",
+        "email": "s10246633@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_tennis@connect.np.edu.sg",
+      "instagram": "@nptennis",
+      "telegram": "t.me/NPTennis"
+    }
+  },
+  {
+    "id": "touch_rugby",
+    "name": "Touch Rugby",
+    "category": "Sports",
+    "school": "Sports & Wellness",
+    "description": "Fast evasion, passing drills, fitness conditioning, and non-tackle touch rugby matches.",
+    "location": "NP Sports Field",
+    "commitment_level": "medium",
+    "style": "team",
+    "training_frequency": "2x/week + ad-hoc",
+    "tags": [
+      "sports",
+      "touchrugby",
+      "rugby",
+      "fitness",
+      "team"
+    ],
+    "exco": [
+      {
+        "name": "Hannah Tan",
+        "role": "Captain",
+        "email": "s10247744@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_touchrugby@connect.np.edu.sg",
+      "instagram": "@nptouchrugby",
+      "telegram": "t.me/NPTouchRugby"
+    }
+  },
+  {
+    "id": "track_and_field",
+    "name": "Track and Field",
+    "category": "Sports",
+    "school": "Sports & Wellness",
+    "description": "Sprints, hurdles, throws, long jump, and middle-distance running for POL-ITE track meets.",
+    "location": "NP 400m Track Stadium",
+    "commitment_level": "high",
+    "style": "individual",
+    "training_frequency": "3x/week + extra for competition prep",
+    "tags": [
+      "sports",
+      "trackfield",
+      "running",
+      "sprint",
+      "athletics"
+    ],
+    "exco": [
+      {
+        "name": "Joel Sim",
+        "role": "Captain",
+        "email": "s10248855@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_trackfield@connect.np.edu.sg",
+      "instagram": "@nptrackfield",
+      "telegram": "t.me/NPTrackField"
+    }
+  },
+  {
+    "id": "ultimate_frisbee",
+    "name": "Ultimate Frisbee",
+    "category": "Sports",
+    "school": "Sports & Wellness",
+    "description": "Disc handling techniques, layouts, zone defense, spirit of the game, open to all skill levels.",
+    "location": "NP Sports Field",
+    "commitment_level": "medium",
+    "style": "team",
+    "training_frequency": "2x/week",
+    "tags": [
+      "sports",
+      "frisbee",
+      "ultimate",
+      "disc",
+      "team"
+    ],
+    "exco": [
+      {
+        "name": "Gabriel Teo",
+        "role": "Captain",
+        "email": "s10249966@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_frisbee@connect.np.edu.sg",
+      "instagram": "@ngeeann_ultimate",
+      "telegram": "t.me/NPUltimate"
+    }
+  },
+  {
+    "id": "volleyball",
+    "name": "Volleyball",
+    "category": "Sports",
+    "school": "Sports & Wellness",
+    "description": "Spiking mechanics, setting accuracy, defensive digs, and year-end intensive training camps.",
+    "location": "Indoor Sports Hall Level 3",
+    "commitment_level": "high",
+    "style": "team",
+    "training_frequency": "2x/week (+more for competitive team)",
+    "tags": [
+      "sports",
+      "volleyball",
+      "spike",
+      "court",
+      "team"
+    ],
+    "exco": [
+      {
+        "name": "Lucas Tan",
+        "role": "Captain",
+        "email": "s10241177@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_volleyball@connect.np.edu.sg",
+      "instagram": "@ngeeannvolleyball",
+      "telegram": "t.me/NPVolleyball"
+    }
+  },
+  {
+    "id": "water_polo",
+    "name": "Water Polo",
+    "category": "Sports",
+    "school": "Sports & Wellness",
+    "description": "Treading water, ball passing, offensive tactics, and high-intensity aquatic fitness.",
+    "location": "NP Swimming Pool Complex",
+    "commitment_level": "high",
+    "style": "team",
+    "training_frequency": "2x/week",
+    "tags": [
+      "sports",
+      "waterpolo",
+      "swimming",
+      "water",
+      "team"
+    ],
+    "exco": [
+      {
+        "name": "Aiden Lim",
+        "role": "Captain",
+        "email": "s10242288@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_waterpolo@connect.np.edu.sg",
+      "instagram": "@npwaterpolo",
+      "telegram": "t.me/NPWaterPolo"
+    }
+  },
+  {
+    "id": "wushu",
+    "name": "Wushu",
+    "category": "Sports",
+    "school": "Sports & Wellness",
+    "description": "Traditional Chinese martial arts, weapons routines (broadsword, spear), and freestyle routine execution.",
+    "location": "Combat Studio Block 22",
+    "commitment_level": "medium",
+    "style": "individual",
+    "training_frequency": "2x/week",
+    "tags": [
+      "sports",
+      "wushu",
+      "chinese",
+      "martialarts",
+      "forms"
+    ],
+    "exco": [
+      {
+        "name": "Jasmine Chen",
+        "role": "Captain",
+        "email": "s10243399@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_wushu@connect.np.edu.sg",
+      "instagram": "@np_wushu",
+      "telegram": "t.me/NPWushu"
+    }
+  },
+  {
+    "id": "np_mentors",
+    "name": "NP Mentors",
+    "category": "Community Service",
+    "school": "Community & Outreach",
+    "description": "Academic tutoring & holistic guidance for children in need across 7+ partner social service agencies.",
+    "location": "Block 22 Student Life Centre",
+    "commitment_level": "medium",
+    "style": "mixed",
+    "training_frequency": "1x/week + ad-hoc events",
+    "tags": [
+      "community",
+      "volunteering",
+      "tutoring",
+      "children",
+      "outreach"
+    ],
+    "exco": [
+      {
+        "name": "Clara Tan",
+        "role": "President",
+        "email": "s10244400@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_npmentors@connect.np.edu.sg",
+      "instagram": "@npmentors",
+      "telegram": "t.me/NPMentors"
+    }
+  },
+  {
+    "id": "environmental_rangers_club",
+    "name": "Environmental Rangers Club",
+    "category": "Community Service",
+    "school": "Community & Outreach",
+    "description": "Campus sustainability initiatives, Cleanshores coastal cleanups, and Adopt-A-Block recycling drives.",
+    "location": "Block 22 Eco Corner",
+    "commitment_level": "medium",
+    "style": "team",
+    "training_frequency": "2x/month + ad-hoc",
+    "tags": [
+      "community",
+      "environment",
+      "sustainability",
+      "volunteering",
+      "green"
+    ],
+    "exco": [
+      {
+        "name": "Megan Lee",
+        "role": "President",
+        "email": "s10245511@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_erangers@connect.np.edu.sg",
+      "instagram": "@nperc_",
+      "telegram": "t.me/NPEnviroRangers"
+    }
+  },
+  {
+    "id": "foodaid_club",
+    "name": "FoodAID Club",
+    "category": "Community Service",
+    "school": "Community & Outreach",
+    "description": "Organising surplus food donation drives and packing food packs to support underprivileged communities.",
+    "location": "Student Life Office Block 22",
+    "commitment_level": "medium",
+    "style": "team",
+    "training_frequency": "Monthly (Wed/weekend) + ad-hoc",
+    "tags": [
+      "community",
+      "foodaid",
+      "volunteering",
+      "charity",
+      "outreach"
+    ],
+    "exco": [
+      {
+        "name": "Samuel Koh",
+        "role": "President",
+        "email": "s10246622@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_foodaid@connect.np.edu.sg",
+      "instagram": "@npfoodaid",
+      "telegram": "t.me/NPFoodAID"
+    }
+  },
+  {
+    "id": "leo_club",
+    "name": "Leo Club",
+    "category": "Community Service",
+    "school": "Community & Outreach",
+    "description": "300+ active members engaging in elderly befriending, special needs outreach, and youth mentoring.",
+    "location": "Block 22 Leo Room",
+    "commitment_level": "high",
+    "style": "team",
+    "training_frequency": "Regularly on weekends",
+    "tags": [
+      "community",
+      "volunteering",
+      "leo",
+      "elderly",
+      "outreach"
+    ],
+    "exco": [
+      {
+        "name": "Rachel Wong",
+        "role": "President",
+        "email": "s10247733@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_leo@connect.np.edu.sg",
+      "instagram": "@npleoclub",
+      "telegram": "t.me/NPLeoClub"
+    }
+  },
+  {
+    "id": "np_bb_primers",
+    "name": "NP BB Primers",
+    "category": "Community Service",
+    "school": "Community & Outreach",
+    "description": "Boys' Brigade-affiliated leadership club, NDP crowd motivators, and annual food donation logistics.",
+    "location": "Block 22 Primers Room",
+    "commitment_level": "medium",
+    "style": "team",
+    "training_frequency": "Ad-hoc, project-based",
+    "tags": [
+      "community",
+      "leadership",
+      "primers",
+      "volunteering",
+      "service"
+    ],
+    "exco": [
+      {
+        "name": "David Teo",
+        "role": "President",
+        "email": "s10248844@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_primers@connect.np.edu.sg",
+      "instagram": "@npprimers",
+      "telegram": "t.me/NPBBPrimers"
+    }
+  },
+  {
+    "id": "red_cross_youth_chapter",
+    "name": "Red Cross Youth Chapter (RCYC)",
+    "category": "Community Service",
+    "school": "Community & Outreach",
+    "description": "First aid standby, blood donation drives, disaster relief awareness, and CIP community initiatives.",
+    "location": "Block 22 Red Cross Room",
+    "commitment_level": "medium",
+    "style": "team",
+    "training_frequency": "Event-based, ~2x/month",
+    "tags": [
+      "community",
+      "firstaid",
+      "redcross",
+      "volunteering",
+      "health"
+    ],
+    "exco": [
+      {
+        "name": "Amanda Goh",
+        "role": "President",
+        "email": "s10249955@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_redcross@connect.np.edu.sg",
+      "instagram": "@ngeeannredcrossyouth",
+      "telegram": "t.me/NPRedCross"
+    }
+  },
+  {
+    "id": "rotaract_club",
+    "name": "Rotaract Club",
+    "category": "Community Service",
+    "school": "Community & Outreach",
+    "description": "4 pillars: Community Service, Club Service, Professional Development, and International Service.",
+    "location": "Block 22 Rotaract Room",
+    "commitment_level": "medium",
+    "style": "team",
+    "training_frequency": "2-3 events/month",
+    "tags": [
+      "community",
+      "rotaract",
+      "leadership",
+      "volunteering",
+      "international"
+    ],
+    "exco": [
+      {
+        "name": "Tricia Heng",
+        "role": "President",
+        "email": "s10241166@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_rotaract@connect.np.edu.sg",
+      "instagram": "@nprotaract",
+      "telegram": "t.me/NPRotaract"
+    }
+  },
+  {
     "id": "legaltech_sig",
     "name": "NP LegalTech SIG",
-    "category": "Special Interest",
+    "category": "Academic & Tech",
     "school": "ICT / Business",
-    "description": "Empowering NP students at the intersection of AI, Software Engineering, and Legal Discourse. Build law-tech bots, automate legal workflows, and join national hackathons.",
+    "description": "Empowering NP students at the intersection of AI, Software Engineering, and Legal Discourse. Build law-tech bots and join hackathons.",
     "location": "Block 31 (ICT) Level 4, Room 402",
     "commitment_level": "medium",
     "style": "team",
-    "tags": ["tech", "ai", "coding", "law", "innovation", "hackathon"],
+    "training_frequency": "1x/week + hackathon prep",
+    "tags": [
+      "tech",
+      "ai",
+      "coding",
+      "law",
+      "innovation",
+      "hackathon"
+    ],
     "exco": [
-      { "name": "Thurai Ganesh", "role": "President", "email": "S10275803@connect.np.edu.sg" },
-      { "name": "Rachel Tan", "role": "Vice President", "email": "s10234890@connect.np.edu.sg" }
+      {
+        "name": "Thurai Ganesh",
+        "role": "President",
+        "email": "S10275803@connect.np.edu.sg"
+      },
+      {
+        "name": "Rachel Tan",
+        "role": "Vice President",
+        "email": "s10234890@connect.np.edu.sg"
+      }
     ],
     "contact": {
-      "telegram": "t.me/NPLegalTechSIG",
+      "email": "legaltech@connect.np.edu.sg",
       "instagram": "@np_legaltech",
-      "email": "legaltech@connect.np.edu.sg"
+      "telegram": "t.me/NPLegalTechSIG"
     }
   },
   {
@@ -24,139 +1900,605 @@
     "name": "NP Developers Club",
     "category": "Academic & Tech",
     "school": "ICT",
-    "description": "Full-stack development, mobile app creation, open-source projects, and technical workshops. Build real software products for campus life.",
+    "description": "Full-stack web development, mobile app creation, open-source projects, and technical workshops.",
     "location": "Block 31 Level 3, Makerspace",
     "commitment_level": "high",
     "style": "team",
-    "tags": ["tech", "coding", "software", "web", "mobile", "ai"],
+    "training_frequency": "2x/week",
+    "tags": [
+      "tech",
+      "coding",
+      "software",
+      "web",
+      "mobile",
+      "ai"
+    ],
     "exco": [
-      { "name": "Marcus Lim", "role": "President", "email": "s10241122@connect.np.edu.sg" },
-      { "name": "Chloe Wong", "role": "Tech Lead", "email": "s10249911@connect.np.edu.sg" }
+      {
+        "name": "Marcus Lim",
+        "role": "President",
+        "email": "s10241122@connect.np.edu.sg"
+      },
+      {
+        "name": "Thurai Ganesh",
+        "role": "Tech Lead",
+        "email": "S10275803@connect.np.edu.sg"
+      }
     ],
     "contact": {
-      "telegram": "t.me/NPDevelopers",
+      "email": "developers@connect.np.edu.sg",
       "instagram": "@np_devs",
-      "email": "developers@connect.np.edu.sg"
+      "telegram": "t.me/NPDevelopers"
     }
   },
   {
-    "id": "np_robotics",
-    "name": "NP Robotics & Automation Club",
+    "id": "astronomy_club",
+    "name": "Astronomy Club",
     "category": "Special Interest",
-    "school": "Engineering",
-    "description": "Design autonomous robots, drone navigation, embedded systems, and microcontroller programming for national competitions.",
-    "location": "Block 22 (MAE) Robotics Lab",
-    "commitment_level": "high",
-    "style": "team",
-    "tags": ["tech", "robotics", "hardware", "engineering", "coding"],
-    "exco": [
-      { "name": "Ahmad Farhan", "role": "President", "email": "s10239081@connect.np.edu.sg" },
-      { "name": "David Chen", "role": "Vice President", "email": "s10237722@connect.np.edu.sg" }
-    ],
-    "contact": {
-      "telegram": "t.me/NPRobotics",
-      "instagram": "@np_robotics",
-      "email": "robotics@connect.np.edu.sg"
-    }
-  },
-  {
-    "id": "np_badminton",
-    "name": "NP Badminton Club",
-    "category": "Sports",
-    "school": "All Schools",
-    "description": "Competitive and recreational badminton training sessions. Build agility, court strategy, and sportsmanship in IVP tournaments.",
-    "location": "Sports Complex Court 1-4",
-    "commitment_level": "medium",
-    "style": "team",
-    "tags": ["sports", "fitness", "badminton", "racket", "competition"],
-    "exco": [
-      { "name": "Kevin Teo", "role": "Captain", "email": "s10231122@connect.np.edu.sg" },
-      { "name": "Sarah Lee", "role": "Vice Captain", "email": "s10233344@connect.np.edu.sg" }
-    ],
-    "contact": {
-      "telegram": "t.me/NPBadminton",
-      "instagram": "@np_badminton",
-      "email": "badminton@connect.np.edu.sg"
-    }
-  },
-  {
-    "id": "np_photography",
-    "name": "NP Visual Arts & Photography",
-    "category": "Arts & Culture",
-    "school": "All Schools",
-    "description": "Master camera composition, street photography, studio lighting, photo editing, and visual storytelling across campus events.",
-    "location": "Block 52 Visual Arts Studio",
+    "school": "Special Interest",
+    "description": "Public astronomy outreach, telescope observation sessions, astrophotography, and overseas stargazing trips.",
+    "location": "Block 22 Observatory Deck",
     "commitment_level": "low",
-    "style": "solo",
-    "tags": ["arts", "photography", "design", "creative", "media"],
+    "style": "individual",
+    "training_frequency": "Once every 2 weeks",
+    "tags": [
+      "space",
+      "astronomy",
+      "science",
+      "stargazing",
+      "physics"
+    ],
     "exco": [
-      { "name": "Jessica Koh", "role": "President", "email": "s10236611@connect.np.edu.sg" },
-      { "name": "Bryan Goh", "role": "Head of Events", "email": "s10237788@connect.np.edu.sg" }
+      {
+        "name": "Isaac Newton",
+        "role": "President",
+        "email": "s10242277@connect.np.edu.sg"
+      }
     ],
     "contact": {
-      "telegram": "t.me/NPPhoto",
-      "instagram": "@np_photography",
-      "email": "photo@connect.np.edu.sg"
+      "email": "cca_astronomy@connect.np.edu.sg",
+      "instagram": "@npastronomy",
+      "telegram": "t.me/NPAstronomy"
     }
   },
   {
-    "id": "np_dance",
-    "name": "NP Dance Works (Hip-Hop)",
-    "category": "Arts & Culture",
-    "school": "All Schools",
-    "description": "High-energy street dance, choreography jams, stage showcases, and annual dance competitions.",
-    "location": "Convention Centre Dance Studio 2",
-    "commitment_level": "high",
-    "style": "team",
-    "tags": ["arts", "dance", "performance", "hiphop", "music"],
+    "id": "buddhist_society",
+    "name": "Buddhist Society",
+    "category": "Special Interest",
+    "school": "Special Interest",
+    "description": "Dhamma teachings, mindfulness meditation, stress management workshops open to all backgrounds.",
+    "location": "Block 52 Reflection Room",
+    "commitment_level": "low",
+    "style": "individual",
+    "training_frequency": "Once every 2 weeks",
+    "tags": [
+      "culture",
+      "buddhism",
+      "meditation",
+      "mindfulness",
+      "wellness"
+    ],
     "exco": [
-      { "name": "Daniel Kim", "role": "President", "email": "s10238811@connect.np.edu.sg" },
-      { "name": "Mei Ting", "role": "Choreographer", "email": "s10239900@connect.np.edu.sg" }
+      {
+        "name": "Jia Wei Lin",
+        "role": "President",
+        "email": "s10243388@connect.np.edu.sg"
+      }
     ],
     "contact": {
-      "telegram": "t.me/NPDanceWorks",
-      "instagram": "@np_danceworks",
-      "email": "dance@connect.np.edu.sg"
+      "email": "cca_buddhist@connect.np.edu.sg",
+      "instagram": "@np_buddhistsociety",
+      "telegram": "t.me/NPBuddhist"
     }
   },
   {
-    "id": "np_volunteers",
-    "name": "NP Community Volunteers",
-    "category": "Community Service",
-    "school": "All Schools",
-    "description": "Engage in meaningful community outreach, elderly befriending, food drives, and environmental sustainability initiatives.",
-    "location": "Student Life Office Block 22",
+    "id": "catholic_youth_apostolate",
+    "name": "Catholic Youth Apostolate",
+    "category": "Special Interest",
+    "school": "Special Interest",
+    "description": "Weekly fellowship sessions, spiritual retreats, and community outings open to all backgrounds.",
+    "location": "Block 52 Room 4",
     "commitment_level": "low",
     "style": "mixed",
-    "tags": ["community", "volunteering", "social", "outreach", "sustainability"],
+    "training_frequency": "1x/week",
+    "tags": [
+      "culture",
+      "fellowship",
+      "community",
+      "faith",
+      "youth"
+    ],
     "exco": [
-      { "name": "Hannah Tan", "role": "President", "email": "s10232211@connect.np.edu.sg" },
-      { "name": "Darren Ong", "role": "Outreach Lead", "email": "s10234455@connect.np.edu.sg" }
+      {
+        "name": "Dominic Cruz",
+        "role": "President",
+        "email": "s10244499@connect.np.edu.sg"
+      }
     ],
     "contact": {
-      "telegram": "t.me/NPVolunteers",
-      "instagram": "@np_volunteers",
-      "email": "volunteers@connect.np.edu.sg"
+      "email": "cca_catholic@connect.np.edu.sg",
+      "instagram": "@npcatholic",
+      "telegram": "t.me/NPCatholic"
     }
   },
   {
-    "id": "np_entrepreneurs",
-    "name": "NP Youth Entrepreneurs Society",
+    "id": "cru_campus_crusade",
+    "name": "Ngee Ann Polytechnic Cru (Campus Crusade)",
     "category": "Special Interest",
-    "school": "School of Business & Services",
-    "description": "Pitch startup ideas, network with industry mentors, learn financial modeling, and compete in venture capital competitions.",
-    "location": "Block 72 Innovation Hub",
+    "school": "Special Interest",
+    "description": "Christ-centred discipleship, small group Bible studies, youth mentorship, and campus fellowship.",
+    "location": "Block 52 Room 5",
     "commitment_level": "medium",
     "style": "mixed",
-    "tags": ["business", "startup", "innovation", "networking", "pitching"],
+    "training_frequency": "1-2x/week",
+    "tags": [
+      "culture",
+      "cru",
+      "fellowship",
+      "youth",
+      "community"
+    ],
     "exco": [
-      { "name": "Ryan Seow", "role": "President", "email": "s10235566@connect.np.edu.sg" },
-      { "name": "Amanda Tan", "role": "Head of Partnerships", "email": "s10238877@connect.np.edu.sg" }
+      {
+        "name": "Timothy Tan",
+        "role": "President",
+        "email": "s10245500@connect.np.edu.sg"
+      }
     ],
     "contact": {
-      "telegram": "t.me/NPEntrepreneurs",
-      "instagram": "@np_entrepreneurs",
-      "email": "entrepreneurs@connect.np.edu.sg"
+      "email": "cca_crusade@connect.np.edu.sg",
+      "instagram": "@npcru",
+      "telegram": "t.me/NPCru"
+    }
+  },
+  {
+    "id": "christian_fellowship_club",
+    "name": "Christian Fellowship Club",
+    "category": "Special Interest",
+    "school": "Special Interest",
+    "description": "Bible study, student bonding, acoustic worship sessions, and youth development workshops.",
+    "location": "Block 52 Room 6",
+    "commitment_level": "medium",
+    "style": "mixed",
+    "training_frequency": "1x/week + ad-hoc",
+    "tags": [
+      "culture",
+      "fellowship",
+      "christian",
+      "youth",
+      "community"
+    ],
+    "exco": [
+      {
+        "name": "Joshua Sim",
+        "role": "President",
+        "email": "s10246611@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_fellowship@connect.np.edu.sg",
+      "instagram": "@npcf",
+      "telegram": "t.me/NPCristianFellowship"
+    }
+  },
+  {
+    "id": "creators_collective",
+    "name": "Creators Collective",
+    "category": "Special Interest",
+    "school": "Special Interest",
+    "description": "Student content creators \u2014 short-form video reels, digital storytelling, collaborating with Corporate Comms.",
+    "location": "Block 52 Media Studio",
+    "commitment_level": "medium",
+    "style": "individual",
+    "training_frequency": "Recruitment at start of AY + monthly shoots",
+    "tags": [
+      "media",
+      "video",
+      "content",
+      "creators",
+      "reels"
+    ],
+    "exco": [
+      {
+        "name": "Chloe Heng",
+        "role": "President",
+        "email": "s10247722@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_creators@connect.np.edu.sg",
+      "instagram": "@npcreators",
+      "telegram": "t.me/NPCreators"
+    }
+  },
+  {
+    "id": "current_affairs_club",
+    "name": "Current Affairs Club",
+    "category": "Special Interest",
+    "school": "Special Interest",
+    "description": "Local and global geopolitical affairs discussion, parliamentary debate simulations, and dialogue sessions.",
+    "location": "Block 31 Seminar Room 2",
+    "commitment_level": "medium",
+    "style": "team",
+    "training_frequency": "1x/week + monthly events",
+    "tags": [
+      "debate",
+      "currentaffairs",
+      "politics",
+      "global",
+      "discussion"
+    ],
+    "exco": [
+      {
+        "name": "Aaron Heng",
+        "role": "President",
+        "email": "s10248833@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_cafairs@connect.np.edu.sg",
+      "instagram": "@npcurrentaffairs",
+      "telegram": "t.me/NPCurrentAffairs"
+    }
+  },
+  {
+    "id": "erudites_learning_ambassadors",
+    "name": "Erudites (Learning Ambassadors)",
+    "category": "Special Interest",
+    "school": "Special Interest",
+    "description": "Student library ambassadors \u2014 event hosting, curating book collections, social media campaign design.",
+    "location": "NP Lien Ying Chow Library",
+    "commitment_level": "low",
+    "style": "mixed",
+    "training_frequency": "Not specified",
+    "tags": [
+      "library",
+      "books",
+      "ambassadors",
+      "curation",
+      "media"
+    ],
+    "exco": [
+      {
+        "name": "Rachel Koh",
+        "role": "President",
+        "email": "ngeeannerudites@gmail.com"
+      }
+    ],
+    "contact": {
+      "email": "ngeeannerudites@gmail.com",
+      "instagram": "@np_library",
+      "telegram": "t.me/NPErudites"
+    }
+  },
+  {
+    "id": "makers_guild",
+    "name": "Makers Guild",
+    "category": "Special Interest",
+    "school": "Engineering / ICT",
+    "description": "3D printing, laser cutting, leathercrafting, embedded electronics at Makers' Academy & Sandbox.",
+    "location": "Block 58 Makers' Academy",
+    "commitment_level": "medium",
+    "style": "individual",
+    "training_frequency": "Workshop/journey-based",
+    "tags": [
+      "makers",
+      "3dprinting",
+      "lasercutting",
+      "hardware",
+      "engineering"
+    ],
+    "exco": [
+      {
+        "name": "Victor Chen",
+        "role": "President",
+        "email": "askma@np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "askma@np.edu.sg",
+      "instagram": "@npmakersguild",
+      "telegram": "t.me/NPMakersGuild"
+    }
+  },
+  {
+    "id": "muslim_students_society",
+    "name": "Muslim Students Society",
+    "category": "Special Interest",
+    "school": "Special Interest",
+    "description": "Islamic & moral values development, annual Quran camp, community night cycling, and charity drives.",
+    "location": "Block 52 Prayer Room",
+    "commitment_level": "medium",
+    "style": "mixed",
+    "training_frequency": "4-5x/semester + ad-hoc",
+    "tags": [
+      "culture",
+      "muslim",
+      "community",
+      "charity",
+      "youth"
+    ],
+    "exco": [
+      {
+        "name": "Faris Syahmi",
+        "role": "President",
+        "email": "s10249944@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_muslim@connect.np.edu.sg",
+      "instagram": "@ngeeannmss",
+      "telegram": "t.me/NPMuslimSociety"
+    }
+  },
+  {
+    "id": "navigators_club",
+    "name": "Navigators Club",
+    "category": "Special Interest",
+    "school": "Special Interest",
+    "description": "Student discipleship, character development, life mentorship, and weekly Bible study groups.",
+    "location": "Block 52 Room 7",
+    "commitment_level": "medium",
+    "style": "mixed",
+    "training_frequency": "1x/week",
+    "tags": [
+      "culture",
+      "navigators",
+      "fellowship",
+      "mentorship",
+      "youth"
+    ],
+    "exco": [
+      {
+        "name": "Andrew Tan",
+        "role": "President",
+        "email": "s10241155@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_navigators@connect.np.edu.sg",
+      "instagram": "@npnavigators",
+      "telegram": "t.me/NPNavigators"
+    }
+  },
+  {
+    "id": "peer_helpers_club",
+    "name": "Peer Helpers Club",
+    "category": "Special Interest",
+    "school": "Special Interest",
+    "description": "Peer listening & emotional support, mental health awareness, collaboration with health agencies.",
+    "location": "Block 22 Wellness Hub",
+    "commitment_level": "medium",
+    "style": "individual",
+    "training_frequency": "Not specified",
+    "tags": [
+      "wellness",
+      "mentalhealth",
+      "peerhelpers",
+      "support",
+      "community"
+    ],
+    "exco": [
+      {
+        "name": "Gwen Sim",
+        "role": "President",
+        "email": "np_peerhelpers@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "np_peerhelpers@connect.np.edu.sg",
+      "instagram": "@np_peerhelpers",
+      "telegram": "t.me/NPPeerHelpers"
+    }
+  },
+  {
+    "id": "tabletop_games_club",
+    "name": "Tabletop Games Club",
+    "category": "Special Interest",
+    "school": "Special Interest",
+    "description": "100+ board games library, Chess, Weiqi, D&D, TCG card games, competitive and casual gaming sessions.",
+    "location": "Block 52 Game Room",
+    "commitment_level": "low",
+    "style": "mixed",
+    "training_frequency": "1x/week + ad-hoc",
+    "tags": [
+      "games",
+      "tabletop",
+      "boardgames",
+      "chess",
+      "dnd"
+    ],
+    "exco": [
+      {
+        "name": "Jordan Wong",
+        "role": "President",
+        "email": "s10242266@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_tabletop@connect.np.edu.sg",
+      "instagram": "@np_ttgames",
+      "telegram": "t.me/NPTabletopGames"
+    }
+  },
+  {
+    "id": "toastmasters_club",
+    "name": "Toastmasters Club",
+    "category": "Special Interest",
+    "school": "Special Interest",
+    "description": "Public speaking mastery, Speechcraft training, impromptu speaking, emcee hosting opportunities.",
+    "location": "Block 31 Seminar Room 1",
+    "commitment_level": "medium",
+    "style": "individual",
+    "training_frequency": "Once every 2 weeks",
+    "tags": [
+      "speaking",
+      "toastmasters",
+      "emcee",
+      "communication",
+      "leadership"
+    ],
+    "exco": [
+      {
+        "name": "Clarissa Tay",
+        "role": "President",
+        "email": "s10243377@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_toastmasters@connect.np.edu.sg",
+      "instagram": "@nptoastmasters",
+      "telegram": "t.me/NPToastmasters"
+    }
+  },
+  {
+    "id": "christieara_council",
+    "name": "The Christieara Council (TCC)",
+    "category": "Special Interest",
+    "school": "Talent Development",
+    "description": "Student leadership arm of The Christieara Programme (TCP), high-achiever workshops & dialogues.",
+    "location": "Block 22 TCP Lounge",
+    "commitment_level": "high",
+    "style": "team",
+    "training_frequency": "Not specified",
+    "tags": [
+      "leadership",
+      "tcp",
+      "christieara",
+      "talent",
+      "dialogue"
+    ],
+    "exco": [
+      {
+        "name": "Markus Tan",
+        "role": "President",
+        "email": "cca_christieracouncil@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_christieracouncil@connect.np.edu.sg",
+      "instagram": "@np_tcc",
+      "telegram": "t.me/NPTCC"
+    }
+  },
+  {
+    "id": "sandbox_advocates_club",
+    "name": "The Sandbox Advocates Club",
+    "category": "Special Interest",
+    "school": "Entrepreneurship",
+    "description": "Entrepreneurship marketing arm of The Sandbox (Innovation & Entrepreneurship office), startup pitches.",
+    "location": "Block 72 The Sandbox",
+    "commitment_level": "medium",
+    "style": "team",
+    "training_frequency": "Not specified",
+    "tags": [
+      "business",
+      "startup",
+      "entrepreneurship",
+      "innovation",
+      "sandbox"
+    ],
+    "exco": [
+      {
+        "name": "Darren Lim",
+        "role": "President",
+        "email": "cca_sandbox@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "cca_sandbox@connect.np.edu.sg",
+      "instagram": "@tsbadvocates",
+      "telegram": "t.me/NPSandboxAdvocates"
+    }
+  },
+  {
+    "id": "seanernergy",
+    "name": "SEAnergy",
+    "category": "Special Interest",
+    "school": "Special Interest",
+    "description": "Southeast Asian cultural exchange, SEA Fest cultural carnivals, fireside chats with regional leaders.",
+    "location": "Block 52 Activity Lounge",
+    "commitment_level": "medium",
+    "style": "mixed",
+    "training_frequency": "Not specified",
+    "tags": [
+      "culture",
+      "southeastasia",
+      "exchange",
+      "diplomacy",
+      "community"
+    ],
+    "exco": [
+      {
+        "name": "Lim Wee How",
+        "role": "Advisor",
+        "email": "Lim_Wee.How@np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "Lim_Wee.How@np.edu.sg",
+      "instagram": "@npseanernergy",
+      "telegram": "t.me/NPSEAnergy"
+    }
+  },
+  {
+    "id": "np_ambassadors",
+    "name": "NP Ambassadors",
+    "category": "Special Interest",
+    "school": "Corporate Communications",
+    "description": "Official student leadership & outreach team representing NP at Open House, Poly Xperience, and Red Camp.",
+    "location": "Block 1 Corporate Communications",
+    "commitment_level": "high",
+    "style": "team",
+    "training_frequency": "Event-based & Open House bootcamps",
+    "tags": [
+      "leadership",
+      "ambassadors",
+      "outreach",
+      "openhouse",
+      "representation"
+    ],
+    "exco": [
+      {
+        "name": "Katelyn Tan",
+        "role": "Lead Ambassador",
+        "email": "npambassadors@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "npambassadors@connect.np.edu.sg",
+      "instagram": "@npambassadors",
+      "telegram": "t.me/NPAmbassadors"
+    }
+  },
+  {
+    "id": "np_student_council",
+    "name": "NP Student Council",
+    "category": "Special Interest",
+    "school": "Student Affairs",
+    "description": "Official student governing body organising campus-wide bonding programs, Freshman Thrive camps, and advocacy.",
+    "location": "Block 22 Student Council HQ",
+    "commitment_level": "high",
+    "style": "team",
+    "training_frequency": "Weekly council meetings + project camps",
+    "tags": [
+      "leadership",
+      "studentcouncil",
+      "governance",
+      "advocacy",
+      "events"
+    ],
+    "exco": [
+      {
+        "name": "Ryan Chen",
+        "role": "President",
+        "email": "studentcouncil@connect.np.edu.sg"
+      }
+    ],
+    "contact": {
+      "email": "studentcouncil@connect.np.edu.sg",
+      "instagram": "@npsc_official",
+      "telegram": "t.me/NPSC_Official"
     }
   }
 ]

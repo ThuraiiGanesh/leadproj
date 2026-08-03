@@ -700,7 +700,27 @@ async function openCcaDetail(ccaId) {
 
       <p style="color:#c4b5fd; font-size:0.925rem; margin-bottom:1.4rem; line-height:1.65;">${cca.description}</p>
 
-      <div style="background:var(--bg-surface-elevated); border:1px solid var(--border-subtle); padding:1.1rem; border-radius:var(--radius-md); margin-bottom:1.4rem;">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1.4rem;">
+        <div style="background:var(--bg-surface-elevated); border:1px solid var(--border-subtle); padding:1rem; border-radius:18px;">
+          <h4 style="font-size:0.85rem; color:#fff; margin-bottom:6px;">⏱️ Training Frequency</h4>
+          <p style="font-size:0.825rem; color:#c4b5fd;">${cca.training_frequency || 'Weekly sessions'}</p>
+        </div>
+        <div style="background:var(--bg-surface-elevated); border:1px solid var(--border-subtle); padding:1rem; border-radius:18px;">
+          <h4 style="font-size:0.85rem; color:#fff; margin-bottom:6px;">📍 Venue & Commitment</h4>
+          <p style="font-size:0.825rem; color:#c4b5fd;">${cca.location} • <span style="text-transform:capitalize;">${cca.commitment_level}</span></p>
+        </div>
+      </div>
+
+      <div style="background:var(--bg-surface-elevated); border:1px solid var(--border-subtle); padding:1.1rem; border-radius:18px; margin-bottom:1.4rem;">
+        <h4 style="font-size:0.875rem; color:#fff; margin-bottom:8px;">📬 Contact & Social Details</h4>
+        <div style="display:flex; flex-wrap:wrap; gap:14px; font-size:0.825rem; color:#c4b5fd; align-items:center;">
+          ${cca.contact && cca.contact.email ? `<span>✉️ <a href="mailto:${cca.contact.email}" style="color:#a78bfa; text-decoration:underline;">${cca.contact.email}</a></span>` : ''}
+          ${cca.contact && cca.contact.instagram ? `<span>📸 <strong style="color:#e9d5ff;">${cca.contact.instagram}</strong></span>` : ''}
+          ${cca.contact && cca.contact.telegram ? `<span>💬 <strong style="color:#818cf8;">${cca.contact.telegram}</strong></span>` : ''}
+        </div>
+      </div>
+
+      <div style="background:var(--bg-surface-elevated); border:1px solid var(--border-subtle); padding:1.1rem; border-radius:18px; margin-bottom:1.4rem;">
         <h4 style="font-size:0.875rem; color:#fff; margin-bottom:8px;">👥 EXCO Leadership Team</h4>
         <div style="display:flex; gap:14px; font-size:0.825rem; color:#c4b5fd;">
           ${cca.exco.map(e => `<span><strong>${e.role}:</strong> ${e.name}</span>`).join(' • ')}

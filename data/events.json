@@ -37,7 +37,7 @@
   },
   {
     "id": "evt_bad_1",
-    "cca_id": "np_badminton",
+    "cca_id": "badminton",
     "title": "Freshmen Trials & Selection Match",
     "datetime": "2026-08-14T18:00:00",
     "location": "Sports Complex Court 1",
@@ -48,7 +48,7 @@
   },
   {
     "id": "evt_photo_1",
-    "cca_id": "np_photography",
+    "cca_id": "photography_club",
     "title": "Sunset & Night Cityscape Photowalk",
     "datetime": "2026-08-15T17:30:00",
     "location": "Marina Bay Sands Waterfront Promenade",
