@@ -9,6 +9,7 @@ let bookmarkedCcaIds = new Set(JSON.parse(localStorage.getItem('np_bookmarked_cc
 let enrolledCcaIds = new Set(JSON.parse(localStorage.getItem('np_enrolled_ccas') || '[]'));
 let signedUpEventIds = new Set(JSON.parse(localStorage.getItem('np_signed_up_events') || '[]'));
 let signedUpEventsDetails = JSON.parse(localStorage.getItem('np_signed_up_events_details') || '[]');
+let eventReminders = new Set(JSON.parse(localStorage.getItem('np_event_reminders') || '[]'));
 let selectedAdminCcaId = null;
 
 // 15 SPEC Interest Categories
@@ -312,6 +313,7 @@ async function renderAdminDashboard() {
     if (eventsList.length > 0) {
       fetchAdminRoster(eventsList[0].id);
     }
+    renderExcoAnalyticsChart();
   } catch (err) {
     console.error("Admin Dashboard Error:", err);
   }
@@ -556,6 +558,7 @@ async function fetchCcas(isSurveyDone = false, tags = [], commitment = '', style
     if (data.success) {
       allCcas = data.ccas;
       renderCcaFeed();
+      renderTop3MatchesCard();
     }
   } catch (err) {
     console.error("Error fetching CCAs:", err);
@@ -639,16 +642,19 @@ function renderUpcomingEventsFeed() {
           </div>
         </div>
 
-        <div>
+        <div style="display:flex; gap:8px;">
           ${isSignedUp ? `
-            <button class="btn btn-outline" style="width:100%; border-color:var(--moss); color:var(--moss);" disabled>
-              ✓ Registered & Confirmed
+            <button class="btn btn-outline" style="flex:1; border-color:var(--moss); color:var(--moss);" disabled>
+              ✓ Registered
             </button>
           ` : `
-            <button class="btn btn-primary" style="width:100%; font-size:0.875rem;" onclick="quickSignupEvent('${evt.id}', '${evt.cca_id}')" ${isFull ? 'disabled' : ''}>
-              ${isFull ? 'Event Full' : 'Sign Up For Event'}
+            <button class="btn btn-primary" style="flex:1; font-size:0.875rem;" onclick="quickSignupEvent('${evt.id}', '${evt.cca_id}')" ${isFull ? 'disabled' : ''}>
+              ${isFull ? 'Full' : 'Sign Up'}
             </button>
           `}
+          <button class="btn btn-outline btn-sm" style="${eventReminders.has(evt.id) ? 'border-color:var(--ink-navy); color:var(--ink-navy); background:rgba(155, 138, 196, 0.12); font-weight:700;' : ''}" onclick="toggleEventReminder('${evt.id}')">
+            ${eventReminders.has(evt.id) ? '🔔 Reminded' : '🔔 Remind Me'}
+          </button>
         </div>
       </div>
     `;
@@ -818,10 +824,10 @@ function toggleEnrolment(ccaId) {
 
   if (enrolledCcaIds.has(ccaId)) {
     enrolledCcaIds.delete(ccaId);
-    showToast(`Left ${ccaName} membership.`, "info");
+    showToast(`Withdrew application for ${ccaName}.`, "info");
   } else {
     enrolledCcaIds.add(ccaId);
-    showToast(`Officially joined ${ccaName} as a registered member!`, "success");
+    showToast(`Application submitted for ${ccaName}!`, "success");
   }
   localStorage.setItem('np_enrolled_ccas', JSON.stringify(Array.from(enrolledCcaIds)));
   renderCcaFeed();
@@ -861,18 +867,18 @@ function renderMyCcasFeed() {
   const container = document.getElementById('myCcasFeed');
   if (!container) return;
 
-  const joinedCcas = allCcas.filter(cca => enrolledCcaIds.has(cca.id));
+  const appliedCcas = allCcas.filter(cca => enrolledCcaIds.has(cca.id));
   const bookmarkedCcas = allCcas.filter(cca => bookmarkedCcaIds.has(cca.id));
   const registeredEvents = signedUpEventsDetails || [];
 
-  const totalItems = joinedCcas.length + bookmarkedCcas.length + registeredEvents.length;
+  const totalItems = appliedCcas.length + bookmarkedCcas.length + registeredEvents.length;
 
   if (totalItems === 0) {
     container.innerHTML = `
       <div style="text-align:center; padding:3rem 1.5rem; background:var(--paper); border:1px dashed var(--border-subtle); border-radius:14px;">
-        <h3 style="color:var(--ink-navy); font-family:var(--font-heading); font-size:1.3rem; font-weight:700;">You currently have no saved or joined CCAs</h3>
+        <h3 style="color:var(--ink-navy); font-family:var(--font-heading); font-size:1.3rem; font-weight:700;">You currently have no saved or applied CCAs</h3>
         <p style="color:var(--text-muted); font-size:0.875rem; max-width:440px; margin:0.6rem auto 1.5rem auto;">
-          You haven't joined, bookmarked, or registered for any CCAs or events yet. Explore the directory to build your schedule!
+          You haven't applied for, bookmarked, or registered for any CCAs or events yet. Explore the directory to build your schedule!
         </p>
         <button class="btn btn-primary" onclick="showAllCcasSection()">Explore CCAs</button>
       </div>
@@ -882,17 +888,17 @@ function renderMyCcasFeed() {
 
   let html = '';
 
-  // SECTION 1: JOINED CCAS / OFFICIAL MEMBERSHIPS
-  if (joinedCcas.length > 0) {
+  // SECTION 1: APPLIED CCAS / MEMBERSHIP APPLICATIONS
+  if (appliedCcas.length > 0) {
     html += `
       <div style="margin-bottom:1.2rem;">
         <h3 style="font-family:var(--font-heading); font-size:1.2rem; color:var(--moss); display:flex; align-items:center; gap:8px;">
-          🎓 Official Joined Memberships (${joinedCcas.length})
+          📝 Applied CCAs (${appliedCcas.length})
         </h3>
-        <p style="font-size:0.825rem; color:var(--text-muted);">CCAs you are registered as an active official student member.</p>
+        <p style="font-size:0.825rem; color:var(--text-muted);">CCAs you have submitted an official membership application for.</p>
       </div>
       <div class="cca-grid" style="margin-bottom:2.2rem;">
-        ${joinedCcas.map(cca => `
+        ${appliedCcas.map(cca => `
           <div class="cca-card" style="border-left:4px solid var(--moss);">
             <div>
               <div class="cca-header">
@@ -900,14 +906,14 @@ function renderMyCcasFeed() {
                   <span class="cca-category">${cca.category}</span>
                   <h3 class="cca-name">${cca.name}</h3>
                 </div>
-                <span style="font-size:0.75rem; background:rgba(138,154,91,0.15); color:var(--moss); border:1px solid rgba(138,154,91,0.3); padding:4px 8px; border-radius:6px; font-weight:700;">OFFICIAL MEMBER</span>
+                <span style="font-size:0.75rem; background:rgba(138,154,91,0.15); color:var(--moss); border:1px solid rgba(138,154,91,0.3); padding:4px 8px; border-radius:6px; font-weight:700;">APPLICATION SUBMITTED</span>
               </div>
               <p class="cca-desc">${cca.description}</p>
             </div>
             <div class="cca-footer">
               <span class="meta-info">📍 ${cca.location}</span>
               <div style="display:flex; gap:8px;">
-                <button class="btn btn-outline btn-sm" style="color:var(--stamp-red); border-color:var(--stamp-red);" onclick="toggleEnrolment('${cca.id}')">Leave CCA</button>
+                <button class="btn btn-outline btn-sm" style="color:var(--stamp-red); border-color:var(--stamp-red);" onclick="toggleEnrolment('${cca.id}')">Withdraw Application</button>
                 <button class="btn btn-outline btn-sm" onclick="openCcaDetail('${cca.id}')">Details ↗</button>
               </div>
             </div>
@@ -924,7 +930,7 @@ function renderMyCcasFeed() {
         <h3 style="font-family:var(--font-heading); font-size:1.2rem; color:var(--ink-navy); display:flex; align-items:center; gap:8px;">
           📌 Bookmarked & Saved CCAs (${bookmarkedCcas.length})
         </h3>
-        <p style="font-size:0.825rem; color:var(--text-muted);">Activities you are exploring or considering joining.</p>
+        <p style="font-size:0.825rem; color:var(--text-muted);">Activities you are exploring or considering applying for.</p>
       </div>
       <div class="cca-grid" style="margin-bottom:2.2rem;">
         ${bookmarkedCcas.map(cca => `
@@ -941,7 +947,7 @@ function renderMyCcasFeed() {
             <div class="cca-footer">
               <span class="meta-info">📍 ${cca.location}</span>
               <div style="display:flex; gap:8px; align-items:center;">
-                <button class="btn btn-primary btn-sm" onclick="toggleEnrolment('${cca.id}')">Join CCA</button>
+                <button class="btn btn-primary btn-sm" onclick="toggleEnrolment('${cca.id}')">Apply for CCA</button>
                 <button class="btn btn-outline btn-sm" style="color:var(--stamp-red);" onclick="toggleBookmark('${cca.id}')">Remove</button>
                 <button class="btn btn-outline btn-sm" onclick="openCcaDetail('${cca.id}')">Details ↗</button>
               </div>
@@ -1092,7 +1098,7 @@ async function openCcaDetail(ccaId) {
       <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--border-subtle); padding-top:1.1rem; flex-wrap:wrap; gap:1rem;">
         <div style="display:flex; gap:10px;">
           <button class="btn btn-primary btn-sm" onclick="toggleEnrolment('${cca.id}')">
-            ${isEnrolled ? '✓ Official Member' : 'Join CCA'}
+            ${isEnrolled ? '✓ Application Submitted' : 'Apply for CCA'}
           </button>
           <button class="btn btn-outline btn-sm" onclick="toggleBookmark('${cca.id}')">
             ${isBookmarked ? '★ Bookmarked' : '☆ Bookmark'}
@@ -1155,174 +1161,7 @@ async function signUpForEvent(eventId, ccaName = '') {
   }
 }
 
-// ----------------------------------------------------
-// TELEGRAM BOT PREVIEW SIMULATOR
-// ----------------------------------------------------
-let tgQuizStep = 0;
-let tgQuizAnswers = { tags: [], commitment: 'medium', style: 'team' };
 
-function toggleTelegramDrawer() {
-  document.getElementById('telegramDrawer').classList.toggle('active');
-  renderIcons();
-}
-
-function appendTgMessage(sender, text, actionsHtml = '') {
-  const body = document.getElementById('tgBody');
-  if (!body) return;
-
-  const msg = document.createElement('div');
-  msg.className = `tg-message ${sender}`;
-  msg.innerHTML = text.replace(/\n/g, '<br>') + (actionsHtml ? `<div class="tg-actions">${actionsHtml}</div>` : '');
-  body.appendChild(msg);
-  body.scrollTop = body.scrollHeight;
-  renderIcons();
-}
-
-function sendTgCommand(cmd) {
-  appendTgMessage('user', cmd);
-
-  if (cmd === '/start') {
-    tgQuizStep = 0;
-    setTimeout(() => {
-      appendTgMessage('bot', 
-        `🎯 **Welcome to NP CCA Match Bot!**\n\nI can help you discover perfect CCAs, find open campus events, and manage your schedule.\n\nChoose an option:`,
-        `<button class="tg-action-btn" onclick="sendTgCommand('start_quiz')">🎯 Take Match Quiz</button>
-         <button class="tg-action-btn" onclick="sendTgCommand('/browse')">📋 Browse All CCAs</button>
-         <button class="tg-action-btn" onclick="sendTgCommand('/events')">🙌 Open Events</button>
-         <button class="tg-action-btn" onclick="sendTgCommand('/myccas')">⭐ My CCAs</button>
-         <button class="tg-action-btn" onclick="sendTgCommand('/surprise')">🎲 Surprise Me</button>`
-      );
-    }, 400);
-  } else if (cmd === 'start_quiz') {
-    tgQuizStep = 1;
-    setTimeout(() => {
-      appendTgMessage('bot',
-        `<strong>Question 1/3: What activities interest you most?</strong>`,
-        `<button class="tg-action-btn" onclick="submitTgQuizAnswer('sports')">🏀 Team Sports</button>
-         <button class="tg-action-btn" onclick="submitTgQuizAnswer('arts')">🎭 Arts & Media</button>
-         <button class="tg-action-btn" onclick="submitTgQuizAnswer('volunteering')">🤝 Volunteering</button>
-         <button class="tg-action-btn" onclick="submitTgQuizAnswer('leadership')">👑 Leadership</button>`
-      );
-    }, 400);
-  } else if (cmd === '/browse') {
-    setTimeout(() => {
-      appendTgMessage('bot',
-        `<strong>📋 Browse NP CCAs (81 Total):</strong>\nSelect a category to view clubs:`,
-        `<button class="tg-action-btn" onclick="sendTgCommand('cat_Arts')">🎭 Arts & Culture</button>
-         <button class="tg-action-btn" onclick="sendTgCommand('cat_Sports')">⚽ Sports</button>
-         <button class="tg-action-btn" onclick="sendTgCommand('cat_Community')">❤️ Community Service</button>
-         <button class="tg-action-btn" onclick="sendTgCommand('cat_Special Interest')">💡 Special Interest</button>`
-      );
-    }, 400);
-  } else if (cmd.startsWith('cat_')) {
-    const cat = cmd.replace('cat_', '');
-    const filtered = allCcas.filter(c => c.category.toLowerCase().includes(cat.toLowerCase())).slice(0, 5);
-    setTimeout(() => {
-      appendTgMessage('bot',
-        `<strong>Found ${filtered.length} CCAs in ${cat}:</strong>\n` + 
-        filtered.map((c, i) => `${i+1}. **${c.name}** — ${c.description.slice(0, 50)}...`).join('\n\n'),
-        filtered.map(c => `<button class="tg-action-btn" onclick="toggleBookmark('${c.id}'); appendTgMessage('bot', '🔖 Bookmarked ${c.name}!')">🔖 Bookmark ${c.name.split(' ')[0]}</button>`).join('')
-      );
-    }, 400);
-  } else if (cmd === '/events') {
-    setTimeout(() => {
-      const openEvents = allUpcomingEvents.filter(e => OPEN_EVENTS_CCA_IDS.includes(e.cca_id) || true).slice(0, 4);
-      appendTgMessage('bot',
-        `<strong>🙌 Open Campus Events (No Membership Required):</strong>\nThese events are open to all NP students!\n\n` +
-        openEvents.map(e => `📌 **${e.title}**\n🗓️ ${new Date(e.datetime).toLocaleDateString()} at ${new Date(e.datetime).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}\n📍 ${e.location}`).join('\n\n'),
-        openEvents.map(e => `<button class="tg-action-btn" onclick="quickSignupEvent('${e.id}', '${e.cca_id}')">✅ Join ${e.title.slice(0, 15)}...</button>`).join('') +
-        `<button class="tg-action-btn" onclick="appendTgMessage('bot', '🔔 Event reminder scheduled for 2 hours before start date!')">🔔 Remind Me</button>`
-      );
-    }, 400);
-  } else if (cmd === '/myccas') {
-    const joined = allCcas.filter(c => enrolledCcaIds.has(c.id));
-    const bookmarked = allCcas.filter(c => bookmarkedCcaIds.has(c.id));
-    setTimeout(() => {
-      appendTgMessage('bot',
-        `<strong>⭐ Your Schedule Summary:</strong>\n\n` +
-        `<strong>Joined CCAs (${joined.length}):</strong>\n` + (joined.length ? joined.map(c => `• ${c.name}`).join('\n') : 'None yet') + '\n\n' +
-        `<strong>Bookmarked CCAs (${bookmarked.length}):</strong>\n` + (bookmarked.length ? bookmarked.map(c => `• ${c.name}`).join('\n') : 'None yet') + '\n\n' +
-        `<strong>Registered Events (${signedUpEventIds.size}):</strong>\n` + (signedUpEventsDetails.length ? signedUpEventsDetails.map(e => `• ${e.title}`).join('\n') : 'None yet')
-      );
-    }, 400);
-  } else if (cmd === '/surprise') {
-    const rand = allCcas[Math.floor(Math.random() * allCcas.length)];
-    setTimeout(() => {
-      appendTgMessage('bot',
-        `🎲 **Random CCA Pick:**\n\n` +
-        `**${rand.name}** (${rand.category})\n` +
-        `"${rand.description}"\n\n` +
-        `📍 Location: ${rand.location}\n` +
-        `⏱️ Frequency: ${rand.training_frequency || 'Weekly'}`,
-        `<button class="tg-action-btn" onclick="toggleBookmark('${rand.id}'); appendTgMessage('bot', '🔖 Bookmarked ${rand.name}!')">🔖 Bookmark This CCA</button>`
-      );
-    }, 400);
-  } else if (cmd.startsWith('/search')) {
-    const q = cmd.replace('/search', '').trim().toLowerCase();
-    const matches = allCcas.filter(c => c.name.toLowerCase().includes(q) || c.tags.some(t => t.toLowerCase().includes(q))).slice(0, 4);
-    setTimeout(() => {
-      if (matches.length === 0) {
-        appendTgMessage('bot', `🔍 No CCAs found matching "${q}". Try another keyword!`);
-      } else {
-        appendTgMessage('bot',
-          `🔍 **Search Results for "${q}":**\n\n` +
-          matches.map(c => `• **${c.name}** (${c.category})\n  ${c.description.slice(0, 60)}...`).join('\n\n')
-        );
-      }
-    }, 400);
-  }
-}
-
-function submitTgQuizAnswer(ans) {
-  if (tgQuizStep === 1) {
-    tgQuizAnswers.tags = [ans];
-    tgQuizStep = 2;
-    appendTgMessage('user', `Selected: ${ans}`);
-    setTimeout(() => {
-      appendTgMessage('bot',
-        `<strong>Question 2/3: Time Availability per week?</strong>`,
-        `<button class="tg-action-btn" onclick="submitTgQuizAnswer('low')">🌱 Low (1-2 hrs/wk)</button>
-         <button class="tg-action-btn" onclick="submitTgQuizAnswer('medium')">⚡ Medium (3-5 hrs/wk)</button>
-         <button class="tg-action-btn" onclick="submitTgQuizAnswer('high')">🔥 High (6+ hrs/wk)</button>`
-      );
-    }, 400);
-  } else if (tgQuizStep === 2) {
-    tgQuizAnswers.commitment = ans;
-    tgQuizStep = 3;
-    appendTgMessage('user', `Selected: ${ans}`);
-    setTimeout(() => {
-      appendTgMessage('bot',
-        `<strong>Question 3/3: Preferred activity style?</strong>`,
-        `<button class="tg-action-btn" onclick="submitTgQuizAnswer('team')">👥 Team & Group</button>
-         <button class="tg-action-btn" onclick="submitTgQuizAnswer('solo')">🎯 Solo Practice</button>
-         <button class="tg-action-btn" onclick="submitTgQuizAnswer('mixed')">🔀 Mixed</button>`
-      );
-    }, 400);
-  } else if (tgQuizStep === 3) {
-    tgQuizAnswers.style = ans;
-    tgQuizStep = 0;
-    appendTgMessage('user', `Selected: ${ans}`);
-
-    // Compute top matches
-    const topMatches = allCcas.slice(0, 3);
-    setTimeout(() => {
-      appendTgMessage('bot',
-        `🎉 **Quiz Complete! Your Top 3 CCA Matches:**\n\n` +
-        topMatches.map((c, i) => `${i+1}. ⭐ **${c.name}**\n   "${c.description.slice(0, 50)}..."\n   📍 ${c.location}`).join('\n\n'),
-        `<button class="tg-action-btn" onclick="sendTgCommand('/browse')">View All CCAs ▶️</button>`
-      );
-    }, 400);
-  }
-}
-
-function submitTgInput() {
-  const input = document.getElementById('tgInput');
-  if (!input) return;
-  const val = input.value.trim();
-  if (!val) return;
-  input.value = '';
-  sendTgCommand(val);
-}
 
 // ----------------------------------------------------
 // HELPER UTILITIES

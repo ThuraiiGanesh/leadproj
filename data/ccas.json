@@ -27,7 +27,8 @@
       "email": "cca_bboys@connect.np.edu.sg",
       "instagram": "@npmightynomads",
       "telegram": "t.me/NPBboys"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "chinese_calligraphy",
@@ -57,7 +58,8 @@
       "email": "cca_calligraphy@connect.np.edu.sg",
       "instagram": "@np.calligraphy",
       "telegram": "t.me/NPCalligraphy"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "chinese_dance_npcd",
@@ -87,7 +89,8 @@
       "email": "cca_cdance@connect.np.edu.sg",
       "instagram": "@npchinesedance",
       "telegram": "t.me/NPChineseDance"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "chinese_drama",
@@ -117,7 +120,8 @@
       "email": "cca_cdrama@connect.np.edu.sg",
       "instagram": "@npcdrama",
       "telegram": "t.me/NPChineseDrama"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "chinese_orchestra",
@@ -147,7 +151,8 @@
       "email": "cca_corchestra@connect.np.edu.sg",
       "instagram": "@npco",
       "telegram": "t.me/NPChineseOrchestra"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "concert_band",
@@ -177,7 +182,8 @@
       "email": "cca_concert@connect.np.edu.sg",
       "instagram": "@npconcertband",
       "telegram": "t.me/NPConcertBand"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "contemporary_dance_d3",
@@ -207,7 +213,8 @@
       "email": "cca_contemdance@connect.np.edu.sg",
       "instagram": "@d3contemporarydance",
       "telegram": "t.me/NPD3Dance"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "dancesport",
@@ -237,7 +244,8 @@
       "email": "cca_dancesport@connect.np.edu.sg",
       "instagram": "@npdancesport",
       "telegram": "t.me/NPDanceSport"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "dragon_lion_dance",
@@ -267,7 +275,8 @@
       "email": "cca_lion@connect.np.edu.sg",
       "instagram": "@npliondance",
       "telegram": "t.me/NPLionDance"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "english_drama_poly_stage_factor",
@@ -297,7 +306,8 @@
       "email": "cca_edrama@connect.np.edu.sg",
       "instagram": "@polystagefactor",
       "telegram": "t.me/NPPolyStageFactor"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "hip_hop_nra",
@@ -327,7 +337,8 @@
       "email": "cca_hiphop@connect.np.edu.sg",
       "instagram": "@thenraofficial",
       "telegram": "t.me/NPNRAHipHop"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "indian_cultural_society",
@@ -357,7 +368,8 @@
       "email": "cca_indian@connect.np.edu.sg",
       "instagram": "@npindiancultural",
       "telegram": "t.me/NPIndianCultural"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "japanese_cultural",
@@ -387,7 +399,8 @@
       "email": "cca_japanese@connect.np.edu.sg",
       "instagram": "@npjapaneseclub",
       "telegram": "t.me/NPJapaneseClub"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "korean_cultural",
@@ -417,7 +430,8 @@
       "email": "cca_korean@connect.np.edu.sg",
       "instagram": "@npkoreancultural",
       "telegram": "t.me/NPKoreanClub"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "malay_cultural",
@@ -447,7 +461,8 @@
       "email": "cca_malay@connect.np.edu.sg",
       "instagram": "@npmalaycultural",
       "telegram": "t.me/NPMalayCultural"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "percussion_baracuda_batucada",
@@ -477,7 +492,8 @@
       "email": "cca_percussion@connect.np.edu.sg",
       "instagram": "@baracudabatucada",
       "telegram": "t.me/BaracudaBatucada"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "photography",
@@ -507,7 +523,8 @@
       "email": "cca_photography@connect.np.edu.sg",
       "instagram": "@npphotography",
       "telegram": "t.me/NPPhotography"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "piano_klavierensemble",
@@ -537,7 +554,8 @@
       "email": "cca_piano@connect.np.edu.sg",
       "instagram": "@npklavierensemble",
       "telegram": "t.me/NPKlavierensemble"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "song_composing_amplify",
@@ -567,7 +585,8 @@
       "email": "cca_song@connect.np.edu.sg",
       "instagram": "@npamplify",
       "telegram": "t.me/NPAmplify"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "stage_production",
@@ -597,7 +616,8 @@
       "email": "cca_stage@connect.np.edu.sg",
       "instagram": "@polystageproduction",
       "telegram": "t.me/NPStageProduction"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "strings",
@@ -627,7 +647,8 @@
       "email": "cca_strings@connect.np.edu.sg",
       "instagram": "@npstrings",
       "telegram": "t.me/NPStrings"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "voices",
@@ -657,7 +678,8 @@
       "email": "cca_voices@connect.np.edu.sg",
       "instagram": "@npvoices",
       "telegram": "t.me/NPVoices"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "archery",
@@ -687,7 +709,8 @@
       "email": "cca_archery@connect.np.edu.sg",
       "instagram": "@nparchery",
       "telegram": "t.me/NPArchery"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "badminton",
@@ -717,7 +740,8 @@
       "email": "cca_badminton@connect.np.edu.sg",
       "instagram": "@npbadmintonclub",
       "telegram": "t.me/NPBadminton"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "basketball",
@@ -747,7 +771,8 @@
       "email": "cca_basketball@connect.np.edu.sg",
       "instagram": "@npbasketball",
       "telegram": "t.me/NPBasketball"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "bowling",
@@ -777,7 +802,8 @@
       "email": "cca_bowling@connect.np.edu.sg",
       "instagram": "@ngeeannbowling",
       "telegram": "t.me/NPBowling"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "canoeing",
@@ -807,7 +833,8 @@
       "email": "cca_canoeing@connect.np.edu.sg",
       "instagram": "@npcanoeing",
       "telegram": "t.me/NPCanoeing"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "climbing_club",
@@ -837,7 +864,8 @@
       "email": "cca_climbing@connect.np.edu.sg",
       "instagram": "@npclimbing",
       "telegram": "t.me/NPClimbing"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "dragon_boat",
@@ -867,7 +895,8 @@
       "email": "cca_dragonboat@connect.np.edu.sg",
       "instagram": "@npdragonboat",
       "telegram": "t.me/NPDragonBoat"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "fencing",
@@ -897,7 +926,8 @@
       "email": "cca_fencing@connect.np.edu.sg",
       "instagram": "@npfencing",
       "telegram": "t.me/NPFencing"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "floorball",
@@ -927,7 +957,8 @@
       "email": "cca_floorball@connect.np.edu.sg",
       "instagram": "@npfloorball",
       "telegram": "t.me/NPFloorball"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "football",
@@ -957,7 +988,8 @@
       "email": "cca_football@connect.np.edu.sg",
       "instagram": "@npfootball_",
       "telegram": "t.me/NPFootball"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "handball",
@@ -987,7 +1019,8 @@
       "email": "cca_handball@connect.np.edu.sg",
       "instagram": "@nphandball",
       "telegram": "t.me/NPHandball"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "hockey",
@@ -1017,7 +1050,8 @@
       "email": "cca_hockey@connect.np.edu.sg",
       "instagram": "@nphockey",
       "telegram": "t.me/NPHockey"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "inline_skating",
@@ -1047,7 +1081,8 @@
       "email": "cca_inline@connect.np.edu.sg",
       "instagram": "@npinlineskating",
       "telegram": "t.me/NPInline"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "judo",
@@ -1077,7 +1112,8 @@
       "email": "cca_judo@connect.np.edu.sg",
       "instagram": "@npjudo",
       "telegram": "t.me/NPJudo"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "lifesaving",
@@ -1107,7 +1143,8 @@
       "email": "cca_lifesaving@connect.np.edu.sg",
       "instagram": "@ngeeannlifesaving",
       "telegram": "t.me/NPLifesaving"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "netball",
@@ -1137,14 +1174,15 @@
       "email": "cca_netball@connect.np.edu.sg",
       "instagram": "@npnetball",
       "telegram": "t.me/NPNetball"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "pickleball",
     "name": "Pickleball",
     "category": "Sports",
     "school": "Sports & Wellness",
-    "description": "Newest CCA (2026) \u2014 tennis/badminton/table-tennis hybrid.",
+    "description": "Newest CCA (2026) — tennis/badminton/table-tennis hybrid.",
     "location": "Sports Complex Court 5",
     "commitment_level": "medium",
     "style": "mixed",
@@ -1167,7 +1205,8 @@
       "email": "cca_pickleball@connect.np.edu.sg",
       "instagram": "@nppickleball",
       "telegram": "t.me/NPPickleball"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "rugby_rhinos",
@@ -1197,7 +1236,8 @@
       "email": "cca_rugby@connect.np.edu.sg",
       "instagram": "@nprugby",
       "telegram": "t.me/NPRugby"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "silat",
@@ -1227,7 +1267,8 @@
       "email": "cca_silat@connect.np.edu.sg",
       "instagram": "@npsilat",
       "telegram": "t.me/NPSilat"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "shooting",
@@ -1257,7 +1298,8 @@
       "email": "cca_shooting@connect.np.edu.sg",
       "instagram": "@npshooting",
       "telegram": "t.me/NPShooting"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "softball",
@@ -1287,7 +1329,8 @@
       "email": "cca_softball@connect.np.edu.sg",
       "instagram": "@npsoftball",
       "telegram": "t.me/NPSoftball"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "squash",
@@ -1317,7 +1360,8 @@
       "email": "cca_squash@connect.np.edu.sg",
       "instagram": "@np_squash",
       "telegram": "t.me/NPSquash"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "swimming",
@@ -1347,7 +1391,8 @@
       "email": "cca_swimming@connect.np.edu.sg",
       "instagram": "@npswimming",
       "telegram": "t.me/NPSwimming"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "table_tennis",
@@ -1377,7 +1422,8 @@
       "email": "cca_tabletennis@connect.np.edu.sg",
       "instagram": "@np_tabletennis",
       "telegram": "t.me/NPTableTennis"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "taekwondo",
@@ -1407,7 +1453,8 @@
       "email": "cca_tkd@connect.np.edu.sg",
       "instagram": "@nptkdfighters",
       "telegram": "t.me/NPTaekwondo"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "tchoukball",
@@ -1437,7 +1484,8 @@
       "email": "cca_tchouk@connect.np.edu.sg",
       "instagram": "@nptchoukball",
       "telegram": "t.me/NPTchoukball"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "tennis",
@@ -1467,7 +1515,8 @@
       "email": "cca_tennis@connect.np.edu.sg",
       "instagram": "@nptennis",
       "telegram": "t.me/NPTennis"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "touch_rugby",
@@ -1497,7 +1546,8 @@
       "email": "cca_touchrugby@connect.np.edu.sg",
       "instagram": "@nptouchrugby",
       "telegram": "t.me/NPTouchRugby"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "track_and_field",
@@ -1527,7 +1577,8 @@
       "email": "cca_trackfield@connect.np.edu.sg",
       "instagram": "@nptrackfield",
       "telegram": "t.me/NPTrackField"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "ultimate_frisbee",
@@ -1557,7 +1608,8 @@
       "email": "cca_frisbee@connect.np.edu.sg",
       "instagram": "@ngeeann_ultimate",
       "telegram": "t.me/NPUltimate"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "volleyball",
@@ -1587,7 +1639,8 @@
       "email": "cca_volleyball@connect.np.edu.sg",
       "instagram": "@ngeeannvolleyball",
       "telegram": "t.me/NPVolleyball"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "water_polo",
@@ -1617,7 +1670,8 @@
       "email": "cca_waterpolo@connect.np.edu.sg",
       "instagram": "@npwaterpolo",
       "telegram": "t.me/NPWaterPolo"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "wushu",
@@ -1647,7 +1701,8 @@
       "email": "cca_wushu@connect.np.edu.sg",
       "instagram": "@np_wushu",
       "telegram": "t.me/NPWushu"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "np_mentors",
@@ -1677,14 +1732,15 @@
       "email": "cca_npmentors@connect.np.edu.sg",
       "instagram": "@npmentors",
       "telegram": "t.me/NPMentors"
-    }
+    },
+    "open_participation": true
   },
   {
     "id": "environmental_rangers_club",
     "name": "Environmental Rangers Club",
     "category": "Community Service",
     "school": "Community Service",
-    "description": "Sustainability initiatives \u2014 Cleanshores, Adopt-A-Block.",
+    "description": "Sustainability initiatives — Cleanshores, Adopt-A-Block.",
     "location": "Block 22 Eco Corner",
     "commitment_level": "medium",
     "style": "team",
@@ -1707,7 +1763,8 @@
       "email": "cca_erangers@connect.np.edu.sg",
       "instagram": "@nperc_",
       "telegram": "t.me/NPEnviroRangers"
-    }
+    },
+    "open_participation": true
   },
   {
     "id": "foodaid_club",
@@ -1737,7 +1794,8 @@
       "email": "cca_foodaid@connect.np.edu.sg",
       "instagram": "@npfoodaid",
       "telegram": "t.me/NPFoodAID"
-    }
+    },
+    "open_participation": true
   },
   {
     "id": "leo_club",
@@ -1767,7 +1825,8 @@
       "email": "cca_leo@connect.np.edu.sg",
       "instagram": "@npleoclub",
       "telegram": "t.me/NPLeoClub"
-    }
+    },
+    "open_participation": true
   },
   {
     "id": "np_bb_primers",
@@ -1797,7 +1856,8 @@
       "email": "cca_primers@connect.np.edu.sg",
       "instagram": "@npprimers",
       "telegram": "t.me/NPBBPrimers"
-    }
+    },
+    "open_participation": true
   },
   {
     "id": "red_cross_youth_chapter",
@@ -1827,7 +1887,8 @@
       "email": "cca_redcross@connect.np.edu.sg",
       "instagram": "@ngeeannredcrossyouth",
       "telegram": "t.me/NPRedCross"
-    }
+    },
+    "open_participation": true
   },
   {
     "id": "rotaract_club",
@@ -1857,7 +1918,8 @@
       "email": "cca_rotaract@connect.np.edu.sg",
       "instagram": "@nprotaract",
       "telegram": "t.me/NPRotaract"
-    }
+    },
+    "open_participation": true
   },
   {
     "id": "astronomy_club",
@@ -1887,7 +1949,8 @@
       "email": "cca_astronomy@connect.np.edu.sg",
       "instagram": "@npastronomy",
       "telegram": "t.me/NPAstronomy"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "buddhist_society",
@@ -1917,7 +1980,8 @@
       "email": "cca_buddhist@connect.np.edu.sg",
       "instagram": "@np_buddhistsociety",
       "telegram": "t.me/NPBuddhist"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "catholic_youth_apostolate",
@@ -1947,7 +2011,8 @@
       "email": "cca_catholic@connect.np.edu.sg",
       "instagram": "@npcatholic",
       "telegram": "t.me/NPCatholic"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "cru_campus_crusade",
@@ -1977,7 +2042,8 @@
       "email": "cca_crusade@connect.np.edu.sg",
       "instagram": "@npcru",
       "telegram": "t.me/NPCru"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "christian_fellowship_club",
@@ -2007,14 +2073,15 @@
       "email": "cca_fellowship@connect.np.edu.sg",
       "instagram": "@npcf",
       "telegram": "t.me/NPCristianFellowship"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "creators_collective",
     "name": "Creators Collective",
     "category": "Special Interest",
     "school": "Special Interest",
-    "description": "Student content creators \u2014 reels, storytelling, works with NP's Corp Comms.",
+    "description": "Student content creators — reels, storytelling, works with NP's Corp Comms.",
     "location": "Block 52 Media Studio",
     "commitment_level": "medium",
     "style": "individual",
@@ -2037,7 +2104,8 @@
       "email": "cca_creators@connect.np.edu.sg",
       "instagram": "@npcreators",
       "telegram": "t.me/NPCreators"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "current_affairs_club",
@@ -2067,14 +2135,15 @@
       "email": "cca_cafairs@connect.np.edu.sg",
       "instagram": "@npcurrentaffairs",
       "telegram": "t.me/NPCurrentAffairs"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "erudites_learning_ambassadors",
     "name": "Erudites (Learning Ambassadors)",
     "category": "Special Interest",
     "school": "Special Interest",
-    "description": "Student library ambassadors \u2014 hosting, curating, social media.",
+    "description": "Student library ambassadors — hosting, curating, social media.",
     "location": "NP Lien Ying Chow Library",
     "commitment_level": "low",
     "style": "mixed",
@@ -2097,14 +2166,15 @@
       "email": "ngeeannerudites@gmail.com",
       "instagram": "@np_library",
       "telegram": "t.me/NPErudites"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "makers_guild",
     "name": "Makers Guild",
     "category": "Special Interest",
     "school": "Special Interest",
-    "description": "3D printing, laser cutting, leatherwork \u2014 based at Makers' Academy/The Sandbox.",
+    "description": "3D printing, laser cutting, leatherwork — based at Makers' Academy/The Sandbox.",
     "location": "Block 58 Makers' Academy",
     "commitment_level": "medium",
     "style": "individual",
@@ -2127,7 +2197,8 @@
       "email": "askma@np.edu.sg",
       "instagram": "@npmakersguild",
       "telegram": "t.me/NPMakersGuild"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "muslim_students_society",
@@ -2157,7 +2228,8 @@
       "email": "cca_muslim@connect.np.edu.sg",
       "instagram": "@ngeeannmss",
       "telegram": "t.me/NPMuslimSociety"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "navigators_club",
@@ -2187,7 +2259,8 @@
       "email": "cca_navigators@connect.np.edu.sg",
       "instagram": "@npnavigators",
       "telegram": "t.me/NPNavigators"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "peer_helpers_club",
@@ -2217,7 +2290,8 @@
       "email": "np_peerhelpers@connect.np.edu.sg",
       "instagram": "@np_peerhelpers",
       "telegram": "t.me/NPPeerHelpers"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "tabletop_games_club",
@@ -2247,7 +2321,8 @@
       "email": "cca_tabletop@connect.np.edu.sg",
       "instagram": "@np_ttgames",
       "telegram": "t.me/NPTabletopGames"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "toastmasters_club",
@@ -2277,7 +2352,8 @@
       "email": "cca_toastmasters@connect.np.edu.sg",
       "instagram": "@nptoastmasters",
       "telegram": "t.me/NPToastmasters"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "christieara_council",
@@ -2307,7 +2383,8 @@
       "email": "cca_christieracouncil@connect.np.edu.sg",
       "instagram": "@np_tcc",
       "telegram": "t.me/NPTCC"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "sandbox_advocates_club",
@@ -2337,14 +2414,15 @@
       "email": "cca_sandbox@connect.np.edu.sg",
       "instagram": "@tsbadvocates",
       "telegram": "t.me/NPSandboxAdvocates"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "seanernergy",
     "name": "SEAnergy",
     "category": "Special Interest",
     "school": "Special Interest",
-    "description": "Southeast Asian culture \u2014 SEA Fest, fireside chats.",
+    "description": "Southeast Asian culture — SEA Fest, fireside chats.",
     "location": "Block 52 Activity Lounge",
     "commitment_level": "medium",
     "style": "mixed",
@@ -2367,7 +2445,8 @@
       "email": "Lim_Wee.How@np.edu.sg",
       "instagram": "@npseanernergy",
       "telegram": "t.me/NPSEAnergy"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "np_ambassadors",
@@ -2402,7 +2481,8 @@
       "email": "npambassadors@connect.np.edu.sg",
       "instagram": "@npambassadors",
       "telegram": "t.me/NPAmbassadors"
-    }
+    },
+    "open_participation": false
   },
   {
     "id": "np_student_council",
@@ -2437,6 +2517,7 @@
       "email": "studentcouncil@connect.np.edu.sg",
       "instagram": "@npsc_official",
       "telegram": "t.me/NPSC_Official"
-    }
+    },
+    "open_participation": false
   }
 ]

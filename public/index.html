@@ -57,14 +57,17 @@
           <h2 class="bento-title">Find CCAs That Fit You</h2>
           <p class="bento-desc">Personalized CCA recommendations powered by multi-factor weighted matching analytics — aligning your interests, commitment level, and teamwork preferences across 81 Ngee Ann Polytechnic CCAs.</p>
         </div>
-        
-        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; margin-top:1.4rem;">
-          <button class="btn btn-primary" onclick="openSurveyModal()">
-            <i data-lucide="sparkles" style="width:16px; height:16px;"></i> Take Match Survey
-          </button>
-          <div style="text-align:right;">
-            <div style="font-weight:700; font-size:0.9rem; color:var(--ink-navy);">Personalized Match Engine</div>
-            <div style="font-size:0.775rem; color:var(--text-muted);">Take survey to compute your score</div>
+
+        <!-- Top 3 Matches Summary Card Container (Rendered dynamically post-survey) -->
+        <div id="topMatchesContainer" style="margin-top: 1.4rem;">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
+            <button class="btn btn-primary" onclick="openSurveyModal()">
+              <i data-lucide="sparkles" style="width:16px; height:16px;"></i> Take Match Survey
+            </button>
+            <div style="text-align:right;">
+              <div style="font-weight:700; font-size:0.9rem; color:var(--ink-navy);">Personalized Match Engine</div>
+              <div style="font-size:0.775rem; color:var(--text-muted);">Take survey to compute your score</div>
+            </div>
           </div>
         </div>
       </div>
@@ -120,6 +123,7 @@
           <div class="filter-group">
             <input type="text" id="searchInput" class="search-input" placeholder="Search CCAs or tags..." oninput="handleFilterChange()">
             <button class="category-chip active" onclick="setCategoryFilter('All', this)">All</button>
+            <button class="category-chip" onclick="setCategoryFilter('Open Events', this)">Open Events</button>
             <button class="category-chip" onclick="setCategoryFilter('Arts', this)">Arts & Culture</button>
             <button class="category-chip" onclick="setCategoryFilter('Sports', this)">Sports</button>
             <button class="category-chip" onclick="setCategoryFilter('Community', this)">Community Service</button>
@@ -153,7 +157,7 @@
         </div>
       </div>
 
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.6rem;">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.6rem; margin-bottom: 1.6rem;">
         <!-- Published Events Card -->
         <div style="background:var(--paper-elevated); border:1px solid var(--border-subtle); border-radius:var(--radius-md); padding:1.6rem;">
           <h3 style="font-family:var(--font-heading); font-size:1.15rem; color:var(--ink-navy); margin-bottom:1.2rem;">Published CCA Events</h3>
@@ -173,6 +177,23 @@
           <div id="adminRosterList">
             <!-- Rendered dynamically -->
           </div>
+        </div>
+      </div>
+
+      <!-- EXCO INTEREST-TAG ANALYTICS CHART CARD -->
+      <div style="background:var(--paper-elevated); border:1px solid var(--border-subtle); border-radius:var(--radius-md); padding:1.6rem;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.2rem; border-bottom:1px solid var(--border-subtle); padding-bottom:0.8rem;">
+          <div>
+            <h3 style="font-family:var(--font-heading); font-size:1.15rem; color:var(--ink-navy); margin-bottom:2px;">Student Interest Tag Analytics</h3>
+            <p style="font-size:0.8rem; color:var(--text-muted);">Aggregate interest demand selected across completed student matching surveys.</p>
+          </div>
+          <span style="font-size:0.75rem; color:var(--ink-navy); background:var(--paper); padding:4px 10px; border-radius:6px; border:1px solid var(--border-subtle); font-weight:600;" id="surveyTotalBadge">
+            142 Surveys Analyzed
+          </span>
+        </div>
+        
+        <div id="excoTagAnalyticsChart" style="display:grid; grid-template-columns: 1fr 1fr; gap:1.2rem;">
+          <!-- Filled dynamically by app.js -->
         </div>
       </div>
     </div>
@@ -373,40 +394,6 @@
       <div id="ccaDetailContent">
         <!-- Rendered by app.js -->
       </div>
-    </div>
-  </div>
-
-  <!-- Telegram Bot Preview Drawer Simulator -->
-  <div id="telegramDrawer" class="telegram-drawer">
-    <div class="tg-header">
-      <div style="display:flex; align-items:center; gap:10px;">
-        <i data-lucide="bot" style="width:20px; height:20px;"></i>
-        <div>
-          <h4 style="font-size:0.95rem; font-weight:700;">NP CCA Match Bot</h4>
-          <span style="font-size:0.7rem; color:#A0AEC0;">Bot Preview (Interactive Simulator)</span>
-        </div>
-      </div>
-      <button style="background:none; border:none; color:#fff; font-size:1.2rem; cursor:pointer;" onclick="toggleTelegramDrawer()">✕</button>
-    </div>
-
-    <div id="tgBody" class="tg-body">
-      <div class="tg-message bot">
-        <strong>👋 Welcome to NP CCA Match Bot!</strong><br>
-        Find your ideal CCA, browse open campus events, and manage your schedule.<br><br>
-        Tap a quick action below to start:
-        <div class="tg-actions">
-          <button class="tg-action-btn" onclick="sendTgCommand('/start')">🎯 Start Quiz</button>
-          <button class="tg-action-btn" onclick="sendTgCommand('/browse')">📋 Browse CCAs</button>
-          <button class="tg-action-btn" onclick="sendTgCommand('/events')">🙌 Open Events</button>
-          <button class="tg-action-btn" onclick="sendTgCommand('/myccas')">⭐ My CCAs</button>
-          <button class="tg-action-btn" onclick="sendTgCommand('/surprise')">🎲 Surprise Me</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="tg-footer">
-      <input type="text" id="tgInput" class="form-control" placeholder="Type /start, /search dance, etc..." onkeypress="if(event.key==='Enter') submitTgInput()">
-      <button class="btn btn-primary btn-sm" onclick="submitTgInput()">Send</button>
     </div>
   </div>
 
