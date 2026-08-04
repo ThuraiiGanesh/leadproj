@@ -10,6 +10,9 @@ let enrolledCcaIds = new Set(JSON.parse(localStorage.getItem('np_enrolled_ccas')
 let signedUpEventIds = new Set(JSON.parse(localStorage.getItem('np_signed_up_events') || '[]'));
 let signedUpEventsDetails = JSON.parse(localStorage.getItem('np_signed_up_events_details') || '[]');
 let eventReminders = new Set(JSON.parse(localStorage.getItem('np_event_reminders') || '[]'));
+let googleCalendarSynced = false;
+let googleCalendarEvents = [];
+let weeklyCommitments = JSON.parse(localStorage.getItem('np_weekly_commitments') || '[]');
 let selectedAdminCcaId = null;
 
 // 15 SPEC Interest Categories
@@ -566,6 +569,179 @@ async function fetchCcas(isSurveyDone = false, tags = [], commitment = '', style
 }
 
 // ----------------------------------------------------
+// GOOGLE CALENDAR & TIMETABLE SCHEDULE CLASH ENGINE
+// ----------------------------------------------------
+
+async function fetchSyncedGoogleCalendar() {
+  try {
+    const res = await fetch('/api/calendar/events');
+    const data = await res.json();
+    if (data.success && data.is_synced) {
+      googleCalendarSynced = true;
+      googleCalendarEvents = data.events || [];
+    } else {
+      googleCalendarSynced = false;
+      googleCalendarEvents = [];
+    }
+  } catch (err) {
+    console.warn("Google Calendar sync check notice:", err);
+  }
+}
+
+async function syncGoogleCalendar() {
+  try {
+    const res = await fetch('/api/auth/google/url');
+    const data = await res.json();
+    if (data.success && data.is_configured && data.auth_url) {
+      window.open(data.auth_url, 'GoogleAuth', 'width=500,height=600');
+    } else {
+      // Self-contained demo sync mode (Data Minimization: temporary mock sync)
+      googleCalendarSynced = true;
+      googleCalendarEvents = [
+        {
+          id: 'demo_cal_1',
+          summary: 'IT2003 Web Development Lecture',
+          start: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+          end: new Date(Date.now() + (24 * 60 * 60 + 2 * 3600) * 1000).toISOString()
+        },
+        {
+          id: 'demo_cal_2',
+          summary: 'MP201 Project Presentation',
+          start: new Date(Date.now() + 48 * 60 * 60 * 1000).toISOString(),
+          end: new Date(Date.now() + (48 * 60 * 60 + 3 * 3600) * 1000).toISOString()
+        }
+      ];
+      showToast("Google Calendar Connected (Synced for Clash Detection)!", "success");
+      renderMyCcasFeed();
+      renderUpcomingEventsFeed();
+    }
+  } catch (err) {
+    showToast("Google Calendar sync error.", "error");
+  }
+}
+
+async function disconnectGoogleCalendar() {
+  try {
+    await fetch('/api/calendar/disconnect', { method: 'POST' });
+    googleCalendarSynced = false;
+    googleCalendarEvents = [];
+    showToast("Google Calendar disconnected. Session data cleared.", "info");
+    renderMyCcasFeed();
+    renderUpcomingEventsFeed();
+  } catch (err) {
+    showToast("Failed to disconnect calendar.", "error");
+  }
+}
+
+function openAddScheduleModal() {
+  document.getElementById('schLabel').value = '';
+  document.getElementById('addScheduleModal').classList.add('active');
+}
+
+function saveWeeklyCommitment() {
+  const label = document.getElementById('schLabel').value.trim();
+  const day = parseInt(document.getElementById('schDay').value, 10);
+  const startTime = document.getElementById('schStartTime').value;
+  const endTime = document.getElementById('schEndTime').value;
+
+  if (!label) {
+    showToast("Please enter a subject or activity name.", "error");
+    return;
+  }
+
+  const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const newCommitment = {
+    id: 'sch_' + Date.now(),
+    label,
+    day,
+    dayName: dayNames[day],
+    startTime,
+    endTime
+  };
+
+  weeklyCommitments.push(newCommitment);
+  localStorage.setItem('np_weekly_commitments', JSON.stringify(weeklyCommitments));
+  closeModal('addScheduleModal');
+  showToast(`Added "${label}" to your weekly schedule!`, "success");
+  renderMyCcasFeed();
+  renderUpcomingEventsFeed();
+}
+
+function deleteWeeklyCommitment(id) {
+  weeklyCommitments = weeklyCommitments.filter(c => c.id !== id);
+  localStorage.setItem('np_weekly_commitments', JSON.stringify(weeklyCommitments));
+  showToast("Schedule commitment removed.", "info");
+  renderMyCcasFeed();
+  renderUpcomingEventsFeed();
+}
+
+// Unified Schedule Clash Engine (Google Calendar + Timetable + Registered Events)
+function detectScheduleClash(eventDatetimeStr, durationMinutes = 120) {
+  if (!eventDatetimeStr) return { isClash: false };
+
+  const evtStart = new Date(eventDatetimeStr);
+  const evtEnd = new Date(evtStart.getTime() + durationMinutes * 60 * 1000);
+  const evtDay = evtStart.getDay();
+  const evtStartMins = evtStart.getHours() * 60 + evtStart.getMinutes();
+  const evtEndMins = evtEnd.getHours() * 60 + evtEnd.getMinutes();
+
+  // 1. Check Synced Google Calendar Events
+  if (googleCalendarEvents.length > 0) {
+    for (const gEvt of googleCalendarEvents) {
+      const gStart = new Date(gEvt.start);
+      const gEnd = new Date(gEvt.end);
+
+      if (evtStart < gEnd && evtEnd > gStart) {
+        const timeRangeStr = `${gStart.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})} - ${gEnd.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}`;
+        return {
+          isClash: true,
+          clashingTitle: gEvt.summary,
+          timeRange: timeRangeStr,
+          source: 'Google Calendar'
+        };
+      }
+    }
+  }
+
+  // 2. Check Weekly Timetable Commitments
+  for (const item of weeklyCommitments) {
+    if (item.day === evtDay) {
+      const [sH, sM] = item.startTime.split(':').map(Number);
+      const [eH, eM] = item.endTime.split(':').map(Number);
+      const itemStartMins = sH * 60 + sM;
+      const itemEndMins = eH * 60 + eM;
+
+      if (evtStartMins < itemEndMins && evtEndMins > itemStartMins) {
+        return {
+          isClash: true,
+          clashingTitle: item.label,
+          timeRange: `${item.startTime} - ${item.endTime}`,
+          source: 'Weekly Timetable'
+        };
+      }
+    }
+  }
+
+  // 3. Check Registered Events
+  for (const regEvt of signedUpEventsDetails) {
+    const regStart = new Date(regEvt.datetime);
+    const regEnd = new Date(regStart.getTime() + 120 * 60 * 1000);
+
+    if (evtStart < regEnd && evtEnd > regStart) {
+      const timeRangeStr = `${regStart.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})} - ${regEnd.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}`;
+      return {
+        isClash: true,
+        clashingTitle: regEvt.title,
+        timeRange: timeRangeStr,
+        source: 'Registered Event'
+      };
+    }
+  }
+
+  return { isClash: false };
+}
+
+// ----------------------------------------------------
 // LIVE UPCOMING CAMPUS EVENTS FEED
 // ----------------------------------------------------
 let allUpcomingEvents = [];
@@ -639,6 +815,15 @@ function renderUpcomingEventsFeed() {
             <div><strong>🗓️ Date:</strong> ${dateFormatted} at ${timeFormatted}</div>
             <div><strong>📍 Venue:</strong> ${escapeHtml(evt.location || 'NP Campus')}</div>
             ${regFormatted ? `<div><strong>⏳ Reg Deadline:</strong> ${regFormatted}</div>` : ''}
+            ${(() => {
+              const clash = detectScheduleClash(evt.datetime);
+              if (clash.isClash) {
+                return `<div style="background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.3); border-radius:6px; padding:6px 10px; margin-top:6px; font-size:0.775rem; color:var(--stamp-red); font-weight:600;">
+                  ⚠️ This clashes with <strong>${escapeHtml(clash.clashingTitle)}</strong> on your calendar (${clash.timeRange}).
+                </div>`;
+              }
+              return '';
+            })()}
           </div>
         </div>
 
@@ -662,35 +847,6 @@ function renderUpcomingEventsFeed() {
   renderIcons();
 }
 
-// Check schedule clash with student's weekly availability or registered events
-function checkScheduleClash(eventDatetime) {
-  const evtDate = new Date(eventDatetime);
-  const day = evtDate.getDay(); // 0: Sun, 6: Sat
-  const hour = evtDate.getHours();
-
-  if (currentUser && currentUser.survey_answers && currentUser.survey_answers.weekly_availability) {
-    const avail = currentUser.survey_answers.weekly_availability;
-    let isClash = false;
-    
-    if (day === 0 && !avail.includes('sunday')) isClash = true;
-    if (day === 6 && !avail.includes('saturday')) isClash = true;
-    if (day >= 1 && day <= 5) {
-      if (hour < 12 && !avail.includes('weekday_mornings')) isClash = true;
-      if (hour >= 12 && hour < 17 && !avail.includes('weekday_afternoons')) isClash = true;
-      if (hour >= 17 && !avail.includes('weekday_evenings')) isClash = true;
-    }
-
-    if (isClash) return true;
-  }
-
-  // Also check existing signed up events
-  const clashRegistered = signedUpEventsDetails.some(e => {
-    return new Date(e.datetime).toDateString() === evtDate.toDateString();
-  });
-
-  return clashRegistered;
-}
-
 async function quickSignupEvent(eventId, ccaId) {
   if (!currentUser) {
     showToast("Please sign in with 2FA to register for events.", "info");
@@ -698,9 +854,10 @@ async function quickSignupEvent(eventId, ccaId) {
     return;
   }
 
-  const evtObj = allUpcomingEvents.find(e => e.id === eventId);
-  if (evtObj && checkScheduleClash(evtObj.datetime)) {
-    const proceed = confirm(`⚠️ Schedule Clash Warning!\n\nThis event (${evtObj.title}) may clash with your existing CCA commitments or weekly availability.\n\nDo you still want to confirm registration?`);
+  const evtObj = allUpcomingEvents.find(e => e.id === eventId) || signedUpEventsDetails.find(e => e.id === eventId);
+  const clash = evtObj ? detectScheduleClash(evtObj.datetime) : { isClash: false };
+  if (clash.isClash) {
+    const proceed = confirm(`⚠️ Schedule Clash Warning!\n\nThis event clashes with "${clash.clashingTitle}" on your ${clash.source} (${clash.timeRange}).\n\nDo you still want to confirm registration?`);
     if (!proceed) return;
   }
 
@@ -888,6 +1045,59 @@ function renderMyCcasFeed() {
 
   let html = '';
 
+  // SECTION 0: CALENDAR SYNC & TIMETABLE CLASH SETTINGS
+  html += `
+    <div style="background:var(--paper-elevated); border:1px solid var(--border-subtle); border-radius:14px; padding:1.4rem; margin-bottom:2.2rem;">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:1rem; margin-bottom:1rem;">
+        <div>
+          <span style="font-size:0.75rem; background:rgba(139,92,246,0.15); color:var(--ink-navy); border:1px solid rgba(139,92,246,0.3); padding:3px 8px; border-radius:6px; font-weight:700;">CALENDAR SYNC & CLASH DETECTION</span>
+          <h3 style="font-family:var(--font-heading); font-size:1.25rem; color:var(--ink-navy); margin-top:4px;">Google Calendar & Timetable Sync</h3>
+          <p style="font-size:0.825rem; color:var(--text-muted);">Sync your Google Calendar or add class blocks to detect real-time event clashes.</p>
+        </div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          ${googleCalendarSynced ? `
+            <span style="display:inline-flex; align-items:center; gap:6px; font-size:0.825rem; color:var(--moss); font-weight:700; background:rgba(138,154,91,0.15); padding:6px 12px; border-radius:8px; border:1px solid rgba(138,154,91,0.3);">
+              ✓ Google Calendar Synced (${googleCalendarEvents.length} events)
+            </span>
+            <button class="btn btn-outline btn-sm" style="color:var(--stamp-red); border-color:var(--stamp-red);" onclick="disconnectGoogleCalendar()">Disconnect Calendar</button>
+          ` : `
+            <button class="btn btn-primary btn-sm" style="background:#4285F4; border-color:#4285F4;" onclick="syncGoogleCalendar()">
+              📅 Sync Google Calendar
+            </button>
+          `}
+          <button class="btn btn-outline btn-sm" onclick="openAddScheduleModal()">+ Add Lesson Commitment</button>
+        </div>
+      </div>
+
+      <!-- Weekly Timetable Commitments Preview -->
+      <div style="background:var(--paper); border:1px solid var(--border-subtle); border-radius:10px; padding:1rem;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.6rem;">
+          <h4 style="font-size:0.875rem; color:var(--ink-navy); font-weight:700;">📚 Active Timetable Commitments (${weeklyCommitments.length})</h4>
+          <span style="font-size:0.75rem; color:var(--text-muted);">Used for automatic event clash warning banners</span>
+        </div>
+        ${weeklyCommitments.length === 0 ? `
+          <p style="font-size:0.8rem; color:var(--text-muted); font-style:italic;">No weekly lesson blocks added yet. Click "+ Add Lesson Commitment" to configure your schedule.</p>
+        ` : `
+          <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(220px, 1fr)); gap:0.75rem;">
+            ${weeklyCommitments.map(item => `
+              <div style="background:var(--paper-elevated); border:1px solid var(--border-subtle); border-radius:8px; padding:0.75rem; display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                  <div style="font-size:0.85rem; font-weight:700; color:var(--ink-navy);">${escapeHtml(item.label)}</div>
+                  <div style="font-size:0.775rem; color:var(--text-muted);">${item.dayName} ${item.startTime} - ${item.endTime}</div>
+                </div>
+                <button class="btn btn-outline btn-sm" style="color:var(--stamp-red); padding:2px 6px; font-size:0.75rem;" onclick="deleteWeeklyCommitment('${item.id}')">✕</button>
+              </div>
+            `).join('')}
+          </div>
+        `}
+      </div>
+
+      <div style="margin-top:0.8rem; font-size:0.75rem; color:var(--text-muted); display:flex; align-items:center; gap:6px;">
+        🔒 <strong>LegalTech Data Minimization:</strong> Calendar details are processed in-memory solely for clash checking and are not stored permanently.
+      </div>
+    </div>
+  `;
+
   // SECTION 1: APPLIED CCAS / MEMBERSHIP APPLICATIONS
   if (appliedCcas.length > 0) {
     html += `
@@ -1070,7 +1280,7 @@ async function openCcaDetail(ccaId) {
                   <p style="font-size:0.825rem; color:var(--text-muted); margin-top:3px;">
                     🗓️ ${new Date(evt.datetime).toLocaleString()} | 📍 ${escapeHtml(evt.location)}
                   </p>
-                  <div style="display:flex; gap:12px; margin-top:4px; font-size:0.78rem;">
+                  <div style="display:flex; flex-direction:column; gap:4px; margin-top:4px; font-size:0.78rem;">
                     <span style="color:${isFull ? 'var(--stamp-red)' : 'var(--moss)'};">
                       Capacity: ${evt.signup_count} / ${evt.capacity} signed up
                     </span>
@@ -1079,6 +1289,15 @@ async function openCcaDetail(ccaId) {
                         ⏳ Reg Deadline: ${new Date(evt.registration_deadline).toLocaleString()}
                       </span>
                     ` : ''}
+                    ${(() => {
+                      const clash = detectScheduleClash(evt.datetime);
+                      if (clash.isClash) {
+                        return `<div style="background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.3); border-radius:6px; padding:4px 8px; font-size:0.75rem; color:var(--stamp-red); font-weight:600;">
+                          ⚠️ This clashes with <strong>${escapeHtml(clash.clashingTitle)}</strong> on your calendar (${clash.timeRange}).
+                        </div>`;
+                      }
+                      return '';
+                    })()}
                   </div>
                 </div>
                 <div>

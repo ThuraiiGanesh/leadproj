@@ -853,6 +853,145 @@ app.get('/api/admin/analytics/survey-tags', (req, res) => {
   });
 });
 
+// ----------------------------------------------------
+// GOOGLE CALENDAR OAUTH 2.0 & CALENDAR SYNC ENDPOINTS
+// ----------------------------------------------------
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '';
+const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || '';
+const GOOGLE_REDIRECT_URI = process.env.GOOGLE_REDIRECT_URI || 'http://localhost:3000/api/auth/google/callback';
+
+// Temporary in-memory token store (Data Minimization: not persisted long-term)
+const userCalendarTokens = new Map();
+
+// 1. Get Google OAuth Authorization URL
+app.get('/api/auth/google/url', (req, res) => {
+  if (!GOOGLE_CLIENT_ID) {
+    return res.json({
+      success: false,
+      is_configured: false,
+      message: "GOOGLE_CLIENT_ID not configured in server environment."
+    });
+  }
+
+  const scope = encodeURIComponent('https://www.googleapis.com/auth/calendar.readonly');
+  const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?` +
+    `client_id=${GOOGLE_CLIENT_ID}&` +
+    `redirect_uri=${encodeURIComponent(GOOGLE_REDIRECT_URI)}&` +
+    `response_type=code&` +
+    `scope=${scope}&` +
+    `access_type=offline&` +
+    `prompt=consent`;
+
+  res.json({
+    success: true,
+    is_configured: true,
+    auth_url: authUrl
+  });
+});
+
+// 2. Google OAuth Callback (Exchanges Code for Token)
+app.get('/api/auth/google/callback', async (req, res) => {
+  const { code } = req.query;
+  if (!code) {
+    return res.status(400).send('Authorization code missing.');
+  }
+
+  try {
+    const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        code,
+        client_id: GOOGLE_CLIENT_ID,
+        client_secret: GOOGLE_CLIENT_SECRET,
+        redirect_uri: GOOGLE_REDIRECT_URI,
+        grant_type: 'authorization_code'
+      })
+    });
+
+    const tokenData = await tokenRes.json();
+    if (tokenData.access_token) {
+      // Store token in session cache (minimization requirement)
+      userCalendarTokens.set('default_student', tokenData.access_token);
+      res.send(`
+        <html>
+          <body style="font-family:sans-serif; text-align:center; padding:50px; background:#0e0c19; color:#fff;">
+            <h2 style="color:#8b5cf6;">✅ Google Calendar Connected Successfully!</h2>
+            <p>Your calendar events are now synced to detect schedule clashes.</p>
+            <script>
+              if (window.opener) {
+                window.opener.postMessage({ type: 'GOOGLE_CALENDAR_CONNECTED' }, '*');
+                window.close();
+              } else {
+                setTimeout(() => window.location.href = '/', 2000);
+              }
+            </script>
+          </body>
+        </html>
+      `);
+    } else {
+      res.status(400).send(`Token exchange failed: ${JSON.stringify(tokenData)}`);
+    }
+  } catch (err) {
+    console.error("Google OAuth token exchange error:", err);
+    res.status(500).send("OAuth exchange failed.");
+  }
+});
+
+// 3. Fetch Synced Google Calendar Events (Data Minimization: Returns min fields)
+app.get('/api/calendar/events', async (req, res) => {
+  const accessToken = userCalendarTokens.get('default_student');
+  if (!accessToken) {
+    return res.json({
+      success: false,
+      is_synced: false,
+      events: [],
+      message: "No active Google Calendar session."
+    });
+  }
+
+  try {
+    const now = new Date().toISOString();
+    const future = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
+    
+    const calRes = await fetch(
+      `https://www.googleapis.com/calendar/v3/calendars/primary/events?timeMin=${encodeURIComponent(now)}&timeMax=${encodeURIComponent(future)}&singleEvents=true&orderBy=startTime`,
+      { headers: { Authorization: `Bearer ${accessToken}` } }
+    );
+
+    const calData = await calRes.json();
+    if (calData.items) {
+      // LegalTech Data Minimization: Extract ONLY necessary fields for clash detection
+      const minimizedEvents = calData.items.map(evt => ({
+        id: evt.id,
+        summary: evt.summary || 'Calendar Commitment',
+        start: evt.start.dateTime || evt.start.date,
+        end: evt.end.dateTime || evt.end.date
+      }));
+
+      return res.json({
+        success: true,
+        is_synced: true,
+        events: minimizedEvents
+      });
+    }
+
+    res.json({ success: true, is_synced: true, events: [] });
+  } catch (err) {
+    console.error("Fetch Google Calendar events error:", err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// 4. Disconnect Google Calendar Session
+app.post('/api/calendar/disconnect', (req, res) => {
+  userCalendarTokens.delete('default_student');
+  res.json({
+    success: true,
+    message: "Google Calendar disconnected and cached session data discarded."
+  });
+});
+
 // Start Server (local) and export app (for Vercel serverless)
 if (require.main === module) {
   app.listen(PORT, () => {
