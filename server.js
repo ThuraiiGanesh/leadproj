@@ -124,6 +124,25 @@ function getManagedCcas(studentIdOrEmail) {
   return managed;
 }
 
+// Spec Tag Mapping Dictionary (Section 11)
+const SPEC_TAG_MAP = {
+  dance: ['dance', 'hiphop', 'breakdance', 'dancesport', 'kpop', 'd3', 'contemporary', 'performance', 'liondance', 'dragon'],
+  music: ['music', 'orchestra', 'instruments', 'band', 'wind', 'concert', 'percussion', 'piano', 'strings', 'singing', 'voices', 'acappella', 'songwriting', 'amplify', 'classical', 'samba', 'baracuda', 'drums', 'choir', 'guitar', 'violin'],
+  drama: ['drama', 'theatre', 'acting', 'production', 'stage', 'edrama', 'cdrama'],
+  arts: ['arts', 'art', 'calligraphy', 'photography', 'media', 'camera', 'design', 'visual'],
+  culture: ['culture', 'chinese', 'indian', 'japanese', 'korean', 'malay', 'language', 'traditional', 'dikir', 'cosplay', 'anime', 'taiko'],
+  sports: ['sports', 'team', 'basketball', 'football', 'soccer', 'handball', 'hockey', 'rugby', 'touchrugby', 'volleyball', 'softball', 'tchoukball', 'frisbee', 'ultimate'],
+  combat: ['combat', 'martialarts', 'judo', 'taekwondo', 'silat', 'wushu', 'fencing', 'archery', 'tkd'],
+  water: ['water', 'swimming', 'canoeing', 'dragonboat', 'waterpolo', 'lifesaving'],
+  racket: ['racket', 'racquet', 'badminton', 'tennis', 'tabletennis', 'squash', 'pickleball', 'bowling', 'shooting', 'precision'],
+  volunteering: ['volunteering', 'community', 'service', 'mentors', 'rangers', 'foodaid', 'leo', 'primers', 'redcross', 'rotaract', 'environment'],
+  faith: ['faith', 'buddhist', 'catholic', 'cru', 'christian', 'navigators', 'muslim', 'spirituality'],
+  academic: ['academic', 'debate', 'currentaffairs', 'toastmasters'],
+  stem: ['stem', 'tech', 'innovation', 'astronomy', 'makers', 'sandbox', 'developers', 'ict'],
+  games: ['games', 'tabletop', 'strategy'],
+  leadership: ['leadership', 'ambassadors', 'council', 'peer', 'erudites', 'exco', 'leaders']
+};
+
 // Helper: Calculate Weighted Score (Section 3 of Build Spec)
 function calculateMatchScore(studentAnswers, cca) {
   if (!studentAnswers || !studentAnswers.interest_tags || studentAnswers.interest_tags.length === 0) {
@@ -132,16 +151,27 @@ function calculateMatchScore(studentAnswers, cca) {
 
   // 1. Interest Tag Overlap (weight 0.5)
   const studentTags = studentAnswers.interest_tags.map(t => t.toLowerCase());
-  const ccaTags = cca.tags.map(t => t.toLowerCase());
+  const ccaTags = (cca.tags || []).map(t => t.toLowerCase());
   
+  // Extract normalized spec categories for the CCA
+  const ccaCategories = new Set();
+  ccaTags.forEach(t => {
+    ccaCategories.add(t);
+    for (const [categoryKey, aliases] of Object.entries(SPEC_TAG_MAP)) {
+      if (aliases.includes(t) || t === categoryKey) {
+        ccaCategories.add(categoryKey);
+      }
+    }
+  });
+
   let matchCount = 0;
   studentTags.forEach(tag => {
-    if (ccaTags.includes(tag)) {
+    if (ccaCategories.has(tag) || ccaTags.some(ct => ct.includes(tag) || tag.includes(ct))) {
       matchCount++;
     }
   });
 
-  const interestOverlap = matchCount / studentTags.length;
+  const interestOverlap = studentTags.length > 0 ? matchCount / studentTags.length : 0;
 
   // 2. Commitment Fit (weight 0.3)
   const studentCommitment = (studentAnswers.commitment_level || '').toLowerCase();
@@ -160,8 +190,12 @@ function calculateMatchScore(studentAnswers, cca) {
   }
 
   // 3. Style Fit (weight 0.2)
-  const studentStyle = (studentAnswers.style || '').toLowerCase();
-  const ccaStyle = (cca.style || '').toLowerCase();
+  let studentStyle = (studentAnswers.style || '').toLowerCase();
+  let ccaStyle = (cca.style || '').toLowerCase();
+
+  // Normalize "individual" to "solo"
+  if (studentStyle === 'individual') studentStyle = 'solo';
+  if (ccaStyle === 'individual') ccaStyle = 'solo';
 
   let styleFit = 0.0;
   if (studentStyle === ccaStyle) {
