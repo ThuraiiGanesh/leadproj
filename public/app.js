@@ -482,12 +482,12 @@ function renderSurveyTags() {
   };
 
   container.innerHTML = SPEC_INTEREST_TAGS.map(t => `
-    <label style="background:var(--paper); border:1px solid var(--border-subtle); padding:8px 12px; border-radius:10px; font-size:0.8rem; cursor:pointer; display:flex; flex-direction:column; gap:2px; color:var(--ink-navy); width:calc(50% - 6px); box-sizing:border-box;">
-      <div style="display:flex; align-items:center; gap:6px; font-weight:700;">
+    <label style="background:var(--paper); border:1px solid var(--border-subtle); padding:10px 12px; border-radius:10px; font-size:0.825rem; cursor:pointer; display:flex; flex-direction:column; gap:4px; color:var(--ink-navy); width:100%; box-sizing:border-box;">
+      <div style="display:flex; align-items:center; gap:8px; font-weight:700;">
         <input type="checkbox" value="${t.id}" ${['sports', 'arts', 'leadership', 'culture'].includes(t.id) ? 'checked' : ''}>
         ${t.label}
       </div>
-      <span style="font-size:0.7rem; color:var(--text-muted); padding-left:22px; line-height:1.2;">${tagSubtext[t.id] || ''}</span>
+      <span style="font-size:0.75rem; color:var(--text-muted); padding-left:24px; line-height:1.3;">${tagSubtext[t.id] || ''}</span>
     </label>
   `).join('');
 }
