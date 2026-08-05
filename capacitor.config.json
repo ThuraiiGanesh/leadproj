@@ -1,0 +1,9 @@
+{
+  "appId": "com.np.ccamatch",
+  "appName": "NP CCA Match",
+  "webDir": "public",
+  "server": {
+    "url": "https://leadproj.vercel.app",
+    "cleartext": true
+  }
+}

@@ -1,3 +1,4 @@
+const API_BASE = (typeof window !== 'undefined' && (window.location.protocol === 'file:' || (window.location.hostname === 'localhost' && !window.location.port) || typeof window.Capacitor !== 'undefined')) ? 'https://leadproj.vercel.app' : '';
 // NP CCA Match — Campus Life Discovery & RBAC Logic
 
 let currentUser = null;
@@ -143,7 +144,7 @@ async function submitLogin() {
   }
 
   try {
-    const res = await fetch('/api/auth/login', {
+    const res = await fetch(API_BASE + '/api/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ student_id: studentId, password })
@@ -190,7 +191,7 @@ async function submit2FA() {
   }
 
   try {
-    const res = await fetch('/api/auth/verify-2fa', {
+    const res = await fetch(API_BASE + '/api/auth/verify-2fa', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ student_id: studentId, otp_code: otpCode })
@@ -293,7 +294,7 @@ async function renderAdminDashboard() {
   if (!currentUser || !currentUser.is_exco || !selectedAdminCcaId) return;
 
   try {
-    const eventsRes = await fetch(`/api/ccas/${selectedAdminCcaId}`);
+    const eventsRes = await fetch(`${API_BASE}/api/ccas/${selectedAdminCcaId}`);
     const eventsData = await eventsRes.json();
     const eventsList = eventsData.events || [];
 
@@ -325,7 +326,7 @@ async function renderAdminDashboard() {
 
 async function fetchAdminRoster(eventId) {
   try {
-    const res = await fetch(`/api/admin/events/${eventId}/signups`);
+    const res = await fetch(`${API_BASE}/api/admin/events/${eventId}/signups`);
     const data = await res.json();
 
     if (!data.success) return;
@@ -421,7 +422,7 @@ async function submitCreateEvent() {
   }
 
   try {
-    const res = await fetch('/api/admin/events/create', {
+    const res = await fetch(API_BASE + '/api/admin/events/create', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -543,7 +544,7 @@ async function submitSurvey() {
 // ----------------------------------------------------
 async function fetchCcas(isSurveyDone = false, tags = [], commitment = '', style = '') {
   try {
-    let url = '/api/ccas?';
+    let url = `${API_BASE}/api/ccas?`;
     if (isSurveyDone || (currentUser && currentUser.survey_completed)) {
       const survey = currentUser ? currentUser.survey_answers : { interest_tags: tags, commitment_level: commitment, style };
       url += `survey_completed=true&interest_tags=${survey.interest_tags.join(',')}&commitment_level=${survey.commitment_level}&style=${survey.style}&`;
@@ -574,7 +575,7 @@ async function fetchCcas(isSurveyDone = false, tags = [], commitment = '', style
 
 async function fetchSyncedGoogleCalendar() {
   try {
-    const res = await fetch('/api/calendar/events');
+    const res = await fetch(API_BASE + '/api/calendar/events');
     const data = await res.json();
     if (data.success && data.is_synced) {
       googleCalendarSynced = true;
@@ -590,7 +591,7 @@ async function fetchSyncedGoogleCalendar() {
 
 async function syncGoogleCalendar() {
   try {
-    const res = await fetch('/api/auth/google/url');
+    const res = await fetch(API_BASE + '/api/auth/google/url');
     const data = await res.json();
     if (data.success && data.is_configured && data.auth_url) {
       window.open(data.auth_url, 'GoogleAuth', 'width=500,height=600');
@@ -622,7 +623,7 @@ async function syncGoogleCalendar() {
 
 async function disconnectGoogleCalendar() {
   try {
-    await fetch('/api/calendar/disconnect', { method: 'POST' });
+    await fetch(API_BASE + '/api/calendar/disconnect', { method: 'POST' });
     googleCalendarSynced = false;
     googleCalendarEvents = [];
     showToast("Google Calendar disconnected. Session data cleared.", "info");
@@ -751,7 +752,7 @@ async function fetchUpcomingCampusEvents() {
   if (!container) return;
 
   try {
-    const res = await fetch('/api/events');
+    const res = await fetch(API_BASE + '/api/events');
     const data = await res.json();
 
     if (data.success) {
@@ -862,7 +863,7 @@ async function quickSignupEvent(eventId, ccaId) {
   }
 
   try {
-    const res = await fetch(`/api/events/${eventId}/signup`, {
+    const res = await fetch(`${API_BASE}/api/events/${eventId}/signup`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -1215,7 +1216,7 @@ function cancelEventSignup(eventId) {
 // ----------------------------------------------------
 async function openCcaDetail(ccaId) {
   try {
-    const res = await fetch(`/api/ccas/${ccaId}`);
+    const res = await fetch(`${API_BASE}/api/ccas/${ccaId}`);
     const data = await res.json();
 
     if (!data.success) return;
@@ -1348,7 +1349,7 @@ async function signUpForEvent(eventId, ccaName = '') {
   }
 
   try {
-    const res = await fetch(`/api/events/${eventId}/signup`, {
+    const res = await fetch(`${API_BASE}/api/events/${eventId}/signup`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
