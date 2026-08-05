@@ -57,12 +57,20 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.1rem 2.2rem;
-  background: var(--bg-panel);
-  border-bottom: 1px solid var(--border-subtle);
+  padding: 0.85rem 1.8rem;
+  background: rgba(30, 24, 48, 0.75);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
   position: sticky;
-  top: 0;
-  z-index: 100;
+  top: 1rem;
+  max-width: 1240px;
+  margin: 1rem auto 0 auto;
+  width: calc(100% - 2rem);
+  z-index: 1000;
+  box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.5), 0 0 1px 1px rgba(255, 255, 255, 0.05);
+  transition: all 0.3s ease;
 }
 
 .brand {
@@ -601,7 +609,13 @@ body {
 }
 
 @media (max-width: 768px) {
-  .navbar { padding: 1rem; }
+  .navbar { 
+    padding: 0.85rem 1rem; 
+    width: calc(100% - 1.5rem);
+    top: 0.5rem;
+    margin-top: 0.5rem;
+    border-radius: 16px;
+  }
   .container { padding: 1.2rem 1rem; }
   .telegram-drawer { width: 100%; right: -100%; }
 }
