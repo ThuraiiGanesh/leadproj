@@ -1651,9 +1651,29 @@ async function startLiveWalkingDirections(destLat, destLng, destName, targetId) 
           }
         });
 
+        // Helper: Calculate Haversine straight-line distance in km
+        function getDirectDistanceKm(lat1, lon1, lat2, lon2) {
+          const R = 6371;
+          const dLat = (lat2 - lat1) * Math.PI / 180;
+          const dLon = (lon2 - lon1) * Math.PI / 180;
+          const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                    Math.sin(dLon/2) * Math.sin(dLon/2);
+          const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+          return R * c;
+        }
+
+        let fallbackPolyline = null;
+
         // Calculate walking directions
         function calculateRoute(origin, destination) {
           try {
+            // Fit map bounds to show both origin and destination
+            const bounds = new maps.LatLngBounds();
+            bounds.extend(origin);
+            bounds.extend(destination);
+            currentMap.fitBounds(bounds, 60);
+
             currentDirectionsService.route(
               {
                 origin: origin,
@@ -1662,6 +1682,10 @@ async function startLiveWalkingDirections(destLat, destLng, destName, targetId) 
               },
               (result, status) => {
                 if (status === maps.DirectionsStatus.OK && result.routes && result.routes.length > 0) {
+                  if (fallbackPolyline) {
+                    fallbackPolyline.setMap(null);
+                    fallbackPolyline = null;
+                  }
                   currentDirectionsRenderer.setDirections(result);
                   const leg = result.routes[0].legs[0];
                   if (stats) {
@@ -1672,8 +1696,29 @@ async function startLiveWalkingDirections(destLat, destLng, destName, targetId) 
                   }
                 } else {
                   console.warn("DirectionsService status notice:", status);
+                  const distKm = getDirectDistanceKm(origin.lat, origin.lng, destination.lat, destination.lng);
+                  const approxMins = Math.round((distKm / 4.5) * 60);
+                  const distStr = distKm < 1 ? `${Math.round(distKm * 1000)} m` : `${distKm.toFixed(1)} km`;
+
+                  // Render direct route line on map
+                  if (!fallbackPolyline) {
+                    fallbackPolyline = new maps.Polyline({
+                      path: [origin, destination],
+                      geodesic: true,
+                      strokeColor: "#8b5cf6",
+                      strokeOpacity: 0.8,
+                      strokeWeight: 4,
+                      map: currentMap
+                    });
+                  } else {
+                    fallbackPolyline.setPath([origin, destination]);
+                  }
+
                   if (stats) {
-                    stats.innerHTML = `<span style="color:#f87171;">⚠️ Unable to calculate a walking route right now</span>`;
+                    stats.innerHTML = `
+                      <span style="color:#8b5cf6; font-weight:700;">📍 Location Direct Route:</span>
+                      <span><strong>${distStr}</strong> (~${approxMins} mins walk) to <strong>${escapeHtml(destName)}</strong></span>
+                    `;
                   }
                 }
               }
