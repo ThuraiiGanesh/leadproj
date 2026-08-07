@@ -1591,29 +1591,77 @@ async function renderLeafletFallbackMap(userLat, userLng, destLat, destLng, dest
       currentLeafletMap = null;
     }
 
-    container.innerHTML = ''; // clear Google Maps error overlay
-    currentLeafletMap = L.map(container).setView([userLat, userLng], 16);
+    container.innerHTML = ''; // clear error overlays
+    currentLeafletMap = L.map(container).setView([userLat, userLng], 17);
 
-    // CartoDB Dark Matter tile layer
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    // Tile Layers
+    const darkTileLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
       attribution: '&copy; OpenStreetMap &copy; CARTO',
       maxZoom: 19
-    }).addTo(currentLeafletMap);
-
-    // Custom User Marker (Blue Circle)
-    const userIcon = L.divIcon({
-      className: 'custom-user-marker',
-      html: '<div style="background:#3b82f6; width:16px; height:16px; border-radius:50%; border:3px solid #ffffff; box-shadow:0 0 10px #3b82f6;"></div>',
-      iconSize: [16, 16],
-      iconAnchor: [8, 8]
     });
 
-    // Custom Dest Marker (Red Pin)
+    const satelliteTileLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP',
+      maxZoom: 19
+    });
+
+    const labelTileLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; CARTO',
+      maxZoom: 19
+    });
+
+    // Default to Satellite / Terrain View for realistic campus visualization
+    satelliteTileLayer.addTo(currentLeafletMap);
+    labelTileLayer.addTo(currentLeafletMap);
+
+    // Add Map Layer Controls
+    const mapControlBox = document.createElement('div');
+    mapControlBox.style.cssText = 'position:absolute; top:10px; right:10px; z-index:1000; background:rgba(15,23,42,0.85); backdrop-filter:blur(8px); padding:4px; border-radius:8px; border:1px solid rgba(255,255,255,0.15); display:flex; gap:4px;';
+    mapControlBox.innerHTML = `
+      <button id="${container.id}_btn_sat" style="background:#8b5cf6; color:#ffffff; border:none; padding:5px 10px; border-radius:6px; font-size:0.75rem; font-weight:700; cursor:pointer; transition:all 0.2s;">🛰️ Satellite Terrain</button>
+      <button id="${container.id}_btn_dark" style="background:transparent; color:#94a3b8; border:none; padding:5px 10px; border-radius:6px; font-size:0.75rem; font-weight:600; cursor:pointer; transition:all 0.2s;">🗺️ Dark Mode</button>
+    `;
+    container.appendChild(mapControlBox);
+
+    const btnSat = document.getElementById(`${container.id}_btn_sat`);
+    const btnDark = document.getElementById(`${container.id}_btn_dark`);
+
+    if (btnSat && btnDark) {
+      btnSat.addEventListener('click', () => {
+        if (currentLeafletMap.hasLayer(darkTileLayer)) currentLeafletMap.removeLayer(darkTileLayer);
+        satelliteTileLayer.addTo(currentLeafletMap);
+        labelTileLayer.addTo(currentLeafletMap);
+        btnSat.style.background = '#8b5cf6';
+        btnSat.style.color = '#ffffff';
+        btnDark.style.background = 'transparent';
+        btnDark.style.color = '#94a3b8';
+      });
+
+      btnDark.addEventListener('click', () => {
+        if (currentLeafletMap.hasLayer(satelliteTileLayer)) currentLeafletMap.removeLayer(satelliteTileLayer);
+        if (currentLeafletMap.hasLayer(labelTileLayer)) currentLeafletMap.removeLayer(labelTileLayer);
+        darkTileLayer.addTo(currentLeafletMap);
+        btnDark.style.background = '#8b5cf6';
+        btnDark.style.color = '#ffffff';
+        btnSat.style.background = 'transparent';
+        btnSat.style.color = '#94a3b8';
+      });
+    }
+
+    // Custom User Marker (Blue Glowing Dot)
+    const userIcon = L.divIcon({
+      className: 'custom-user-marker',
+      html: '<div style="background:#3b82f6; width:18px; height:18px; border-radius:50%; border:3px solid #ffffff; box-shadow:0 0 12px #3b82f6;"></div>',
+      iconSize: [18, 18],
+      iconAnchor: [9, 9]
+    });
+
+    // Custom Dest Marker (Red Glowing Pin)
     const destIcon = L.divIcon({
       className: 'custom-dest-marker',
-      html: '<div style="background:#ef4444; width:22px; height:22px; border-radius:50%; border:2px solid #ffffff; box-shadow:0 0 10px #ef4444; display:flex; align-items:center; justify-content:center; color:#fff; font-size:12px; font-weight:bold;">📍</div>',
-      iconSize: [22, 22],
-      iconAnchor: [11, 11]
+      html: '<div style="background:#ef4444; width:26px; height:26px; border-radius:50%; border:2px solid #ffffff; box-shadow:0 0 12px #ef4444; display:flex; align-items:center; justify-content:center; color:#fff; font-size:14px; font-weight:bold;">📍</div>',
+      iconSize: [26, 26],
+      iconAnchor: [13, 13]
     });
 
     currentLeafletUserMarker = L.marker([userLat, userLng], { icon: userIcon, title: "Your Location" }).addTo(currentLeafletMap);
@@ -1621,7 +1669,7 @@ async function renderLeafletFallbackMap(userLat, userLng, destLat, destLng, dest
 
     // Route Polyline
     const latlngs = [[userLat, userLng], [destLat, destLng]];
-    currentLeafletPolyline = L.polyline(latlngs, { color: '#8b5cf6', weight: 5, opacity: 0.85 }).addTo(currentLeafletMap);
+    currentLeafletPolyline = L.polyline(latlngs, { color: '#a855f7', weight: 5, opacity: 0.9 }).addTo(currentLeafletMap);
 
     // Fit bounds
     currentLeafletMap.fitBounds(L.latLngBounds(latlngs), { padding: [50, 50] });
@@ -1633,7 +1681,7 @@ async function renderLeafletFallbackMap(userLat, userLng, destLat, destLng, dest
 
     if (stats) {
       stats.innerHTML = `
-        <span style="color:#8b5cf6; font-weight:700;">🗺️ Live Map Route:</span>
+        <span style="color:#a855f7; font-weight:700;">🛰️ Satellite Terrain Route:</span>
         <span><strong>${distStr}</strong> (~${approxMins} mins walk) to <strong>${escapeHtml(destName)}</strong></span>
       `;
     }
