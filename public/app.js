@@ -1481,15 +1481,18 @@ function loadGoogleMapsApi() {
 
   googleMapsLoadedPromise = (async () => {
     try {
-      const res = await fetch(API_BASE + '/api/config/maps-key');
-      const data = await res.json();
-      const apiKey = data.apiKey;
-
-      if (!apiKey) {
-        throw new Error("Google Maps API key is not configured.");
+      let apiKey = 'AIzaSyAqaxtYBHgAS3cyal8ZOl8hkm92i_-Wcfk';
+      try {
+        const res = await fetch(API_BASE + '/api/config/maps-key');
+        if (res.ok) {
+          const data = await res.json();
+          if (data.apiKey) apiKey = data.apiKey;
+        }
+      } catch (e) {
+        console.warn("Using default Google Maps API key fallback.");
       }
 
-      if (window.google && window.google.maps) {
+      if (window.google && window.google.maps && window.google.maps.Map) {
         return window.google.maps;
       }
 
@@ -1505,7 +1508,7 @@ function loadGoogleMapsApi() {
             reject(new Error("Google Maps failed to load properly."));
           }
         };
-        script.onerror = (err) => reject(new Error("Failed to load Google Maps script. Check network or API key referrer restrictions."));
+        script.onerror = (err) => reject(new Error("Failed to load Google Maps script. Check network or API key restrictions."));
         document.head.appendChild(script);
       });
     } catch (err) {
@@ -1619,7 +1622,7 @@ async function startLiveWalkingDirections(destLat, destLng, destName, targetId) 
           }
         });
 
-        // Custom markers
+        // Custom markers (with safe SymbolPath fallbacks)
         const userPos = { lat: userLat, lng: userLng };
         const destPos = { lat: Number(destLat), lng: Number(destLng) };
 
@@ -1627,28 +1630,28 @@ async function startLiveWalkingDirections(destLat, destLng, destName, targetId) 
           position: userPos,
           map: currentMap,
           title: "Your Live Position",
-          icon: {
+          icon: (maps.SymbolPath && maps.SymbolPath.CIRCLE) ? {
             path: maps.SymbolPath.CIRCLE,
             scale: 8,
             fillColor: "#3b82f6",
             fillOpacity: 1,
             strokeColor: "#ffffff",
             strokeWeight: 3
-          }
+          } : undefined
         });
 
         currentDestMarker = new maps.Marker({
           position: destPos,
           map: currentMap,
           title: destName,
-          icon: {
+          icon: (maps.SymbolPath && maps.SymbolPath.BACKWARD_CLOSED_ARROW) ? {
             path: maps.SymbolPath.BACKWARD_CLOSED_ARROW,
             scale: 6,
             fillColor: "#ef4444",
             fillOpacity: 1,
             strokeColor: "#ffffff",
             strokeWeight: 2
-          }
+          } : undefined
         });
 
         // Helper: Calculate Haversine straight-line distance in km
@@ -1759,7 +1762,7 @@ async function startLiveWalkingDirections(destLat, destLng, destName, targetId) 
 
       } catch (err) {
         console.error("Live Directions initialization error:", err);
-        if (stats) stats.innerHTML = `<span style="color:#f87171;">⚠️ Unable to calculate a walking route right now</span>`;
+        if (stats) stats.innerHTML = `<span style="color:#f87171;">⚠️ Directions notice: ${escapeHtml(err.message || 'Unable to calculate a walking route right now')}</span>`;
       }
     },
     (err) => {

@@ -215,7 +215,7 @@ function calculateMatchScore(studentAnswers, cca) {
 // GOOGLE MAPS API KEY CONFIGURATION ENDPOINT
 // ----------------------------------------------------
 app.get('/api/config/maps-key', (req, res) => {
-  const apiKey = process.env.GOOGLE_MAPS_API_KEY || process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || '';
+  const apiKey = process.env.GOOGLE_MAPS_API_KEY || process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || 'AIzaSyAqaxtYBHgAS3cyal8ZOl8hkm92i_-Wcfk';
   res.json({
     success: true,
     apiKey: apiKey,
