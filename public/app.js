@@ -1481,7 +1481,7 @@ function loadGoogleMapsApi() {
 
   googleMapsLoadedPromise = (async () => {
     try {
-      const res = await fetch('/api/config/maps-key');
+      const res = await fetch(API_BASE + '/api/config/maps-key');
       const data = await res.json();
       const apiKey = data.apiKey;
 
@@ -1731,8 +1731,12 @@ async function startLiveWalkingDirections(destLat, destLng, destName, targetId) 
 
 // Wrapper for CCA modal map button
 function initMapDirectionsForCca(ccaId) {
-  const cca = ccasList.find(c => c.id === ccaId);
-  if (!cca) return;
+  const cca = allCcas.find(c => c.id === ccaId);
+  if (!cca) {
+    console.error("CCA not found in allCcas array:", ccaId);
+    showToast("Unable to locate CCA venue details.", "error");
+    return;
+  }
   const lat = cca.latitude || 1.3326;
   const lng = cca.longitude || 103.7744;
   startLiveWalkingDirections(lat, lng, cca.name, `cca_map_${cca.id}`);
@@ -1740,7 +1744,7 @@ function initMapDirectionsForCca(ccaId) {
 
 // Wrapper for Event map button
 function initMapDirectionsForEvent(eventId) {
-  fetch('/api/events/' + eventId)
+  fetch(API_BASE + '/api/events/' + eventId)
     .then(res => res.json())
     .then(data => {
       if (data.success && data.event) {
@@ -1752,6 +1756,7 @@ function initMapDirectionsForEvent(eventId) {
     })
     .catch(err => {
       console.error("Event map error:", err);
+      showToast("Unable to load event venue location.", "error");
     });
 }
 
