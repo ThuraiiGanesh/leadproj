@@ -1550,6 +1550,98 @@ function stopLiveLocationWatch(targetId) {
   }
 }
 
+// ====================================================
+// LEAFLET / OPENSTREETMAP FALLBACK ENGINE
+// ====================================================
+let leafletLoadedPromise = null;
+function loadLeafletApi() {
+  if (leafletLoadedPromise) return leafletLoadedPromise;
+  leafletLoadedPromise = new Promise((resolve, reject) => {
+    if (window.L) return resolve(window.L);
+    const script = document.createElement('script');
+    script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+    script.onload = () => resolve(window.L);
+    script.onerror = (err) => reject(new Error("Failed to load Leaflet script"));
+    document.head.appendChild(script);
+  });
+  return leafletLoadedPromise;
+}
+
+let currentLeafletMap = null;
+let currentLeafletPolyline = null;
+let currentLeafletUserMarker = null;
+
+function getDirectDistanceKm(lat1, lon1, lat2, lon2) {
+  const R = 6371;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+            Math.sin(dLon/2) * Math.sin(dLon/2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  return R * c;
+}
+
+async function renderLeafletFallbackMap(userLat, userLng, destLat, destLng, destName, container, stats) {
+  try {
+    const L = await loadLeafletApi();
+    
+    if (currentLeafletMap) {
+      try { currentLeafletMap.remove(); } catch(e){}
+      currentLeafletMap = null;
+    }
+
+    container.innerHTML = ''; // clear Google Maps error overlay
+    currentLeafletMap = L.map(container).setView([userLat, userLng], 16);
+
+    // CartoDB Dark Matter tile layer
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; OpenStreetMap &copy; CARTO',
+      maxZoom: 19
+    }).addTo(currentLeafletMap);
+
+    // Custom User Marker (Blue Circle)
+    const userIcon = L.divIcon({
+      className: 'custom-user-marker',
+      html: '<div style="background:#3b82f6; width:16px; height:16px; border-radius:50%; border:3px solid #ffffff; box-shadow:0 0 10px #3b82f6;"></div>',
+      iconSize: [16, 16],
+      iconAnchor: [8, 8]
+    });
+
+    // Custom Dest Marker (Red Pin)
+    const destIcon = L.divIcon({
+      className: 'custom-dest-marker',
+      html: '<div style="background:#ef4444; width:22px; height:22px; border-radius:50%; border:2px solid #ffffff; box-shadow:0 0 10px #ef4444; display:flex; align-items:center; justify-content:center; color:#fff; font-size:12px; font-weight:bold;">📍</div>',
+      iconSize: [22, 22],
+      iconAnchor: [11, 11]
+    });
+
+    currentLeafletUserMarker = L.marker([userLat, userLng], { icon: userIcon, title: "Your Location" }).addTo(currentLeafletMap);
+    L.marker([destLat, destLng], { icon: destIcon, title: destName }).addTo(currentLeafletMap);
+
+    // Route Polyline
+    const latlngs = [[userLat, userLng], [destLat, destLng]];
+    currentLeafletPolyline = L.polyline(latlngs, { color: '#8b5cf6', weight: 5, opacity: 0.85 }).addTo(currentLeafletMap);
+
+    // Fit bounds
+    currentLeafletMap.fitBounds(L.latLngBounds(latlngs), { padding: [50, 50] });
+
+    // Calculate distance
+    const distKm = getDirectDistanceKm(userLat, userLng, destLat, destLng);
+    const approxMins = Math.max(1, Math.round((distKm / 4.5) * 60));
+    const distStr = distKm < 1 ? `${Math.round(distKm * 1000)} m` : `${distKm.toFixed(1)} km`;
+
+    if (stats) {
+      stats.innerHTML = `
+        <span style="color:#8b5cf6; font-weight:700;">🗺️ Live Map Route:</span>
+        <span><strong>${distStr}</strong> (~${approxMins} mins walk) to <strong>${escapeHtml(destName)}</strong></span>
+      `;
+    }
+  } catch (err) {
+    console.error("Leaflet fallback error:", err);
+  }
+}
+
 // Main live walking route initializer
 async function startLiveWalkingDirections(destLat, destLng, destName, targetId) {
   currentActiveTargetId = targetId;
@@ -1575,11 +1667,19 @@ async function startLiveWalkingDirections(destLat, destLng, destName, targetId) 
   // 2. Request initial fix with getCurrentPosition()
   navigator.geolocation.getCurrentPosition(
     async (pos) => {
-      try {
-        const userLat = pos.coords.latitude;
-        const userLng = pos.coords.longitude;
+      const userLat = pos.coords.latitude;
+      const userLng = pos.coords.longitude;
+      const numDestLat = Number(destLat);
+      const numDestLng = Number(destLng);
 
-        if (stats) stats.innerHTML = '<span>🗺️ Loading Google Maps API...</span>';
+      // Register Google Maps Auth Failure Fallback Handler
+      window.gm_authFailure = () => {
+        console.warn("Google Maps Auth Failure detected. Switching seamlessly to Dark Mode Leaflet Map!");
+        renderLeafletFallbackMap(userLat, userLng, numDestLat, numDestLng, destName, container, stats);
+      };
+
+      try {
+        if (stats) stats.innerHTML = '<span>🗺️ Loading Maps API...</span>';
 
         // 3. Async load Maps API
         const maps = await loadGoogleMapsApi();
@@ -1762,7 +1862,7 @@ async function startLiveWalkingDirections(destLat, destLng, destName, targetId) 
 
       } catch (err) {
         console.error("Live Directions initialization error:", err);
-        if (stats) stats.innerHTML = `<span style="color:#f87171;">⚠️ Directions notice: ${escapeHtml(err.message || 'Unable to calculate a walking route right now')}</span>`;
+        renderLeafletFallbackMap(userLat, userLng, numDestLat, numDestLng, destName, container, stats);
       }
     },
     (err) => {
