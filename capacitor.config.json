@@ -1,6 +1,6 @@
 {
   "appId": "com.np.ccamatch",
-  "appName": "NP CCA Match",
+  "appName": "NPULSE",
   "webDir": "public",
   "server": {
     "url": "https://leadproj.vercel.app",

@@ -3,8 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NP CCA Match — Campus Life Discovery</title>
-  <meta name="description" content="Ngee Ann Polytechnic Campus Life CCA Matching Platform">
+  <title>NPULSE — Ngee Ann Poly CCA Discovery & Management</title>
+  <meta name="description" content="Ngee Ann Polytechnic Campus Life CCA Matching & Discovery Platform">
+  <link rel="icon" type="image/png" href="logo.png">
+  <link rel="apple-touch-icon" href="logo.png">
   <link rel="stylesheet" href="style.css">
   <!-- Lucide Icons Library -->
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -14,12 +16,12 @@
   <!-- Top Navigation Bar -->
   <header class="navbar">
     <div class="brand">
-      <div class="brand-icon">
-        <i data-lucide="compass" style="width:24px; height:24px;"></i>
-      </div>
-      <div class="brand-text">
-        <h1>NP CCA Match</h1>
-        <span class="brand-badge">Campus Life</span>
+      <div class="brand-logo-container">
+        <img src="logo.png" alt="NPULSE Logo" class="app-logo-img">
+        <div class="brand-text">
+          <h1 class="brand-title">NPULSE</h1>
+          <span class="brand-badge">CCA Discovery & Management</span>
+        </div>
       </div>
     </div>
 
@@ -204,7 +206,13 @@
   <div id="loginModal" class="modal-overlay">
     <div class="modal-card">
       <div id="loginStep1">
-        <h3 class="modal-title">NP LEAD LaunchPad Sign In</h3>
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:1.2rem;">
+          <img src="logo.png" alt="NPULSE Logo" style="width:48px; height:48px; object-fit:cover; border-radius:12px; border:1px solid rgba(255,255,255,0.15); box-shadow:0 4px 12px rgba(0,0,0,0.3);">
+          <div>
+            <h3 class="modal-title" style="margin:0; font-size:1.25rem;">NPULSE Sign In</h3>
+            <span style="font-size:0.75rem; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.05em; font-weight:600;">CCA Discovery & Management</span>
+          </div>
+        </div>
         <p style="color:var(--text-muted); font-size:0.875rem; margin-bottom:1.4rem;">Secured with 2-step verification.</p>
 
         <!-- Hidden Microsoft 365 SSO (preserved in codebase) -->
