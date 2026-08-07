@@ -1238,15 +1238,29 @@ async function openCcaDetail(ccaId) {
 
       <p style="color:var(--text-secondary); font-size:0.925rem; margin-bottom:1.4rem; line-height:1.6;">${cca.description}</p>
 
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1.4rem;">
-        <div style="background:var(--paper); border:1px solid var(--border-subtle); padding:1rem; border-radius:12px;">
-          <h4 style="font-size:0.85rem; color:var(--ink-navy); margin-bottom:4px;">⏱️ Training Frequency</h4>
-          <p style="font-size:0.825rem; color:var(--text-muted);">${cca.training_frequency || 'Weekly sessions'}</p>
+      <div style="background:var(--paper); border:1px solid var(--border-subtle); padding:1.1rem; border-radius:12px; margin-bottom:1.4rem;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.75rem;">
+          <div>
+            <h4 style="font-size:0.875rem; color:var(--ink-navy); margin-bottom:4px;">📍 Campus Location & Training Venue</h4>
+            <p style="font-size:0.85rem; color:var(--text-secondary); margin:0;">${escapeHtml(cca.location)} • <span style="text-transform:capitalize;">${cca.commitment_level} commitment</span></p>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="initMapDirectionsForCca('${cca.id}')">
+            🗺️ Show Walking Route
+          </button>
         </div>
-        <div style="background:var(--paper); border:1px solid var(--border-subtle); padding:1rem; border-radius:12px;">
-          <h4 style="font-size:0.85rem; color:var(--ink-navy); margin-bottom:4px;">📍 Venue & Commitment</h4>
-          <p style="font-size:0.825rem; color:var(--text-muted);">${cca.location} • <span style="text-transform:capitalize;">${cca.commitment_level}</span></p>
+
+        <div id="cca_map_${cca.id}_wrapper" class="map-embed-wrapper" style="display:none;">
+          <div id="cca_map_${cca.id}_container" class="map-container-box"></div>
+          <div id="cca_map_${cca.id}_panel" class="map-info-panel">
+            <div id="cca_map_${cca.id}_stats" class="map-stats-badge">
+              <span>⏳ Initializing Navigation...</span>
+            </div>
+            <button id="cca_map_${cca.id}_stop_btn" class="btn-stop-location" onclick="stopLiveLocationWatch('cca_map_${cca.id}')">
+              🛑 Stop sharing location
+            </button>
+          </div>
         </div>
+        <div id="cca_map_${cca.id}_status"></div>
       </div>
 
       <div style="background:var(--paper); border:1px solid var(--border-subtle); padding:1.1rem; border-radius:12px; margin-bottom:1.4rem;">
@@ -1448,3 +1462,296 @@ function initSpotlightTracking() {
     });
   });
 }
+
+// ====================================================
+// GOOGLE MAPS LIVE WALKING DIRECTIONS MODULE
+// ====================================================
+let googleMapsLoadedPromise = null;
+let activeWatchId = null;
+let currentMap = null;
+let currentDirectionsRenderer = null;
+let currentDirectionsService = null;
+let currentUserMarker = null;
+let currentDestMarker = null;
+let currentActiveTargetId = null;
+
+// Official Loader implementation: Async promise fetching key from API
+function loadGoogleMapsApi() {
+  if (googleMapsLoadedPromise) return googleMapsLoadedPromise;
+
+  googleMapsLoadedPromise = (async () => {
+    try {
+      const res = await fetch('/api/config/maps-key');
+      const data = await res.json();
+      const apiKey = data.apiKey;
+
+      if (!apiKey) {
+        throw new Error("Google Maps API key is not configured.");
+      }
+
+      if (window.google && window.google.maps) {
+        return window.google.maps;
+      }
+
+      return new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(apiKey)}&libraries=places,geometry`;
+        script.async = true;
+        script.defer = true;
+        script.onload = () => {
+          if (window.google && window.google.maps) {
+            resolve(window.google.maps);
+          } else {
+            reject(new Error("Google Maps failed to load properly."));
+          }
+        };
+        script.onerror = (err) => reject(new Error("Failed to load Google Maps script. Check network or API key referrer restrictions."));
+        document.head.appendChild(script);
+      });
+    } catch (err) {
+      console.error("Google Maps Loader Error:", err);
+      throw err;
+    }
+  })();
+
+  return googleMapsLoadedPromise;
+}
+
+// Stop live location watch & clear markers (LegalTech/PDPA story: consent revocable)
+function stopLiveLocationWatch(targetId) {
+  try {
+    if (activeWatchId !== null) {
+      navigator.geolocation.clearWatch(activeWatchId);
+      activeWatchId = null;
+    }
+    if (currentUserMarker) {
+      currentUserMarker.setMap(null);
+      currentUserMarker = null;
+    }
+    
+    const wrapper = document.getElementById(`${targetId}_wrapper`);
+    const statusBox = document.getElementById(`${targetId}_status`);
+
+    if (wrapper) wrapper.style.display = 'none';
+    if (statusBox) {
+      statusBox.innerHTML = `
+        <div style="background:rgba(255,255,255,0.05); border:1px solid var(--border-subtle); padding:10px 14px; border-radius:8px; color:var(--text-muted); font-size:0.825rem; margin-top:0.75rem;">
+          ℹ️ Location sharing stopped (Consent revoked under PDPA). Click "Show Walking Route" to navigate again.
+        </div>
+      `;
+    }
+
+    showToast("Location tracking stopped. Consent revoked.", "info");
+  } catch (err) {
+    console.error("Error stopping location watch:", err);
+  }
+}
+
+// Main live walking route initializer
+async function startLiveWalkingDirections(destLat, destLng, destName, targetId) {
+  currentActiveTargetId = targetId;
+  const wrapper = document.getElementById(`${targetId}_wrapper`);
+  const container = document.getElementById(`${targetId}_container`);
+  const stats = document.getElementById(`${targetId}_stats`);
+  const statusBox = document.getElementById(`${targetId}_status`);
+
+  if (statusBox) statusBox.innerHTML = '';
+  if (wrapper) wrapper.style.display = 'block';
+  if (stats) stats.innerHTML = '<span>⏳ Requesting live location permission...</span>';
+
+  // 1. Geolocation availability check
+  if (!navigator.geolocation) {
+    if (stats) stats.innerHTML = '';
+    if (statusBox) {
+      statusBox.innerHTML = `<div class="map-permission-alert">Location access is needed to show walking directions. Please enable location permissions.</div>`;
+    }
+    showToast("Geolocation is not supported by your browser.", "error");
+    return;
+  }
+
+  // 2. Request initial fix with getCurrentPosition()
+  navigator.geolocation.getCurrentPosition(
+    async (pos) => {
+      try {
+        const userLat = pos.coords.latitude;
+        const userLng = pos.coords.longitude;
+
+        if (stats) stats.innerHTML = '<span>🗺️ Loading Google Maps API...</span>';
+
+        // 3. Async load Maps API
+        const maps = await loadGoogleMapsApi();
+
+        // Dark map styling matching existing app theme
+        const darkMapStyles = [
+          { elementType: "geometry", stylers: [{ color: "#212121" }] },
+          { elementType: "labels.icon", stylers: [{ visibility: "off" }] },
+          { elementType: "labels.text.fill", stylers: [{ color: "#757575" }] },
+          { elementType: "labels.text.stroke", stylers: [{ color: "#212121" }] },
+          { featureType: "administrative", elementType: "geometry", stylers: [{ color: "#757575" }] },
+          { featureType: "administrative.country", elementType: "labels.text.fill", stylers: [{ color: "#9e9e9e" }] },
+          { featureType: "poi", elementType: "labels.text.fill", stylers: [{ color: "#757575" }] },
+          { featureType: "poi.park", elementType: "geometry", stylers: [{ color: "#181818" }] },
+          { featureType: "road", elementType: "geometry.fill", stylers: [{ color: "#2c2c2c" }] },
+          { featureType: "road", elementType: "labels.text.fill", stylers: [{ color: "#8a8a8a" }] },
+          { featureType: "road.arterial", elementType: "geometry", stylers: [{ color: "#373737" }] },
+          { featureType: "road.highway", elementType: "geometry", stylers: [{ color: "#3c3c3c" }] },
+          { featureType: "water", elementType: "geometry", stylers: [{ color: "#000000" }] }
+        ];
+
+        currentMap = new maps.Map(container, {
+          zoom: 17,
+          center: { lat: userLat, lng: userLng },
+          styles: darkMapStyles,
+          disableDefaultUI: false,
+          zoomControl: true,
+          streetViewControl: false,
+          mapTypeControl: false
+        });
+
+        currentDirectionsService = new maps.DirectionsService();
+        currentDirectionsRenderer = new maps.DirectionsRenderer({
+          map: currentMap,
+          suppressMarkers: true,
+          polylineOptions: {
+            strokeColor: "#8b5cf6",
+            strokeWeight: 5,
+            strokeOpacity: 0.85
+          }
+        });
+
+        // Custom markers
+        const userPos = { lat: userLat, lng: userLng };
+        const destPos = { lat: Number(destLat), lng: Number(destLng) };
+
+        currentUserMarker = new maps.Marker({
+          position: userPos,
+          map: currentMap,
+          title: "Your Live Position",
+          icon: {
+            path: maps.SymbolPath.CIRCLE,
+            scale: 8,
+            fillColor: "#3b82f6",
+            fillOpacity: 1,
+            strokeColor: "#ffffff",
+            strokeWeight: 3
+          }
+        });
+
+        currentDestMarker = new maps.Marker({
+          position: destPos,
+          map: currentMap,
+          title: destName,
+          icon: {
+            path: maps.SymbolPath.BACKWARD_CLOSED_ARROW,
+            scale: 6,
+            fillColor: "#ef4444",
+            fillOpacity: 1,
+            strokeColor: "#ffffff",
+            strokeWeight: 2
+          }
+        });
+
+        // Calculate walking directions
+        function calculateRoute(origin, destination) {
+          try {
+            currentDirectionsService.route(
+              {
+                origin: origin,
+                destination: destination,
+                travelMode: maps.TravelMode.WALKING
+              },
+              (result, status) => {
+                if (status === maps.DirectionsStatus.OK && result.routes && result.routes.length > 0) {
+                  currentDirectionsRenderer.setDirections(result);
+                  const leg = result.routes[0].legs[0];
+                  if (stats) {
+                    stats.innerHTML = `
+                      <span style="color:#8b5cf6; font-weight:700;">🚶 Live Walking Route:</span>
+                      <span><strong>${leg.distance.text}</strong> (${leg.duration.text}) to <strong>${escapeHtml(destName)}</strong></span>
+                    `;
+                  }
+                } else {
+                  console.warn("DirectionsService status notice:", status);
+                  if (stats) {
+                    stats.innerHTML = `<span style="color:#f87171;">⚠️ Unable to calculate a walking route right now</span>`;
+                  }
+                }
+              }
+            );
+          } catch (err) {
+            console.error("Directions route calculation error:", err);
+            if (stats) stats.innerHTML = `<span style="color:#f87171;">⚠️ Unable to calculate a walking route right now</span>`;
+          }
+        }
+
+        calculateRoute(userPos, destPos);
+
+        // 4. Start live location watchPosition for real-time updates as user moves
+        if (activeWatchId !== null) {
+          navigator.geolocation.clearWatch(activeWatchId);
+        }
+
+        activeWatchId = navigator.geolocation.watchPosition(
+          (watchPos) => {
+            try {
+              const liveLat = watchPos.coords.latitude;
+              const liveLng = watchPos.coords.longitude;
+              const newPos = { lat: liveLat, lng: liveLng };
+
+              if (currentUserMarker) {
+                currentUserMarker.setPosition(newPos);
+              }
+              calculateRoute(newPos, destPos);
+            } catch (err) {
+              console.error("WatchPosition update error:", err);
+            }
+          },
+          (watchErr) => {
+            console.warn("WatchPosition notice:", watchErr.message);
+          },
+          { enableHighAccuracy: true, maximumAge: 5000, timeout: 20000 }
+        );
+
+      } catch (err) {
+        console.error("Live Directions initialization error:", err);
+        if (stats) stats.innerHTML = `<span style="color:#f87171;">⚠️ Unable to calculate a walking route right now</span>`;
+      }
+    },
+    (err) => {
+      console.warn("Geolocation permission error:", err.message);
+      if (stats) stats.innerHTML = '';
+      if (statusBox) {
+        statusBox.innerHTML = `<div class="map-permission-alert">Location access is needed to show walking directions. Please enable location permissions.</div>`;
+      }
+      showToast("Location access is needed to show walking directions. Please enable location permissions.", "error");
+    },
+    { enableHighAccuracy: true, timeout: 15000 }
+  );
+}
+
+// Wrapper for CCA modal map button
+function initMapDirectionsForCca(ccaId) {
+  const cca = ccasList.find(c => c.id === ccaId);
+  if (!cca) return;
+  const lat = cca.latitude || 1.3326;
+  const lng = cca.longitude || 103.7744;
+  startLiveWalkingDirections(lat, lng, cca.name, `cca_map_${cca.id}`);
+}
+
+// Wrapper for Event map button
+function initMapDirectionsForEvent(eventId) {
+  fetch('/api/events/' + eventId)
+    .then(res => res.json())
+    .then(data => {
+      if (data.success && data.event) {
+        const evt = data.event;
+        const lat = evt.latitude || 1.3326;
+        const lng = evt.longitude || 103.7744;
+        startLiveWalkingDirections(lat, lng, evt.title, `evt_map_${evt.id}`);
+      }
+    })
+    .catch(err => {
+      console.error("Event map error:", err);
+    });
+}
+

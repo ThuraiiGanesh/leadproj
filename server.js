@@ -212,6 +212,18 @@ function calculateMatchScore(studentAnswers, cca) {
 }
 
 // ----------------------------------------------------
+// GOOGLE MAPS API KEY CONFIGURATION ENDPOINT
+// ----------------------------------------------------
+app.get('/api/config/maps-key', (req, res) => {
+  const apiKey = process.env.GOOGLE_MAPS_API_KEY || process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || '';
+  res.json({
+    success: true,
+    apiKey: apiKey,
+    defaultCenter: { lat: 1.3326, lng: 103.7744 }
+  });
+});
+
+// ----------------------------------------------------
 // MICROSOFT 365 / AZURE AD SSO CONFIGURATION & ENDPOINTS
 // ----------------------------------------------------
 const AZURE_CLIENT_ID = process.env.AZURE_CLIENT_ID || '';

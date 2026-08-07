@@ -9,10 +9,18 @@
     "capacity": 50,
     "signup_count": 12,
     "signups": [
-      { "student_id": "s10234567", "name": "Thurai Ganesh" },
-      { "student_id": "s10234890", "name": "Rachel Tan" }
+      {
+        "student_id": "s10234567",
+        "name": "Thurai Ganesh"
+      },
+      {
+        "student_id": "s10234890",
+        "name": "Rachel Tan"
+      }
     ],
-    "description": "Training session for student ambassadors on campus tour routing, public speaking, and event hosting."
+    "description": "Training session for student ambassadors on campus tour routing, public speaking, and event hosting.",
+    "latitude": 1.334,
+    "longitude": 103.775
   },
   {
     "id": "evt_sc_1",
@@ -24,7 +32,9 @@
     "capacity": 60,
     "signup_count": 48,
     "signups": [],
-    "description": "Planning and facilitator briefing for the annual campus-wide freshman orientation camp."
+    "description": "Planning and facilitator briefing for the annual campus-wide freshman orientation camp.",
+    "latitude": 1.3332,
+    "longitude": 103.7748
   },
   {
     "id": "evt_bad_1",
@@ -36,7 +46,9 @@
     "capacity": 20,
     "signup_count": 8,
     "signups": [],
-    "description": "Open trials for singles and doubles positions in the upcoming Poly-ITE (POL-ITE) games."
+    "description": "Open trials for singles and doubles positions in the upcoming Poly-ITE (POL-ITE) games.",
+    "latitude": 1.3345,
+    "longitude": 103.7738
   },
   {
     "id": "evt_photo_1",
@@ -48,7 +60,9 @@
     "capacity": 15,
     "signup_count": 6,
     "signups": [],
-    "description": "Outdoor hands-on photo session covering long exposure, manual aperture settings, and tripod framing."
+    "description": "Outdoor hands-on photo session covering long exposure, manual aperture settings, and tripod framing.",
+    "latitude": 1.33362,
+    "longitude": 103.77398
   },
   {
     "id": "evt_past_1",
@@ -60,6 +74,8 @@
     "capacity": 40,
     "signup_count": 35,
     "signups": [],
-    "description": "Past ambassador outreach event for TDD validation of past event timestamps."
+    "description": "Past ambassador outreach event for TDD validation of past event timestamps.",
+    "latitude": 1.334,
+    "longitude": 103.775
   }
 ]

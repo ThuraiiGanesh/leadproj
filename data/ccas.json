@@ -28,7 +28,9 @@
       "instagram": "@npmightynomads",
       "telegram": "t.me/NPBboys"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.3332,
+    "longitude": 103.7748
   },
   {
     "id": "chinese_calligraphy",
@@ -59,7 +61,9 @@
       "instagram": "@np.calligraphy",
       "telegram": "t.me/NPCalligraphy"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.33176,
+    "longitude": 103.77452
   },
   {
     "id": "chinese_dance_npcd",
@@ -90,7 +94,9 @@
       "instagram": "@npchinesedance",
       "telegram": "t.me/NPChineseDance"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.3332,
+    "longitude": 103.7748
   },
   {
     "id": "chinese_drama",
@@ -121,7 +127,9 @@
       "instagram": "@npcdrama",
       "telegram": "t.me/NPChineseDrama"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.33206,
+    "longitude": 103.77389
   },
   {
     "id": "chinese_orchestra",
@@ -152,7 +160,9 @@
       "instagram": "@npco",
       "telegram": "t.me/NPChineseOrchestra"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.33353,
+    "longitude": 103.77521
   },
   {
     "id": "concert_band",
@@ -183,7 +193,9 @@
       "instagram": "@npconcertband",
       "telegram": "t.me/NPConcertBand"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.33143,
+    "longitude": 103.77407
   },
   {
     "id": "contemporary_dance_d3",
@@ -214,7 +226,9 @@
       "instagram": "@d3contemporarydance",
       "telegram": "t.me/NPD3Dance"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.3332,
+    "longitude": 103.7748
   },
   {
     "id": "dancesport",
@@ -245,7 +259,9 @@
       "instagram": "@npdancesport",
       "telegram": "t.me/NPDanceSport"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.3332,
+    "longitude": 103.7748
   },
   {
     "id": "dragon_lion_dance",
@@ -276,7 +292,9 @@
       "instagram": "@npliondance",
       "telegram": "t.me/NPLionDance"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.3345,
+    "longitude": 103.7738
   },
   {
     "id": "english_drama_poly_stage_factor",
@@ -307,7 +325,9 @@
       "instagram": "@polystagefactor",
       "telegram": "t.me/NPPolyStageFactor"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.33206,
+    "longitude": 103.77389
   },
   {
     "id": "hip_hop_nra",
@@ -338,7 +358,9 @@
       "instagram": "@thenraofficial",
       "telegram": "t.me/NPNRAHipHop"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.3332,
+    "longitude": 103.7748
   },
   {
     "id": "indian_cultural_society",
@@ -369,7 +391,9 @@
       "instagram": "@npindiancultural",
       "telegram": "t.me/NPIndianCultural"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.33263,
+    "longitude": 103.77347
   },
   {
     "id": "japanese_cultural",
@@ -400,7 +424,9 @@
       "instagram": "@npjapaneseclub",
       "telegram": "t.me/NPJapaneseClub"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.3335,
+    "longitude": 103.77407
   },
   {
     "id": "korean_cultural",
@@ -431,7 +457,9 @@
       "instagram": "@npkoreancultural",
       "telegram": "t.me/NPKoreanClub"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.3335,
+    "longitude": 103.77407
   },
   {
     "id": "malay_cultural",
@@ -462,7 +490,9 @@
       "instagram": "@npmalaycultural",
       "telegram": "t.me/NPMalayCultural"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.3326,
+    "longitude": 103.77347
   },
   {
     "id": "percussion_baracuda_batucada",
@@ -493,7 +523,9 @@
       "instagram": "@baracudabatucada",
       "telegram": "t.me/BaracudaBatucada"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.3345,
+    "longitude": 103.7738
   },
   {
     "id": "photography",
@@ -524,7 +556,9 @@
       "instagram": "@npphotography",
       "telegram": "t.me/NPPhotography"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.33176,
+    "longitude": 103.77452
   },
   {
     "id": "piano_klavierensemble",
@@ -555,7 +589,9 @@
       "instagram": "@npklavierensemble",
       "telegram": "t.me/NPKlavierensemble"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.33353,
+    "longitude": 103.77521
   },
   {
     "id": "song_composing_amplify",
@@ -586,7 +622,9 @@
       "instagram": "@npamplify",
       "telegram": "t.me/NPAmplify"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.33158,
+    "longitude": 103.77449
   },
   {
     "id": "stage_production",
@@ -617,7 +655,9 @@
       "instagram": "@polystageproduction",
       "telegram": "t.me/NPStageProduction"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.3332,
+    "longitude": 103.7748
   },
   {
     "id": "strings",
@@ -648,7 +688,9 @@
       "instagram": "@npstrings",
       "telegram": "t.me/NPStrings"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.33353,
+    "longitude": 103.77521
   },
   {
     "id": "voices",
@@ -679,7 +721,9 @@
       "instagram": "@npvoices",
       "telegram": "t.me/NPVoices"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.33266,
+    "longitude": 103.77347
   },
   {
     "id": "archery",
@@ -710,7 +754,9 @@
       "instagram": "@nparchery",
       "telegram": "t.me/NPArchery"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.33176,
+    "longitude": 103.77503
   },
   {
     "id": "badminton",
@@ -741,7 +787,9 @@
       "instagram": "@npbadmintonclub",
       "telegram": "t.me/NPBadminton"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.3345,
+    "longitude": 103.7738
   },
   {
     "id": "basketball",
@@ -772,7 +820,9 @@
       "instagram": "@npbasketball",
       "telegram": "t.me/NPBasketball"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.33263,
+    "longitude": 103.77422
   },
   {
     "id": "bowling",
@@ -803,7 +853,9 @@
       "instagram": "@ngeeannbowling",
       "telegram": "t.me/NPBowling"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.33122,
+    "longitude": 103.77512
   },
   {
     "id": "canoeing",
@@ -834,7 +886,9 @@
       "instagram": "@npcanoeing",
       "telegram": "t.me/NPCanoeing"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.3332,
+    "longitude": 103.77548
   },
   {
     "id": "climbing_club",
@@ -865,7 +919,9 @@
       "instagram": "@npclimbing",
       "telegram": "t.me/NPClimbing"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.3311,
+    "longitude": 103.77401
   },
   {
     "id": "dragon_boat",
@@ -896,7 +952,9 @@
       "instagram": "@npdragonboat",
       "telegram": "t.me/NPDragonBoat"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.33362,
+    "longitude": 103.77548
   },
   {
     "id": "fencing",
@@ -927,7 +985,9 @@
       "instagram": "@npfencing",
       "telegram": "t.me/NPFencing"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.3345,
+    "longitude": 103.7738
   },
   {
     "id": "floorball",
@@ -958,7 +1018,9 @@
       "instagram": "@npfloorball",
       "telegram": "t.me/NPFloorball"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.3345,
+    "longitude": 103.7738
   },
   {
     "id": "football",
@@ -989,7 +1051,9 @@
       "instagram": "@npfootball_",
       "telegram": "t.me/NPFootball"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.3352,
+    "longitude": 103.7732
   },
   {
     "id": "handball",
@@ -1020,7 +1084,9 @@
       "instagram": "@nphandball",
       "telegram": "t.me/NPHandball"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.3345,
+    "longitude": 103.7738
   },
   {
     "id": "hockey",
@@ -1051,7 +1117,9 @@
       "instagram": "@nphockey",
       "telegram": "t.me/NPHockey"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.3352,
+    "longitude": 103.7732
   },
   {
     "id": "inline_skating",
@@ -1082,7 +1150,9 @@
       "instagram": "@npinlineskating",
       "telegram": "t.me/NPInline"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.3345,
+    "longitude": 103.7738
   },
   {
     "id": "judo",
@@ -1113,7 +1183,9 @@
       "instagram": "@npjudo",
       "telegram": "t.me/NPJudo"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.33203,
+    "longitude": 103.77563
   },
   {
     "id": "lifesaving",
@@ -1144,7 +1216,9 @@
       "instagram": "@ngeeannlifesaving",
       "telegram": "t.me/NPLifesaving"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.335,
+    "longitude": 103.7735
   },
   {
     "id": "netball",
@@ -1175,7 +1249,9 @@
       "instagram": "@npnetball",
       "telegram": "t.me/NPNetball"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.33314,
+    "longitude": 103.77428
   },
   {
     "id": "pickleball",
@@ -1206,7 +1282,9 @@
       "instagram": "@nppickleball",
       "telegram": "t.me/NPPickleball"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.3345,
+    "longitude": 103.7738
   },
   {
     "id": "rugby_rhinos",
@@ -1237,7 +1315,9 @@
       "instagram": "@nprugby",
       "telegram": "t.me/NPRugby"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.3352,
+    "longitude": 103.7732
   },
   {
     "id": "silat",
@@ -1268,7 +1348,9 @@
       "instagram": "@npsilat",
       "telegram": "t.me/NPSilat"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.33389,
+    "longitude": 103.77476
   },
   {
     "id": "shooting",
@@ -1299,7 +1381,9 @@
       "instagram": "@npshooting",
       "telegram": "t.me/NPShooting"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.3317,
+    "longitude": 103.7747
   },
   {
     "id": "softball",
@@ -1330,7 +1414,9 @@
       "instagram": "@npsoftball",
       "telegram": "t.me/NPSoftball"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.3352,
+    "longitude": 103.7732
   },
   {
     "id": "squash",
@@ -1361,7 +1447,9 @@
       "instagram": "@np_squash",
       "telegram": "t.me/NPSquash"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.3345,
+    "longitude": 103.7738
   },
   {
     "id": "swimming",
@@ -1392,7 +1480,9 @@
       "instagram": "@npswimming",
       "telegram": "t.me/NPSwimming"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.33389,
+    "longitude": 103.77551
   },
   {
     "id": "table_tennis",
@@ -1423,7 +1513,9 @@
       "instagram": "@np_tabletennis",
       "telegram": "t.me/NPTableTennis"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.3345,
+    "longitude": 103.7738
   },
   {
     "id": "taekwondo",
@@ -1454,7 +1546,9 @@
       "instagram": "@nptkdfighters",
       "telegram": "t.me/NPTaekwondo"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.33389,
+    "longitude": 103.77476
   },
   {
     "id": "tchoukball",
@@ -1485,7 +1579,9 @@
       "instagram": "@nptchoukball",
       "telegram": "t.me/NPTchoukball"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.33305,
+    "longitude": 103.775
   },
   {
     "id": "tennis",
@@ -1516,7 +1612,9 @@
       "instagram": "@nptennis",
       "telegram": "t.me/NPTennis"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.33149,
+    "longitude": 103.77371
   },
   {
     "id": "touch_rugby",
@@ -1547,7 +1645,9 @@
       "instagram": "@nptouchrugby",
       "telegram": "t.me/NPTouchRugby"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.3352,
+    "longitude": 103.7732
   },
   {
     "id": "track_and_field",
@@ -1578,7 +1678,9 @@
       "instagram": "@nptrackfield",
       "telegram": "t.me/NPTrackField"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.33155,
+    "longitude": 103.77407
   },
   {
     "id": "ultimate_frisbee",
@@ -1609,7 +1711,9 @@
       "instagram": "@ngeeann_ultimate",
       "telegram": "t.me/NPUltimate"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.3352,
+    "longitude": 103.7732
   },
   {
     "id": "volleyball",
@@ -1640,7 +1744,9 @@
       "instagram": "@ngeeannvolleyball",
       "telegram": "t.me/NPVolleyball"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.33266,
+    "longitude": 103.77422
   },
   {
     "id": "water_polo",
@@ -1671,7 +1777,9 @@
       "instagram": "@npwaterpolo",
       "telegram": "t.me/NPWaterPolo"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.335,
+    "longitude": 103.7735
   },
   {
     "id": "wushu",
@@ -1702,7 +1810,9 @@
       "instagram": "@np_wushu",
       "telegram": "t.me/NPWushu"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.33389,
+    "longitude": 103.77476
   },
   {
     "id": "np_mentors",
@@ -1733,7 +1843,9 @@
       "instagram": "@npmentors",
       "telegram": "t.me/NPMentors"
     },
-    "open_participation": true
+    "open_participation": true,
+    "latitude": 1.33269,
+    "longitude": 103.77383
   },
   {
     "id": "environmental_rangers_club",
@@ -1764,7 +1876,9 @@
       "instagram": "@nperc_",
       "telegram": "t.me/NPEnviroRangers"
     },
-    "open_participation": true
+    "open_participation": true,
+    "latitude": 1.33389,
+    "longitude": 103.77512
   },
   {
     "id": "foodaid_club",
@@ -1795,7 +1909,9 @@
       "instagram": "@npfoodaid",
       "telegram": "t.me/NPFoodAID"
     },
-    "open_participation": true
+    "open_participation": true,
+    "latitude": 1.33374,
+    "longitude": 103.77479
   },
   {
     "id": "leo_club",
@@ -1826,7 +1942,9 @@
       "instagram": "@npleoclub",
       "telegram": "t.me/NPLeoClub"
     },
-    "open_participation": true
+    "open_participation": true,
+    "latitude": 1.33344,
+    "longitude": 103.77584
   },
   {
     "id": "np_bb_primers",
@@ -1857,7 +1975,9 @@
       "instagram": "@npprimers",
       "telegram": "t.me/NPBBPrimers"
     },
-    "open_participation": true
+    "open_participation": true,
+    "latitude": 1.33146,
+    "longitude": 103.77509
   },
   {
     "id": "red_cross_youth_chapter",
@@ -1888,7 +2008,9 @@
       "instagram": "@ngeeannredcrossyouth",
       "telegram": "t.me/NPRedCross"
     },
-    "open_participation": true
+    "open_participation": true,
+    "latitude": 1.33377,
+    "longitude": 103.7744
   },
   {
     "id": "rotaract_club",
@@ -1919,7 +2041,9 @@
       "instagram": "@nprotaract",
       "telegram": "t.me/NPRotaract"
     },
-    "open_participation": true
+    "open_participation": true,
+    "latitude": 1.33146,
+    "longitude": 103.77482
   },
   {
     "id": "astronomy_club",
@@ -1950,7 +2074,9 @@
       "instagram": "@npastronomy",
       "telegram": "t.me/NPAstronomy"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.33122,
+    "longitude": 103.77557
   },
   {
     "id": "buddhist_society",
@@ -1981,7 +2107,9 @@
       "instagram": "@np_buddhistsociety",
       "telegram": "t.me/NPBuddhist"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.33242,
+    "longitude": 103.77422
   },
   {
     "id": "catholic_youth_apostolate",
@@ -2012,7 +2140,9 @@
       "instagram": "@npcatholic",
       "telegram": "t.me/NPCatholic"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.33287,
+    "longitude": 103.77347
   },
   {
     "id": "cru_campus_crusade",
@@ -2043,7 +2173,9 @@
       "instagram": "@npcru",
       "telegram": "t.me/NPCru"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.3329,
+    "longitude": 103.7735
   },
   {
     "id": "christian_fellowship_club",
@@ -2074,7 +2206,9 @@
       "instagram": "@npcf",
       "telegram": "t.me/NPCristianFellowship"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.33293,
+    "longitude": 103.7735
   },
   {
     "id": "creators_collective",
@@ -2105,7 +2239,9 @@
       "instagram": "@npcreators",
       "telegram": "t.me/NPCreators"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.33272,
+    "longitude": 103.77386
   },
   {
     "id": "current_affairs_club",
@@ -2136,7 +2272,9 @@
       "instagram": "@npcurrentaffairs",
       "telegram": "t.me/NPCurrentAffairs"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.33209,
+    "longitude": 103.77491
   },
   {
     "id": "erudites_learning_ambassadors",
@@ -2167,7 +2305,9 @@
       "instagram": "@np_library",
       "telegram": "t.me/NPErudites"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.33257,
+    "longitude": 103.77422
   },
   {
     "id": "makers_guild",
@@ -2198,7 +2338,9 @@
       "instagram": "@npmakersguild",
       "telegram": "t.me/NPMakersGuild"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.33344,
+    "longitude": 103.77485
   },
   {
     "id": "muslim_students_society",
@@ -2229,7 +2371,9 @@
       "instagram": "@ngeeannmss",
       "telegram": "t.me/NPMuslimSociety"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.33206,
+    "longitude": 103.7753
   },
   {
     "id": "navigators_club",
@@ -2260,7 +2404,9 @@
       "instagram": "@npnavigators",
       "telegram": "t.me/NPNavigators"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.33296,
+    "longitude": 103.7735
   },
   {
     "id": "peer_helpers_club",
@@ -2291,7 +2437,9 @@
       "instagram": "@np_peerhelpers",
       "telegram": "t.me/NPPeerHelpers"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.33263,
+    "longitude": 103.77494
   },
   {
     "id": "tabletop_games_club",
@@ -2322,7 +2470,9 @@
       "instagram": "@np_ttgames",
       "telegram": "t.me/NPTabletopGames"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.33275,
+    "longitude": 103.77455
   },
   {
     "id": "toastmasters_club",
@@ -2353,7 +2503,9 @@
       "instagram": "@nptoastmasters",
       "telegram": "t.me/NPToastmasters"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.33212,
+    "longitude": 103.77491
   },
   {
     "id": "christieara_council",
@@ -2384,7 +2536,9 @@
       "instagram": "@np_tcc",
       "telegram": "t.me/NPTCC"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.33212,
+    "longitude": 103.77338
   },
   {
     "id": "sandbox_advocates_club",
@@ -2415,7 +2569,9 @@
       "instagram": "@tsbadvocates",
       "telegram": "t.me/NPSandboxAdvocates"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.33284,
+    "longitude": 103.77386
   },
   {
     "id": "seanernergy",
@@ -2446,7 +2602,9 @@
       "instagram": "@npseanernergy",
       "telegram": "t.me/NPSEAnergy"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.33281,
+    "longitude": 103.77491
   },
   {
     "id": "np_ambassadors",
@@ -2482,7 +2640,9 @@
       "instagram": "@npambassadors",
       "telegram": "t.me/NPAmbassadors"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.33128,
+    "longitude": 103.77293
   },
   {
     "id": "np_student_council",
@@ -2518,6 +2678,8 @@
       "instagram": "@npsc_official",
       "telegram": "t.me/NPSC_Official"
     },
-    "open_participation": false
+    "open_participation": false,
+    "latitude": 1.33116,
+    "longitude": 103.77323
   }
 ]
